@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/types";
-import { MoreHorizontal, Search, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { MoreHorizontal, Search, Loader2, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ApiClient } from "@/lib/api";
@@ -105,12 +105,49 @@ export default function AdminOrdersPage() {
         ? orders.filter(o => {
             const term = searchTerm.toLowerCase();
             return (
-                o._id?.toLowerCase().includes(term) ||
+                (o.id || o._id)?.toLowerCase().includes(term) ||
                 getCustomerName(o).toLowerCase().includes(term) ||
                 getCustomerEmail(o).toLowerCase().includes(term)
             );
         })
         : orders;
+
+    const handleExportCSV = () => {
+        if (!filteredOrders.length) {
+            toast({
+                title: "Atención",
+                description: "No hay órdenes para exportar con los filtros actuales.",
+                variant: "destructive",
+            });
+            return;
+        }
+
+        const headers = ["ID Orden", "Cliente", "Email", "Método", "Total", "Estado", "Pago", "Fecha"];
+        const rows = filteredOrders.map(o => [
+            (o.id || o._id),
+            `"${getCustomerName(o)}"`,
+            `"${getCustomerEmail(o)}"`,
+            o.paymentMethod || 'mercadopago',
+            o.totalPrice,
+            STATUS_LABELS[o.orderStatus] || o.orderStatus,
+            o.isPaid ? 'Pagado' : 'Pendiente',
+            new Date(o.createdAt).toLocaleDateString('es-AR')
+        ]);
+
+        const csvContent = [
+            headers.join(","),
+            ...rows.map(e => e.join(","))
+        ].join("\n");
+
+        const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // BOM for Excel formatting
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `reporte_ordenes_4fun_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     return (
         <div className="space-y-6">
@@ -142,6 +179,14 @@ export default function AdminOrdersPage() {
                         <SelectItem value="cancelled">Cancelado</SelectItem>
                     </SelectContent>
                 </Select>
+                <Button 
+                    variant="outline" 
+                    className="ml-auto flex items-center gap-2" 
+                    onClick={handleExportCSV}
+                    disabled={loading || filteredOrders.length === 0}
+                >
+                    <Download className="h-4 w-4" /> Exportar a CSV
+                </Button>
             </div>
 
             <Card>
@@ -173,8 +218,8 @@ export default function AdminOrdersPage() {
                             </TableHeader>
                             <TableBody>
                                 {filteredOrders.map((order) => (
-                                    <TableRow key={order._id}>
-                                        <TableCell className="font-mono text-xs">{order._id?.slice(-8).toUpperCase()}</TableCell>
+                                    <TableRow key={order.id || order._id}>
+                                        <TableCell className="font-mono text-xs">{(order.id || order._id)?.slice(-8).toUpperCase()}</TableCell>
                                         <TableCell>
                                             <div className="flex flex-col">
                                                 <span className="text-sm">{getCustomerName(order)}</span>
@@ -200,19 +245,19 @@ export default function AdminOrdersPage() {
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel>Cambiar estado</DropdownMenuLabel>
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem onClick={() => handleStatusChange(order._id, 'processing')}>
+                                                    <DropdownMenuItem onClick={() => handleStatusChange(order.id || order._id, 'processing')}>
                                                         Procesando
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => handleStatusChange(order._id, 'shipped')}>
+                                                    <DropdownMenuItem onClick={() => handleStatusChange(order.id || order._id, 'shipped')}>
                                                         Enviado
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => handleStatusChange(order._id, 'delivered')}>
+                                                    <DropdownMenuItem onClick={() => handleStatusChange(order.id || order._id, 'delivered')}>
                                                         Entregado
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem
                                                         className="text-destructive"
-                                                        onClick={() => handleStatusChange(order._id, 'cancelled')}
+                                                        onClick={() => handleStatusChange(order.id || order._id, 'cancelled')}
                                                     >
                                                         Cancelar Orden
                                                     </DropdownMenuItem>
