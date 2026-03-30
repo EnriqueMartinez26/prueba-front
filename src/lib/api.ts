@@ -177,6 +177,7 @@ export class ApiClient {
     discounted?: boolean;
     minPrice?: number;
     maxPrice?: number;
+  }, options?: RequestInit): Promise<PaginatedResponse<Product>> {
     const queryString = this.buildQuery(params);
 
     // Usamos 'any' acá temporalmente porque la respuesta cruda del backend puede variar
