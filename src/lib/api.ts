@@ -90,6 +90,18 @@ export class ApiClient {
     return data;
   }
 
+  private static buildQuery(params?: Record<string, any>): string {
+    if (!params) return "";
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "" && value !== "all") {
+        if (key === 'minPrice' && value <= 0) return;
+        query.append(key, value.toString());
+      }
+    });
+    const qs = query.toString();
+    return qs ? `?${qs}` : "";
+  }
 
   static async login(data: LoginValues) { return this.request<{ success: boolean; token: string; user: User }>('/auth/login', { method: 'POST', cache: 'no-store', body: JSON.stringify(data) }); }
   static async register(data: RegisterPayload) { return this.request<{ success: boolean; token: string; user: User }>('/auth/register', { method: 'POST', cache: 'no-store', body: JSON.stringify(data) }); }
@@ -165,19 +177,7 @@ export class ApiClient {
     discounted?: boolean;
     minPrice?: number;
     maxPrice?: number;
-  }, options?: RequestInit): Promise<PaginatedResponse<Product>> {
-    const query = new URLSearchParams();
-    if (params?.page) query.append("page", params.page.toString());
-    if (params?.limit) query.append("limit", params.limit.toString());
-    if (params?.search) query.append("search", params.search);
-    if (params?.platform && params.platform !== 'all') query.append("platform", params.platform);
-    if (params?.genre && params.genre !== 'all') query.append("genre", params.genre);
-    if (params?.sort) query.append("sort", params.sort);
-    if (params?.discounted) query.append("discounted", "true");
-    if (params?.minPrice !== undefined && params.minPrice > 0) query.append("minPrice", params.minPrice.toString());
-    if (params?.maxPrice !== undefined) query.append("maxPrice", params.maxPrice.toString());
-
-    const queryString = query.toString() ? `?${query.toString()}` : "";
+    const queryString = this.buildQuery(params);
 
     // Usamos 'any' acá temporalmente porque la respuesta cruda del backend puede variar
     // antes de ser normalizada.
@@ -410,11 +410,7 @@ export class ApiClient {
     limit?: number;
     status?: string;
   }): Promise<{ orders: Order[]; total: number; page: number; totalPages: number }> {
-    const query = new URLSearchParams();
-    if (params?.page) query.append("page", params.page.toString());
-    if (params?.limit) query.append("limit", params.limit.toString());
-    if (params?.status && params.status !== "all") query.append("status", params.status);
-    const qs = query.toString() ? `?${query.toString()}` : "";
+    const qs = this.buildQuery(params);
     const res = await this.request<any>(`/orders${qs}`, { cache: 'no-store' });
     return {
       orders: res.orders || [],
@@ -476,13 +472,7 @@ export class ApiClient {
 
   // --- USER MANAGEMENT (ADMIN) ---
   static async getUsers(params: { page?: number; limit?: number; search?: string; role?: string }) {
-    const query = new URLSearchParams();
-    if (params.page) query.append("page", params.page.toString());
-    if (params.limit) query.append("limit", params.limit.toString());
-    if (params.search) query.append("search", params.search);
-    if (params.role && params.role !== 'all') query.append("role", params.role);
-
-    return this.request<any>(`/users?${query.toString()}`);
+    return this.request<any>(`/users${this.buildQuery(params)}`);
   }
 
   static async getUserById(id: string) {
@@ -505,11 +495,7 @@ export class ApiClient {
   // --- REVIEWS ---
 
   static async getProductReviews(productId: string, params?: { page?: number; limit?: number; sort?: string }) {
-    const query = new URLSearchParams();
-    if (params?.page) query.append('page', params.page.toString());
-    if (params?.limit) query.append('limit', params.limit.toString());
-    if (params?.sort) query.append('sort', params.sort);
-    const qs = query.toString() ? `?${query.toString()}` : '';
+    const qs = this.buildQuery(params);
     return this.request<{ success: boolean; reviews: Review[]; pagination: Meta }>(`/reviews/product/${productId}${qs}`);
   }
 
