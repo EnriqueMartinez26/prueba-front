@@ -19,16 +19,9 @@ import {
 import { SearchDialog } from "@/components/search-dialog";
 // ... (imports remain)
 
-import { usePathname } from "next/navigation";
-
 export function Header() {
   const { cartCount } = useCart();
   const { user, logout } = useAuth();
-  const pathname = usePathname();
-
-  if (pathname?.startsWith('/admin')) {
-    return null;
-  }
   // useRouter is used inside SearchDialog if we move logic there, but we might keep it header too if needed?
   // Actually SearchDialog handles navigation. We don't need router here for search anymore.
   // We can remove searchQuery state and handleSearch function from Header if we move it to SearchDialog entirely.

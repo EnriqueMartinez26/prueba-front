@@ -1,8 +1,5 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { AboutDialog } from "@/components/about-dialog";
 import { FaqDialog } from "@/components/faq-dialog";
 
@@ -22,12 +19,6 @@ const footerLinks = {
 };
 
 export function Footer() {
-  const pathname = usePathname();
-
-  if (pathname?.startsWith('/admin')) {
-    return null;
-  }
-
   return (
     <footer className="w-full border-t border-border/40 bg-background/95 mt-16">
       <div className="container mx-auto max-w-screen-2xl px-4 py-8 lg:py-12">
