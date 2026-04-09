@@ -137,6 +137,22 @@ export class ApiClient {
     });
   }
 
+  static async forgotPassword(email: string) {
+    return this.request<{ success: boolean; message: string }>('/auth/forgot-password', {
+      method: 'POST',
+      cache: 'no-store',
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  static async resetPassword(token: string, password: string) {
+    return this.request<{ success: boolean; message: string }>(`/auth/reset-password/${token}`, {
+      method: 'PUT',
+      cache: 'no-store',
+      body: JSON.stringify({ password }),
+    });
+  }
+
 
   static async uploadImage(file: File): Promise<string> {
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dxlbwdqop';
