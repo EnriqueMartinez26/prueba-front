@@ -10,11 +10,13 @@ import { TableSkeleton } from "@/components/ui/skeletons";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus, Pencil, Trash2, ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ChevronLeft, ChevronRight, Search, Download, FileText } from "lucide-react";
 import { formatCurrency, getImageUrl } from "@/lib/utils";
 import { useDebounce } from "@/hooks/use-debounce";
 import type { Product } from "@/lib/schemas";
 import type { Meta } from "@/lib/types";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export default function AdminProductsPage() {
   const { loading: authLoading } = useAuth();
@@ -80,6 +82,63 @@ export default function AdminProductsPage() {
     }
   };
 
+  const handleExportCSV = () => {
+    if (!products.length) {
+      toast({ variant: "destructive", title: "Atención", description: "No hay productos para exportar." });
+      return;
+    }
+    const headers = ["Nombre", "Precio", "Stock", "Tipo", "Plataforma", "Género"];
+    const rows = products.map(p => [
+      `"${p.name}"`,
+      Number(p.price).toFixed(2),
+      p.stock,
+      p.type || "",
+      typeof p.platform === "object" ? p.platform.name || p.platform.id : (p.platform || ""),
+      typeof p.genre === "object" ? p.genre.name || p.genre.id : (p.genre || ""),
+    ]);
+    const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = Object.assign(document.createElement("a"), {
+      href: url,
+      download: `reporte_productos_4fun_${new Date().toISOString().split("T")[0]}.csv`,
+    });
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExportPDF = () => {
+    if (!products.length) {
+      toast({ variant: "destructive", title: "Atención", description: "No hay productos para exportar." });
+      return;
+    }
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text("Catálogo de Productos — 4Fun", 14, 20);
+    doc.setFontSize(10);
+    doc.setTextColor(120);
+    doc.text(`Generado: ${new Date().toLocaleDateString("es-AR")} | Total: ${meta.total} productos`, 14, 27);
+    doc.setTextColor(0);
+    autoTable(doc, {
+      startY: 32,
+      head: [["Nombre", "Precio", "Stock", "Tipo", "Plataforma", "Género"]],
+      body: products.map(p => [
+        p.name,
+        `$${Number(p.price).toFixed(2)}`,
+        p.stock,
+        p.type || "-",
+        typeof p.platform === "object" ? p.platform.name || p.platform.id : (p.platform || "-"),
+        typeof p.genre === "object" ? p.genre.name || p.genre.id : (p.genre || "-"),
+      ]),
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [30, 30, 40] },
+      columnStyles: { 1: { halign: "right" }, 2: { halign: "center" } },
+    });
+    doc.save(`reporte_productos_4fun_${new Date().toISOString().split("T")[0]}.pdf`);
+  };
+
   if (loading && isFirstRun.current) return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -107,6 +166,22 @@ export default function AdminProductsPage() {
                   className="pl-8"
                 />
               </div>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2"
+                onClick={handleExportCSV}
+                disabled={loading || products.length === 0}
+              >
+                <Download className="h-4 w-4" /> CSV
+              </Button>
+              <Button
+                variant="outline"
+                className="flex items-center gap-2"
+                onClick={handleExportPDF}
+                disabled={loading || products.length === 0}
+              >
+                <FileText className="h-4 w-4" /> PDF
+              </Button>
               <Button asChild>
                 <Link href="/admin/products/new"><Plus className="mr-2 h-4 w-4" /> Nuevo Producto</Link>
               </Button>

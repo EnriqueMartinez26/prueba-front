@@ -31,11 +31,15 @@ import {
     Shield,
     User as UserIcon,
     Trash2,
-    Filter
+    Filter,
+    Download,
+    FileText,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 // Tipos locales
 interface User {
@@ -129,6 +133,61 @@ export default function UsersPage() {
         }
     };
 
+    const handleExportCSV = () => {
+        if (!users.length) {
+            toast({ title: "Atención", description: "No hay usuarios para exportar.", variant: "destructive" });
+            return;
+        }
+        const headers = ["Nombre", "Email", "Rol", "Verificado", "Registrado"];
+        const rows = users.map(u => [
+            `"${u.name}"`,
+            `"${u.email}"`,
+            u.role,
+            u.isVerified ? "Sí" : "No",
+            new Date(u.createdAt).toLocaleDateString("es-AR"),
+        ]);
+        const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+        const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = Object.assign(document.createElement("a"), {
+            href: url,
+            download: `reporte_usuarios_4fun_${new Date().toISOString().split("T")[0]}.csv`,
+        });
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
+    const handleExportPDF = () => {
+        if (!users.length) {
+            toast({ title: "Atención", description: "No hay usuarios para exportar.", variant: "destructive" });
+            return;
+        }
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text("Reporte de Usuarios — 4Fun", 14, 20);
+        doc.setFontSize(10);
+        doc.setTextColor(120);
+        doc.text(`Generado: ${new Date().toLocaleDateString("es-AR")} | Total: ${users.length} usuarios`, 14, 27);
+        doc.setTextColor(0);
+        autoTable(doc, {
+            startY: 32,
+            head: [["Nombre", "Email", "Rol", "Verificado", "Registrado"]],
+            body: users.map(u => [
+                u.name,
+                u.email,
+                u.role === "admin" ? "Administrador" : "Usuario",
+                u.isVerified ? "Sí" : "No",
+                new Date(u.createdAt).toLocaleDateString("es-AR"),
+            ]),
+            styles: { fontSize: 8 },
+            headStyles: { fillColor: [30, 30, 40] },
+            columnStyles: { 2: { halign: "center" }, 3: { halign: "center" } },
+        });
+        doc.save(`reporte_usuarios_4fun_${new Date().toISOString().split("T")[0]}.pdf`);
+    };
+
     return (
         <div className="space-y-6">
             <div>
@@ -148,19 +207,37 @@ export default function UsersPage() {
                     />
                 </div>
 
-                <Select value={roleFilter} onValueChange={setRoleFilter}>
-                    <SelectTrigger className="w-[180px]">
-                        <div className="flex items-center gap-2">
-                            <Filter className="h-4 w-4" />
-                            <SelectValue placeholder="Filtrar por Rol" />
-                        </div>
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">Todos los Roles</SelectItem>
-                        <SelectItem value="admin">Administradores</SelectItem>
-                        <SelectItem value="user">Usuarios</SelectItem>
-                    </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2">
+                    <Select value={roleFilter} onValueChange={setRoleFilter}>
+                        <SelectTrigger className="w-[180px]">
+                            <div className="flex items-center gap-2">
+                                <Filter className="h-4 w-4" />
+                                <SelectValue placeholder="Filtrar por Rol" />
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">Todos los Roles</SelectItem>
+                            <SelectItem value="admin">Administradores</SelectItem>
+                            <SelectItem value="user">Usuarios</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
+                        onClick={handleExportCSV}
+                        disabled={loading || users.length === 0}
+                    >
+                        <Download className="h-4 w-4" /> CSV
+                    </Button>
+                    <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
+                        onClick={handleExportPDF}
+                        disabled={loading || users.length === 0}
+                    >
+                        <FileText className="h-4 w-4" /> PDF
+                    </Button>
+                </div>
             </div>
 
             <Card>

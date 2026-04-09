@@ -7,11 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/types";
-import { MoreHorizontal, Search, Loader2, ChevronLeft, ChevronRight, Download } from "lucide-react";
+import { MoreHorizontal, Search, Loader2, ChevronLeft, ChevronRight, Download, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ApiClient } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -149,6 +151,36 @@ export default function AdminOrdersPage() {
         document.body.removeChild(link);
     };
 
+    const handleExportPDF = () => {
+        if (!filteredOrders.length) {
+            toast({ title: "Atención", description: "No hay órdenes para exportar.", variant: "destructive" });
+            return;
+        }
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text("Reporte de Órdenes — 4Fun", 14, 20);
+        doc.setFontSize(10);
+        doc.setTextColor(120);
+        doc.text(`Generado: ${new Date().toLocaleDateString("es-AR")}`, 14, 27);
+        doc.setTextColor(0);
+        autoTable(doc, {
+            startY: 32,
+            head: [["ID Orden", "Cliente", "Email", "Total", "Estado", "Pago", "Fecha"]],
+            body: filteredOrders.map(o => [
+                (o.id || o._id)?.slice(-8).toUpperCase(),
+                getCustomerName(o),
+                getCustomerEmail(o),
+                `$${Number(o.totalPrice || 0).toFixed(2)}`,
+                STATUS_LABELS[o.orderStatus] || o.orderStatus,
+                o.isPaid ? "Pagado" : "Pendiente",
+                new Date(o.createdAt).toLocaleDateString("es-AR"),
+            ]),
+            styles: { fontSize: 8 },
+            headStyles: { fillColor: [30, 30, 40] },
+        });
+        doc.save(`reporte_ordenes_4fun_${new Date().toISOString().split("T")[0]}.pdf`);
+    };
+
     return (
         <div className="space-y-6">
             <div>
@@ -179,14 +211,24 @@ export default function AdminOrdersPage() {
                         <SelectItem value="cancelled">Cancelado</SelectItem>
                     </SelectContent>
                 </Select>
-                <Button 
-                    variant="outline" 
-                    className="ml-auto flex items-center gap-2" 
-                    onClick={handleExportCSV}
-                    disabled={loading || filteredOrders.length === 0}
-                >
-                    <Download className="h-4 w-4" /> Exportar a CSV
-                </Button>
+                <div className="ml-auto flex items-center gap-2">
+                    <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
+                        onClick={handleExportCSV}
+                        disabled={loading || filteredOrders.length === 0}
+                    >
+                        <Download className="h-4 w-4" /> CSV
+                    </Button>
+                    <Button
+                        variant="outline"
+                        className="flex items-center gap-2"
+                        onClick={handleExportPDF}
+                        disabled={loading || filteredOrders.length === 0}
+                    >
+                        <FileText className="h-4 w-4" /> PDF
+                    </Button>
+                </div>
             </div>
 
             <Card>
