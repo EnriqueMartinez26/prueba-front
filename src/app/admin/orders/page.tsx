@@ -22,6 +22,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 
 const STATUS_LABELS: Record<string, string> = {
     pending: "Pendiente",
@@ -212,22 +220,33 @@ export default function AdminOrdersPage() {
                     </SelectContent>
                 </Select>
                 <div className="ml-auto flex items-center gap-2">
-                    <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                        onClick={handleExportCSV}
-                        disabled={loading || filteredOrders.length === 0}
-                    >
-                        <Download className="h-4 w-4" /> CSV
-                    </Button>
-                    <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                        onClick={handleExportPDF}
-                        disabled={loading || filteredOrders.length === 0}
-                    >
-                        <FileText className="h-4 w-4" /> PDF
-                    </Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="outline"
+                                className="flex items-center gap-2"
+                                disabled={loading || filteredOrders.length === 0}
+                            >
+                                <Download className="h-4 w-4" /> Descargar datos
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-sm">
+                            <DialogHeader>
+                                <DialogTitle>Descargar en</DialogTitle>
+                                <DialogDescription>
+                                    Seleccione el formato preferido para exportar las órdenes.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-3 py-4">
+                                <Button variant="outline" className="flex items-center gap-2 justify-center w-full" onClick={handleExportCSV}>
+                                    <Download className="h-4 w-4" /> Formato CSV (Excel)
+                                </Button>
+                                <Button variant="outline" className="flex items-center gap-2 justify-center w-full" onClick={handleExportPDF}>
+                                    <FileText className="h-4 w-4" /> Formato PDF Documento
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
 

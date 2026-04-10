@@ -25,6 +25,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import {
     Loader2,
     Search,
     MoreVertical,
@@ -221,22 +229,33 @@ export default function UsersPage() {
                             <SelectItem value="user">Usuarios</SelectItem>
                         </SelectContent>
                     </Select>
-                    <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                        onClick={handleExportCSV}
-                        disabled={loading || users.length === 0}
-                    >
-                        <Download className="h-4 w-4" /> CSV
-                    </Button>
-                    <Button
-                        variant="outline"
-                        className="flex items-center gap-2"
-                        onClick={handleExportPDF}
-                        disabled={loading || users.length === 0}
-                    >
-                        <FileText className="h-4 w-4" /> PDF
-                    </Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button
+                                variant="outline"
+                                className="flex items-center gap-2"
+                                disabled={loading || users.length === 0}
+                            >
+                                <Download className="h-4 w-4" /> Descargar datos
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-sm">
+                            <DialogHeader>
+                                <DialogTitle>Descargar en</DialogTitle>
+                                <DialogDescription>
+                                    Seleccione el formato preferido para exportar los usuarios.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-3 py-4">
+                                <Button variant="outline" className="flex items-center gap-2 justify-center w-full" onClick={handleExportCSV}>
+                                    <Download className="h-4 w-4" /> Formato CSV (Excel)
+                                </Button>
+                                <Button variant="outline" className="flex items-center gap-2 justify-center w-full" onClick={handleExportPDF}>
+                                    <FileText className="h-4 w-4" /> Formato PDF Documento
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
 
