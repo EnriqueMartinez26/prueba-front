@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { Loader2, Plus, Pencil, Trash2, ChevronLeft, ChevronRight, Search, Download, FileText } from "lucide-react";
 import { formatCurrency, getImageUrl } from "@/lib/utils";
 import { useDebounce } from "@/hooks/use-debounce";
 import type { Product } from "@/lib/schemas";
