@@ -41,6 +41,25 @@ const nextConfig: NextConfig = {
   typescript: { ignoreBuildErrors: true },
 
   /**
+   * RN - Compatibilidad de Rutas: Mantiene interoperabilidad con enlaces legacy
+   * para evitar errores de navegación en despliegues con URLs históricas.
+   */
+  async redirects() {
+    return [
+      {
+        source: '/products',
+        destination: '/productos',
+        permanent: true,
+      },
+      {
+        source: '/products/:id',
+        destination: '/productos/:id',
+        permanent: true,
+      },
+    ];
+  },
+
+  /**
    * RN - Infraestructura de Red (Anti-CORS Proxy):
    * Redirige las peticiones que inician con `/api` hacia el servidor backend.
    * 

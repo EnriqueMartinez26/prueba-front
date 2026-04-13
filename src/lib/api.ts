@@ -64,7 +64,7 @@ export class ApiClient {
   }
   static async logout() { return this.request('/auth/logout', { method: 'POST' }); }
   static async updateProfile(data: Partial<User>) { return this.request('/auth/profile', { method: 'PUT', body: JSON.stringify(data) }); }
-  static async changePassword(data: any) { return this.request('/auth/change-password', { method: 'PUT', body: JSON.stringify(data) }); }
+  static async changePassword(data: any) { return this.request('/auth/password', { method: 'PUT', body: JSON.stringify(data) }); }
 
   /**
    * RN - Recuperación: Inicia el flujo de recuperación de contraseña.
@@ -81,7 +81,7 @@ export class ApiClient {
    */
   static async resetPassword(token: string, password: string) {
     return this.request(`/auth/reset-password/${token}`, {
-      method: 'POST',
+      method: 'PUT',
       body: JSON.stringify({ password }),
     });
   }
@@ -99,12 +99,18 @@ export class ApiClient {
       meta: response.pagination || response.meta || { total: parsedProducts.length, page: 1, limit: 20, totalPages: 1 }
     };
   }
-  static async getProductById(id: string) { return this.request<Product>(`/products/${id}`); }
-  static async getProductByIdAdmin(id: string) { return this.request<Product>(`/products/admin/${id}`); }
+  static async getProductById(id: string): Promise<Product> {
+    const response = await this.request<any>(`/products/${id}`);
+    return this.extractProductFromEnvelope(response, `/products/${id}`);
+  }
+  static async getProductByIdAdmin(id: string): Promise<Product> {
+    const response = await this.request<any>(`/products/admin/${id}`);
+    return this.extractProductFromEnvelope(response, `/products/admin/${id}`);
+  }
   static async createProduct(data: ProductInput) { return this.request<Product>('/products', { method: 'POST', body: JSON.stringify(data) }); }
   static async updateProduct(id: string, data: Partial<ProductInput>) { return this.request<Product>(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
   static async deleteProduct(id: string) { return this.request(`/products/${id}`, { method: 'DELETE' }); }
-  static async reorderProduct(id: string, newPosition: number) { return this.request(`/products/${id}/reorder`, { method: 'PATCH', body: JSON.stringify({ newPosition }) }); }
+  static async reorderProduct(id: string, newPosition: number) { return this.request(`/products/${id}/reorder`, { method: 'PUT', body: JSON.stringify({ newPosition }) }); }
 
   // ─── TAXONOMIES (CRUD Completo — Pilar 3 TFI) ───
   static async getPlatforms() { 
@@ -198,7 +204,7 @@ export class ApiClient {
     return this.request('/contact', { method: 'POST', body: JSON.stringify(data) });
   }
   static async verifyEmail(token: string) {
-    return this.request<{ success: boolean; message: string }>(`/auth/verify-email/${token}`);
+    return this.request<{ success: boolean; message: string }>(`/auth/verify?token=${encodeURIComponent(token)}`);
   }
 
   // ─── UTILIDADES E IMAGENES ───
@@ -212,6 +218,24 @@ export class ApiClient {
     if (!res.ok) throw new Error("Fallo en la nube de imágenes (Cloudinary)");
     const data = await res.json();
     return data.secure_url;
+  }
+
+  /**
+   * Mantenibilidad: Unifica la lectura de envelopes heterogéneos (`data`, `product` o payload plano)
+   * para blindar la hidratación del detalle frente a variaciones del backend.
+   */
+  private static extractProductFromEnvelope(response: any, endpoint: string): Product {
+    const payload = response?.data ?? response?.product ?? response;
+    const parsed = ProductSchema.safeParse(payload);
+
+    if (!parsed.success) {
+      Logger.warn(`[API Warning] Contrato ProductSchema no validado en ${endpoint}`, {
+        issueCount: parsed.error.issues.length,
+      });
+      return payload as Product;
+    }
+
+    return parsed.data;
   }
 
   private static buildQuery(params?: Record<string, any>): string {
