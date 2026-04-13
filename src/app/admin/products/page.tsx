@@ -143,7 +143,7 @@ export default function AdminProductsPage() {
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" className="border-white/10 hover:bg-white/5 font-bold">
-                  <Download className="mr-2 h-4 w-4" /> REPORTE OPERATIVO
+                  <Download className="mr-2 h-4 w-4" /> EXPORTAR DOCUMENTACIÓN
                 </Button>
               </DialogTrigger>
               <DialogContent className="bg-card/95 backdrop-blur-xl border-white/10 sm:max-w-[400px]">
@@ -157,19 +157,13 @@ export default function AdminProductsPage() {
                   <Button variant="outline" className="h-16 justify-between px-6 border-white/10 hover:border-primary/50 group" onClick={handleExportCSV}>
                     <div className="flex items-center gap-4">
                       <FileSpreadsheet className="h-6 w-6 text-green-500" />
-                      <div className="text-left">
-                        <p className="font-bold text-white uppercase text-xs">Microsoft Excel (CSV)</p>
-                        <p className="text-[10px] text-muted-foreground">Datos listos para trabajar en planilla.</p>
-                      </div>
+                      <p className="font-bold text-white uppercase text-xs">EXPORTAR DOCUMENTACIÓN</p>
                     </div>
                   </Button>
                   <Button variant="outline" className="h-16 justify-between px-6 border-white/10 hover:border-primary/50 group" onClick={handleExportPDF}>
                     <div className="flex items-center gap-4">
                       <FilePieChart className="h-6 w-6 text-destructive" />
-                      <div className="text-left">
-                        <p className="font-bold text-white uppercase text-xs">Documento Portable (PDF)</p>
-                        <p className="text-[10px] text-muted-foreground">Resumen listo para compartir con el equipo.</p>
-                      </div>
+                      <p className="font-bold text-white uppercase text-xs">EXPORTAR DOCUMENTACIÓN</p>
                     </div>
                   </Button>
                 </div>

@@ -83,7 +83,7 @@ export function CatalogSidebar({
             <div className="flex items-center justify-between py-4">
                 <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-primary" />
-                    <h3 className="font-headline text-sm font-medium text-white uppercase tracking-widest">Configuración Técnica</h3>
+                    <h3 className="font-headline text-sm font-medium text-white uppercase tracking-widest">Filtros</h3>
                 </div>
                 {(selectedPlatforms.length > 0 || selectedGenres.length > 0 || priceRange[0] !== 0 || priceRange[1] !== maxPriceCap) && (
                     <Button 

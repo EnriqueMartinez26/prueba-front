@@ -192,13 +192,13 @@ export default function AdminOrdersPage() {
                                     <Button variant="outline" className="h-16 justify-between px-6 border-white/10 hover:border-primary/50" onClick={handleExportCSV}>
                                         <div className="flex items-center gap-4">
                                             <FileSpreadsheet className="h-6 w-6 text-green-500" />
-                                            <p className="font-bold text-white uppercase text-xs">Excel / Matriz CSV</p>
+                                            <p className="font-bold text-white uppercase text-xs">EXPORTAR DOCUMENTACIÓN</p>
                                         </div>
                                     </Button>
                                     <Button variant="outline" className="h-16 justify-between px-6 border-white/10 hover:border-primary/50" onClick={handleExportPDF}>
                                         <div className="flex items-center gap-4">
                                             <FilePieChart className="h-6 w-6 text-destructive" />
-                                            <p className="font-bold text-white uppercase text-xs">PDF Documento Legal</p>
+                                            <p className="font-bold text-white uppercase text-xs">EXPORTAR DOCUMENTACIÓN</p>
                                         </div>
                                     </Button>
                                 </div>

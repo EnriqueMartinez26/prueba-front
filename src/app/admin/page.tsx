@@ -210,7 +210,7 @@ export default function AdminDashboardPage() {
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button variant="outline" className="border-white/10 hover:bg-white/5 font-bold">
-                                <Download className="mr-2 h-4 w-4" /> EXPORTAR AUDITORÍA
+                                <Download className="mr-2 h-4 w-4" /> EXPORTAR DOCUMENTACIÓN
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="bg-card/95 backdrop-blur-xl border-white/10 sm:max-w-[400px]">
@@ -222,13 +222,13 @@ export default function AdminDashboardPage() {
                                 <Button variant="outline" className="h-16 justify-between px-6 border-white/10 hover:border-primary/50" onClick={handleExportExcel}>
                                     <div className="flex items-center gap-4">
                                         <FileSpreadsheet className="h-6 w-6 text-green-500" />
-                                        <p className="font-bold text-white uppercase text-xs">Excel / Matriz Contable</p>
+                                        <p className="font-bold text-white uppercase text-xs">EXPORTAR DOCUMENTACIÓN</p>
                                     </div>
                                 </Button>
                                 <Button variant="outline" className="h-16 justify-between px-6 border-white/10 hover:border-primary/50" onClick={handleExportPDF}>
                                     <div className="flex items-center gap-4">
                                         <FilePieChart className="h-6 w-6 text-destructive" />
-                                        <p className="font-bold text-white uppercase text-xs">PDF Informe Ejecutivo</p>
+                                        <p className="font-bold text-white uppercase text-xs">EXPORTAR DOCUMENTACIÓN</p>
                                     </div>
                                 </Button>
                             </div>
