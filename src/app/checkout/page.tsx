@@ -112,11 +112,11 @@ export default function CheckoutPage() {
     const orderData = {
       userId: user.id,
       orderItems: cart.map(item => ({
-        product: item.productId,
-        name: item.name,
+        product: item.productId || item.product?.id || item.product?._id,
+        name: item.name || item.product?.title || item.product?.name,
         quantity: item.quantity,
-        price: item.price,
-        image: item.image
+        price: item.price || item.product?.price || 0,
+        image: item.image || item.product?.picture_url || item.product?.image || ''
       })),
       shippingAddress: {
         fullName: user.name,
@@ -136,8 +136,8 @@ export default function CheckoutPage() {
       const response = await ApiClient.createOrder(orderData as any);
 
       if (response.paymentLink) {
-        toast({ title: "Orden Sincronizada", description: "Redirigiendo a pasarela certificada..." });
-        window.location.href = response.paymentLink;
+        toast({ title: "Orden Sincronizada", description: "Redirigiendo a pantalla de liquidación..." });
+        router.push(`/checkout/success?payment_link=${encodeURIComponent(response.paymentLink)}&order_id=${response.orderId}`);
       } else {
         throw new Error("No se pudo obtener el enlace de liquidación de la pasarela.");
       }
