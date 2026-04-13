@@ -14,6 +14,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ApiClient } from "@/lib/api";
 import type { Game } from "@/lib/types";
 
+const FALLBACK_MAX_PRICE_ARS = 250000;
+
+const normalizeMaxPrice = (value: number) => {
+    if (!Number.isFinite(value) || value <= 0) return FALLBACK_MAX_PRICE_ARS;
+    return Math.max(100, Math.ceil(value / 100) * 100);
+};
+
 export function useGameCatalog(initialGames: Game[], initialTotalPages = 1) {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -22,6 +29,9 @@ export function useGameCatalog(initialGames: Game[], initialTotalPages = 1) {
     const initialSearch = searchParams.get("search") || "";
     const initialPlatform = searchParams.get("platform");
     const initialGenre = searchParams.get("genre");
+    const initialMaxPrice = normalizeMaxPrice(
+        Math.max(0, ...(initialGames || []).map((game) => Number(game.price) || 0))
+    );
 
     const [games, setGames] = useState<Game[]>(initialGames || []);
     const [loading, setLoading] = useState(false);
@@ -36,7 +46,8 @@ export function useGameCatalog(initialGames: Game[], initialTotalPages = 1) {
     const [selectedGenres, setSelectedGenres] = useState<string[]>(
         initialGenre ? initialGenre.split(",").filter(Boolean) : []
     );
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+    const [maxPriceCap, setMaxPriceCap] = useState(initialMaxPrice);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, initialMaxPrice]);
 
     // Estados de metadatos (Taxonomías)
     const [platforms, setPlatforms] = useState<any[]>([]);
@@ -50,12 +61,19 @@ export function useGameCatalog(initialGames: Game[], initialTotalPages = 1) {
     useEffect(() => {
         const loadFilters = async () => {
             try {
-                const [pData, gData] = await Promise.all([
+                const [pData, gData, maxPriceResponse] = await Promise.all([
                     ApiClient.getPlatforms(),
-                    ApiClient.getGenres()
+                    ApiClient.getGenres(),
+                    ApiClient.getProducts({ page: 1, limit: 1, sort: "-price" }),
                 ]);
+
+                const highestPrice = Number(maxPriceResponse.products?.[0]?.price) || 0;
+                const normalizedMaxPrice = normalizeMaxPrice(highestPrice);
+
                 setPlatforms(Array.isArray(pData) ? pData : pData?.data || []);
                 setGenres(Array.isArray(gData) ? gData : gData?.data || []);
+                setMaxPriceCap(normalizedMaxPrice);
+                setPriceRange([0, normalizedMaxPrice]);
             } catch (e) {
                 console.error("[useGameCatalog] Error al cargar glosarios:", e);
             }
@@ -79,7 +97,7 @@ export function useGameCatalog(initialGames: Game[], initialTotalPages = 1) {
                     genre: selectedGenres.length > 0 ? selectedGenres.join(",") : undefined,
                     sort: "order",
                     minPrice: priceRange[0] > 0 ? priceRange[0] : undefined,
-                    maxPrice: priceRange[1] < 500 ? priceRange[1] : undefined,
+                    maxPrice: priceRange[1] < maxPriceCap ? priceRange[1] : undefined,
                 });
 
                 // Normalización de respuesta según la estructura del ApiClient (DTOs).
@@ -103,7 +121,7 @@ export function useGameCatalog(initialGames: Game[], initialTotalPages = 1) {
         }, 300);
 
         return () => clearTimeout(timeoutId);
-    }, [searchQuery, page, selectedPlatforms, selectedGenres, priceRange]);
+    }, [searchQuery, page, selectedPlatforms, selectedGenres, priceRange, maxPriceCap]);
 
     /**
      * RN - UX (URL Sync): Sincroniza el estado visual con la barra de direcciones.
@@ -124,12 +142,12 @@ export function useGameCatalog(initialGames: Game[], initialTotalPages = 1) {
         games, loading, page, setPage, totalPages,
         searchQuery, setSearchQuery, selectedPlatforms, setSelectedPlatforms,
         selectedGenres, setSelectedGenres, priceRange, setPriceRange,
-        platforms, genres,
+        platforms, genres, maxPriceCap,
         resetFilters: () => {
             setSearchQuery("");
             setSelectedPlatforms([]);
             setSelectedGenres([]);
-            setPriceRange([0, 500]);
+            setPriceRange([0, maxPriceCap]);
             setPage(1);
         }
     };

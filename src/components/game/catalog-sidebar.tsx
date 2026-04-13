@@ -35,6 +35,7 @@ interface CatalogSidebarProps {
     selectedGenres: string[];
     setSelectedGenres: (ids: string[]) => void;
     priceRange: [number, number];
+    maxPriceCap: number;
     setPriceRange: (range: [number, number]) => void;
     onClear: () => void;
     className?: string;
@@ -48,6 +49,7 @@ export function CatalogSidebar({
     selectedGenres,
     setSelectedGenres,
     priceRange,
+    maxPriceCap,
     setPriceRange,
     onClear,
     className,
@@ -83,7 +85,7 @@ export function CatalogSidebar({
                     <Filter className="h-4 w-4 text-primary" />
                     <h3 className="font-headline text-sm font-medium text-white uppercase tracking-widest">Configuración Técnica</h3>
                 </div>
-                {(selectedPlatforms.length > 0 || selectedGenres.length > 0 || priceRange[0] !== 0 || priceRange[1] !== 500) && (
+                {(selectedPlatforms.length > 0 || selectedGenres.length > 0 || priceRange[0] !== 0 || priceRange[1] !== maxPriceCap) && (
                     <Button 
                         variant="ghost" 
                         size="sm" 
@@ -111,10 +113,10 @@ export function CatalogSidebar({
                     <AccordionContent>
                         <div className="px-2 pb-6 pt-2 space-y-6">
                             <Slider
-                                defaultValue={[0, 500]}
+                                defaultValue={[0, maxPriceCap]}
                                 value={priceRange}
                                 min={0}
-                                max={500}
+                                max={maxPriceCap}
                                 step={1} 
                                 onValueChange={(val) => setPriceRange(val as [number, number])}
                                 className="py-4"
@@ -133,18 +135,18 @@ export function CatalogSidebar({
                     </AccordionContent>
                 </AccordionItem>
 
-                {/* RN - Ecosistemas de Hardware: Selección de Plataformas Compatibles */}
+                {/* RN - Selección de Plataformas */}
                 <AccordionItem value="platform" className="border-white/5">
                     <AccordionTrigger className="font-bold text-xs uppercase tracking-widest hover:text-primary transition-colors py-6">
                         <div className="flex items-center gap-3">
                             <HardDrive className="h-4 w-4 text-primary/60" />
-                            Ecosistemas de Hardware
+                            Plataformas
                         </div>
                     </AccordionTrigger>
                     <AccordionContent>
                         <div className="space-y-3 pt-2 pb-4">
                             {platforms.map((platform) => (
-                                <div key={platform.id} className="flex items-center space-x-3 group cursor-pointer" onClick={() => handlePlatformChange(platform.id, !selectedPlatforms.includes(platform.id))}>
+                                <div key={platform.id} className="flex items-center space-x-3 group">
                                     <Checkbox
                                         id={`p-${platform.id}`}
                                         checked={selectedPlatforms.includes(platform.id)}
@@ -165,13 +167,13 @@ export function CatalogSidebar({
                     <AccordionTrigger className="font-bold text-xs uppercase tracking-widest hover:text-primary transition-colors py-6">
                         <div className="flex items-center gap-3">
                             <Gamepad2 className="h-4 w-4 text-primary/60" />
-                            Propuestas de Género
+                            Género
                         </div>
                     </AccordionTrigger>
                     <AccordionContent>
                         <div className="space-y-3 pt-2 pb-4">
                             {genres.map((genre) => (
-                                <div key={genre.id} className="flex items-center space-x-3 group cursor-pointer" onClick={() => handleGenreChange(genre.id, !selectedGenres.includes(genre.id))}>
+                                <div key={genre.id} className="flex items-center space-x-3 group">
                                     <Checkbox
                                         id={`g-${genre.id}`}
                                         checked={selectedGenres.includes(genre.id)}

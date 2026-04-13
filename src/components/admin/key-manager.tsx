@@ -128,7 +128,7 @@ export function KeyManager({ productId, productName, onStockSync }: KeyManagerPr
                     <div className="flex justify-end">
                         <Button onClick={handleSave} disabled={isSaving || !inputKeys.trim()} className="font-bold shadow-md">
                             {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                            SINCRONIZAR A INVENTARIO
+                            AÑADIR KEY
                         </Button>
                     </div>
                 </div>

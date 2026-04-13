@@ -36,7 +36,7 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
     games, loading, page, setPage, totalPages,
     searchQuery, setSearchQuery, selectedPlatforms,
     setSelectedPlatforms, selectedGenres, setSelectedGenres,
-    priceRange, setPriceRange, platforms, genres, resetFilters
+    priceRange, setPriceRange, platforms, genres, maxPriceCap, resetFilters
   } = useGameCatalog(initialGames, initialTotalPages);
 
   return (
@@ -82,6 +82,7 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
                   selectedGenres={selectedGenres}
                   setSelectedGenres={setSelectedGenres}
                   priceRange={priceRange}
+                  maxPriceCap={maxPriceCap}
                   setPriceRange={setPriceRange}
                   onClear={resetFilters}
                 />
@@ -109,6 +110,7 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
                   selectedGenres={selectedGenres}
                   setSelectedGenres={setSelectedGenres}
                   priceRange={priceRange}
+                  maxPriceCap={maxPriceCap}
                   setPriceRange={setPriceRange}
                   onClear={resetFilters}
                 />
