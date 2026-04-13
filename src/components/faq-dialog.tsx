@@ -60,17 +60,17 @@ export function FaqDialog({ children }: FaqDialogProps) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto bg-card/95 backdrop-blur-xl border-white/10 shadow-3xl custom-scrollbar">
         <DialogHeader className="mb-4">
-          <DialogTitle className="flex items-center gap-3 text-3xl font-headline font-bold text-white uppercase tracking-tight">
+          <DialogTitle className="flex items-center gap-3 text-3xl font-headline font-semibold text-white uppercase tracking-tight">
             <HelpCircle className="h-8 w-8 text-primary shadow-glow-primary rounded-full" />
             Preguntas Frecuentes
           </DialogTitle>
-          <p className="text-xs text-primary font-bold uppercase tracking-[0.2em] mt-2">Centro de Asistencia Operativa</p>
+          <p className="text-xs text-primary font-medium uppercase tracking-[0.2em] mt-2">Centro de Asistencia Operativa</p>
         </DialogHeader>
         
         <Accordion type="single" collapsible className="w-full mt-4 border-t border-white/5">
           {faqItems.map((item, index) => (
             <AccordionItem key={index} value={`item-${index}`} className="border-white/5">
-              <AccordionTrigger className="text-left text-sm font-bold text-white hover:text-primary transition-colors py-4 uppercase tracking-tighter decoration-transparent">
+              <AccordionTrigger className="text-left text-sm font-semibold text-white hover:text-primary transition-colors py-4 uppercase tracking-tighter decoration-transparent">
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className="text-muted-foreground text-sm leading-relaxed border-l-2 border-primary/20 pl-4 py-2">

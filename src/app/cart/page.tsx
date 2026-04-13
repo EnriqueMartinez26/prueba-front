@@ -41,21 +41,21 @@ export default function CartPage() {
             <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
             <ShoppingBag className="h-12 w-12 text-primary relative z-10" />
         </div>
-        <h1 className="font-headline text-4xl md:text-5xl font-bold mb-4 text-white tracking-tighter">
-          Identidad Requerida
-        </h1>
-        <p className="text-muted-foreground text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
-          Para proceder con la gestión de activos y normalizar procesos de adquisición, se requiere una sesión autenticada en el terminal.
+        <h2 className="text-3xl font-headline font-bold text-white mb-2 italic">
+          Inicia Sesión
+        </h2>
+        <p className="text-muted-foreground text-sm uppercase tracking-widest font-black opacity-60 mb-8 max-w-sm mx-auto">
+          Debes estar autenticado para gestionar tu carrito y finalizar compras.
         </p>
-        <div className="flex flex-col sm:flex-row gap-6 justify-center">
-          <Button size="lg" asChild className="h-14 px-8 rounded-xl font-black uppercase tracking-widest text-[10px] bg-primary text-black hover:bg-primary/90 shadow-xl transition-all shadow-primary/20">
-            <Link href="/register">
-              <UserPlus className="mr-2 h-4 w-4" /> Registrar Identidad
-            </Link>
-          </Button>
-          <Button size="lg" variant="outline" asChild className="h-14 px-8 rounded-xl border-white/10 text-white font-black uppercase tracking-widest text-[10px] hover:bg-white/5 transition-all">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button asChild className="h-12 px-6 bg-primary text-black font-bold uppercase tracking-widest text-[10px] rounded-xl hover:bg-primary/90 transition-all shadow-lg">
             <Link href="/login">
               <LogIn className="mr-2 h-4 w-4" /> Iniciar Sesión
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="h-12 px-6 border-white/10 bg-white/5 text-white font-bold uppercase tracking-widest text-[10px] rounded-xl hover:bg-white/10 transition-all">
+            <Link href="/register">
+              <UserPlus className="mr-2 h-4 w-4" /> Registrarse
             </Link>
           </Button>
         </div>
@@ -67,12 +67,12 @@ export default function CartPage() {
     <div className="container mx-auto max-w-screen-xl px-4 py-20 animate-in fade-in duration-1000">
       <div className="flex items-center justify-between mb-12 border-b border-white/5 pb-8">
           <div>
-            <h1 className="font-headline text-4xl font-bold text-white tracking-tighter">Cesta de Activos</h1>
-            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground opacity-60 mt-1">Sincronización Pre-Checkout de Operaciones</p>
+            <h1 className="text-5xl font-semibold font-headline text-white tracking-tighter italic uppercase">Tu Carrito</h1>
+            <p className="text-[10px] font-medium uppercase tracking-[0.4em] text-muted-foreground opacity-60">Resumen de selección de juegos</p>
           </div>
           <div className="bg-primary/10 border border-primary/20 px-4 py-2 rounded-full hidden md:flex items-center gap-2">
              <BadgeCheck className="h-4 w-4 text-primary" />
-             <span className="text-[9px] font-black uppercase tracking-widest text-primary">Sesión Validada: {user.name}</span>
+             <span className="text-[9px] font-medium uppercase tracking-widest text-primary">Sesión Validada: {user.name}</span>
           </div>
       </div>
 
@@ -84,7 +84,7 @@ export default function CartPage() {
           <p className="mt-4 text-muted-foreground max-w-sm mx-auto text-sm">
             Aún no se han detectado especificaciones de activos en su terminal. Proceda al catálogo maestro para iniciar una selección.
           </p>
-          <Button asChild className="mt-10 h-14 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] bg-white text-black hover:bg-white/90 shadow-xl transition-all">
+          <Button asChild className="mt-10 h-14 px-10 rounded-xl font-medium uppercase tracking-widest text-[10px] bg-white text-black hover:bg-white/90 shadow-xl transition-all">
             <Link href="/productos">Ir al Portafolio Maestro</Link>
           </Button>
         </div>
@@ -107,23 +107,23 @@ export default function CartPage() {
                   </div>
                   <div className="ml-6 flex-1 pr-4">
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary opacity-60">
+                        <span className="text-[10px] font-medium uppercase tracking-widest text-primary opacity-60">
                             {item.platform?.name || "Distribuido"}
                         </span>
                     </div>
-                    <h3 className="font-headline text-xl font-bold text-white group-hover:text-primary transition-colors">{item.name || "Activo en Auditoría"}</h3>
-                    <p className="text-lg font-black mt-2 text-white/90 tabular-nums tracking-tighter">{formatCurrency(item.price || 0)}</p>
+                    <h3 className="font-headline text-xl font-semibold text-white group-hover:text-primary transition-colors">{item.name || "Activo en Auditoría"}</h3>
+                    <p className="text-lg font-medium mt-2 text-white/90 tabular-nums tracking-tighter">{formatCurrency(item.price || 0)}</p>
                   </div>
                   
                   <div className="flex items-center gap-6">
                     <div className="flex flex-col items-center gap-2">
-                        <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-40">UDS</span>
+                        <span className="text-[9px] font-medium uppercase tracking-widest text-muted-foreground opacity-40">UDS</span>
                         <Input
                           type="number"
                           min="1"
                           value={item.quantity}
                           onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
-                          className="h-10 w-16 text-center bg-black/40 border-white/10 rounded-lg text-white font-bold"
+                          className="h-10 w-16 text-center bg-black/40 border-white/10 rounded-lg text-white font-medium"
                           aria-label="Cantidad de activos"
                         />
                     </div>
@@ -146,15 +146,15 @@ export default function CartPage() {
           <div className="lg:col-span-4 sticky top-24">
             <Card className="border-none bg-primary/5 backdrop-blur-3xl shadow-3xl rounded-[2.5rem] overflow-hidden ring-1 ring-primary/20">
               <CardHeader className="bg-primary/10 py-10 px-10 text-center border-b border-primary/10">
-                <CardTitle className="font-headline text-2xl font-bold text-white tracking-widest uppercase">Ticker de Inversión</CardTitle>
+                <CardTitle className="font-headline text-2xl font-semibold text-white tracking-widest uppercase">Ticker de Inversión</CardTitle>
               </CardHeader>
               <CardContent className="p-10 space-y-8">
                 <div className="space-y-4">
-                    <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-muted-foreground">
+                    <div className="flex justify-between items-center text-xs font-medium uppercase tracking-widest text-muted-foreground">
                         <span>Posiciones ({cartCount})</span>
                         <span className="text-white">{formatCurrency(cartTotal)}</span>
                     </div>
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-muted-foreground opacity-60">
+                    <div className="flex justify-between items-center text-[10px] font-medium uppercase tracking-widest text-muted-foreground opacity-60">
                         <span>Protocolo de Envío</span>
                         <span className="text-green-400">Normalizado</span>
                     </div>
@@ -163,12 +163,12 @@ export default function CartPage() {
                 <Separator className="bg-primary/20" />
                 
                 <div className="flex justify-between items-end">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">Total Final</span>
-                    <span className="text-4xl font-black text-white tracking-tighter tabular-nums">{formatCurrency(cartTotal)}</span>
+                    <span className="text-[10px] font-medium uppercase tracking-[0.4em] text-muted-foreground">Total Final</span>
+                    <span className="text-4xl font-medium text-white tracking-tighter tabular-nums">{formatCurrency(cartTotal)}</span>
                 </div>
               </CardContent>
               <CardFooter className="px-10 pb-10">
-                <Button className="w-full h-16 font-black uppercase tracking-[0.2em] text-[10px] bg-primary text-black hover:bg-primary/90 shadow-2xl shadow-primary/30 rounded-2xl transition-all group" size="lg" asChild>
+                <Button className="w-full h-16 font-medium uppercase tracking-[0.2em] text-[10px] bg-primary text-black hover:bg-primary/90 shadow-2xl shadow-primary/30 rounded-2xl transition-all group" size="lg" asChild>
                   <Link href="/checkout">
                     Iniciar Procedimiento <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>

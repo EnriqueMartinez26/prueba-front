@@ -109,15 +109,14 @@ export function QuickViewModal({ game, open, onOpenChange }: QuickViewModalProps
                                     }}
                                 >
                                     <ShoppingCart className="h-4 w-4 mr-2" />
-                                    Adquirir
+                                    Comprar
                                 </Button>
                                 
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    className={cn("h-12 w-12 border-white/10 hover:bg-white/5", isWishlisted && "text-destructive border-destructive/20 bg-destructive/5")}
+                                    className={cn("h-12 w-12 border-white/10 hover:bg-white/5", isWishlisted && "text-red-500 border-red-500/20 bg-red-500/5")}
                                     onClick={() => toggleWishlist(game)}
-                                    title="Añadir a Deseos"
                                 >
                                     <Heart className={cn("h-5 w-5", isWishlisted && "fill-current")} />
                                 </Button>
@@ -140,7 +139,7 @@ export function QuickViewModal({ game, open, onOpenChange }: QuickViewModalProps
                                     onClick={() => onOpenChange(false)}
                                 >
                                     <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    Ver Ficha Técnica Completa
+                                    Ver Detalles
                                 </Link>
                             </div>
                         </div>

@@ -71,18 +71,18 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
             <main className="container mx-auto px-4 pt-28 max-w-7xl animate-in fade-in slide-in-from-bottom-4 duration-700">
                 
                 {/* Jerarquía de Navegación (Breadcrumbs) */}
-                <nav className="mb-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+                <nav className="mb-8 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                     <Link href="/productos" className="hover:text-primary transition-colors">Catálogo Maestro</Link>
                     <span className="opacity-30">/</span>
                     <span className="text-primary/80">{game.genre?.name || "Activo General"}</span>
                 </nav>
 
                 <div className="mb-10">
-                    <h1 className="text-5xl md:text-7xl font-headline font-bold mb-4 tracking-tighter text-white drop-shadow-2xl">
+                    <h1 className="text-5xl md:text-7xl font-headline font-semibold mb-4 tracking-tighter text-white drop-shadow-2xl">
                         {game.name}
                     </h1>
                     <div className="flex items-center gap-4">
-                        <Badge className="bg-primary/10 text-primary border-primary/20 font-black uppercase tracking-widest text-[10px]">OFICIAL STORE</Badge>
+                        <Badge className="bg-primary/10 text-primary border-primary/20 font-bold uppercase tracking-widest text-[10px]">OFICIAL STORE</Badge>
                         <div className="flex items-center gap-1 text-yellow-500">
                             {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
                         </div>
@@ -122,7 +122,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                         <div className="space-y-6">
                             <h2 className="text-2xl font-bold font-headline text-white flex items-center gap-3">
                                 <div className="h-8 w-1 bg-primary rounded-full shadow-glow-primary" />
-                                Sinopsis Técnica
+                                Descripción
                             </h2>
                             <div className="prose prose-invert max-w-none text-muted-foreground leading-relaxed text-lg">
                                 <p className="whitespace-pre-line opacity-90">{game.description || "No se dispone de una descripción detallada para este registro del catálogo."}</p>
@@ -133,9 +133,9 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                         {game.requirements && (
                             <Card className="bg-card/30 backdrop-blur-xl border-white/5 overflow-hidden">
                                 <CardHeader className="bg-muted/20 border-b border-white/5">
-                                    <CardTitle className="text-lg font-headline font-bold flex items-center gap-3 text-white">
+                                    <CardTitle className="text-lg font-headline font-semibold flex items-center gap-3 text-white">
                                         <Monitor className="h-5 w-5 text-primary" />
-                                        Entorno Tecnológico Recomendado
+                                        Requisitos del Sistema
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="pt-6">
@@ -175,12 +175,12 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                                 <span className="text-xl text-muted-foreground line-through opacity-50 font-bold">
                                                     {formatCurrency(game.price)}
                                                 </span>
-                                                <Badge className="bg-destructive text-white font-black text-[10px] px-2 py-0 border-none">
-                                                    -{game.discountPercentage}% BONIFICADO
+                                                <Badge className="bg-destructive text-white font-bold text-[10px] px-2 py-0 border-none">
+                                                    -{game.discountPercentage}% OFF
                                                 </Badge>
                                             </div>
                                         )}
-                                        <div className="text-5xl font-black text-white tracking-tighter drop-shadow-md">
+                                        <div className="text-5xl font-bold text-white tracking-tighter drop-shadow-md">
                                             {formatCurrency(game.finalPrice ?? game.price)}
                                         </div>
                                     </div>
@@ -192,7 +192,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                 <div className="flex flex-col gap-4">
                                     <Button
                                         size="lg"
-                                        className="w-full text-lg font-black h-16 bg-primary hover:bg-primary/90 text-black shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1 group"
+                                        className="w-full text-lg font-bold h-16 bg-primary hover:bg-primary/90 text-black shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1 group"
                                         onClick={() => {
                                             addToCart(game);
                                             toast({ title: "Cesta Actualizada", description: `${game.name} ha sido reservado.` });
@@ -213,14 +213,14 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                         onClick={() => toggleWishlist(game)}
                                     >
                                         <Heart className={cn("mr-2 h-4 w-4", isWishlisted && "fill-current")} />
-                                        {isWishlisted ? "Deseado" : "Añadir a Deseos"}
+                                        {isWishlisted ? "Deseado" : "Favoritos"}
                                     </Button>
 
                                     {/* RN - Acceso Administrativo (RBAC) */}
                                     {user?.role === 'admin' && (
-                                        <Button asChild variant="ghost" size="lg" className="w-full h-10 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground hover:text-white mt-4 border border-dashed border-white/5">
+                                        <Button asChild variant="ghost" size="lg" className="w-full h-10 text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground hover:text-white mt-4 border border-dashed border-white/5">
                                             <Link href={`/admin/products/${game.id}`}>
-                                                ADMNISTRAR REGISTRO
+                                                EDITAR PRODUCTO
                                             </Link>
                                         </Button>
                                     )}
@@ -252,10 +252,10 @@ function MetaRow({ icon, label, value }: { icon: React.ReactNode, label: string,
     if (!value) return null;
     return (
         <div className="flex justify-between items-center py-2 border-b border-transparent hover:border-white/5 transition-all">
-            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                 {icon} {label}
             </span>
-            <span className="text-white text-xs font-bold text-right">{value}</span>
+            <span className="text-white text-xs font-semibold text-right">{value}</span>
         </div>
     );
 }
@@ -267,8 +267,8 @@ function SpecItem({ label, value, highlight }: { label: string, value?: string, 
     if (!value) return null;
     return (
         <div className="flex flex-col gap-1 pb-2 md:pb-0">
-            <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">{label}</span>
-            <span className={cn("text-xs font-bold leading-tight", highlight ? "text-primary uppercase" : "text-white")}>{value}</span>
+            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">{label}</span>
+            <span className={cn("text-xs font-semibold leading-tight", highlight ? "text-primary uppercase" : "text-white")}>{value}</span>
         </div>
     );
 }

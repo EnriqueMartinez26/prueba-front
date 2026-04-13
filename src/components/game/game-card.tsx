@@ -43,8 +43,8 @@ export function GameCard({ game }: GameCardProps) {
       {/* RN - Gestión Promocional: Badge dinámico de bonificación. */}
       {vm.isOnSale() && (
         <div className="absolute left-4 top-4 z-20">
-          <Badge className="bg-destructive text-white font-black px-3 py-1 text-[10px] animate-pulse shadow-xl border-none">
-            {vm.getDiscountBadge()} BONIFICADO
+          <Badge className="bg-destructive text-white font-bold px-3 py-1 text-[10px] animate-pulse shadow-xl border-none">
+            {vm.getDiscountBadge()} OFF
           </Badge>
         </div>
       )}
@@ -79,16 +79,16 @@ export function GameCard({ game }: GameCardProps) {
 
         <CardContent className="p-6 relative">
           <div className="mb-3 flex items-center gap-2">
-            <Badge variant="outline" className="text-[9px] font-black uppercase tracking-widest border-primary/20 text-primary bg-primary/5 px-2">
+            <Badge variant="outline" className="text-[9px] font-medium uppercase tracking-widest border-primary/20 text-primary bg-primary/5 px-2">
               {vm.getPlatformName()}
             </Badge>
-            {!vm.hasStock() && <Badge variant="secondary" className="text-[9px] font-black uppercase tracking-widest bg-destructive/10 text-destructive border-none">Agotado</Badge>}
+            {!vm.hasStock() && <Badge variant="secondary" className="text-[9px] font-medium uppercase tracking-widest bg-destructive/10 text-destructive border-none">Agotado</Badge>}
           </div>
 
-          <h3 className="line-clamp-1 font-headline text-xl font-bold text-white group-hover:text-primary transition-colors mb-1 tracking-tight">
+          <h3 className="line-clamp-1 font-headline text-xl font-semibold text-white group-hover:text-primary transition-colors mb-1 tracking-tight">
             {game.name}
           </h3>
-          <p className="text-[10px] text-muted-foreground mb-4 font-black uppercase tracking-[0.2em] opacity-60">
+          <p className="text-[10px] text-muted-foreground mb-4 font-medium uppercase tracking-[0.2em] opacity-60">
             {vm.getGenreName()}
           </p>
           
@@ -97,10 +97,10 @@ export function GameCard({ game }: GameCardProps) {
               * RN - Localización Monetaria: El ViewModel garantiza el formato ARS (Pesos Argentinos)
               * operando bajo los estándares transaccionales del TFI.
               */}
-            <span className="text-3xl font-black text-white tracking-tighter">{vm.toDisplayPrice()}</span>
+            <span className="text-3xl font-bold text-white tracking-tighter">{vm.toDisplayPrice()}</span>
             
             {vm.isOnSale() && (
-              <span className="text-sm text-muted-foreground line-through opacity-40 font-bold mb-1">
+              <span className="text-sm text-muted-foreground line-through opacity-40 font-medium mb-1">
                 {vm.getOriginalPrice()}
               </span>
             )}
@@ -111,16 +111,16 @@ export function GameCard({ game }: GameCardProps) {
       <CardFooter className="p-6 pt-0">
         <Button
           onClick={() => addToCart(game)}
-          className="w-full h-12 rounded-xl bg-white/5 text-white hover:bg-primary hover:text-black border border-white/10 hover:border-primary transition-all font-black uppercase text-[10px] tracking-[0.2em] group/btn shadow-xl disabled:opacity-20"
+          className="w-full h-12 rounded-xl bg-white/5 text-white hover:bg-primary hover:text-black border border-white/10 hover:border-primary transition-all font-bold uppercase text-[10px] tracking-[0.2em] group/btn shadow-xl disabled:opacity-20"
           disabled={!vm.hasStock()}
         >
           {vm.hasStock() ? (
             <>
               <ShoppingCart className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform" />
-              Adquirir Licencia
+              Añadir al Carrito
             </>
           ) : (
-            "Sin Existencias"
+            "Agotado"
           )}
         </Button>
       </CardFooter>

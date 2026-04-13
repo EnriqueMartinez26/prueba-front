@@ -85,7 +85,7 @@ export const PixelHero = () => {
         <div className="container mx-auto px-4 flex justify-center items-center min-h-[300px]">
           <div className="animate-pulse flex flex-col items-center gap-4">
             <Percent className="h-12 w-12 text-primary/40 animate-spin" />
-            <p className="text-muted-foreground font-mono uppercase tracking-widest text-xs">Sincronizando Ofertas...</p>
+            <p className="text-muted-foreground font-mono uppercase tracking-widest text-xs">Cargando ofertas...</p>
           </div>
         </div>
       </section>
@@ -104,7 +104,7 @@ export const PixelHero = () => {
         />
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-background via-transparent to-background z-0" />
         <div className="container relative z-10 mx-auto px-4 text-center space-y-4">
-          <h2 className="font-headline text-3xl md:text-4xl font-bold text-primary uppercase">Sin Campañas Activas</h2>
+          <h2 className="font-headline text-3xl md:text-4xl font-semibold text-primary uppercase">Sin Campañas Activas</h2>
           <p className="text-muted-foreground text-lg max-w-md mx-auto">Vuelva en breve para acceder a los beneficios técnicos exclusivos.</p>
           <Button variant="outline" size="lg" asChild className="border-primary/20 text-primary hover:bg-primary/10">
             <Link href="/productos">Explorar Catálogo General <ArrowRight className="ml-2 h-5 w-5" /></Link>
@@ -138,7 +138,7 @@ export const PixelHero = () => {
         <div className="flex items-center gap-3 mb-6 md:mb-8">
           <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5">
             <Zap className="h-4 w-4 text-primary fill-current" />
-            <span className="text-sm font-bold text-primary tracking-widest uppercase font-mono">Promociones Técnicas</span>
+            <span className="text-sm font-semibold text-primary tracking-widest uppercase font-mono">Ofertas Especiales</span>
           </div>
           {games.length > 1 && (
             <span className="text-xs text-muted-foreground font-mono px-3 py-1 bg-white/5 rounded-full border border-white/5">{current + 1} / {games.length}</span>
@@ -154,7 +154,7 @@ export const PixelHero = () => {
           <div className="space-y-6">
             <div className="flex flex-wrap gap-2">
               {hasDiscount && (
-                <Badge className="bg-destructive text-white font-black text-sm px-3 py-1 animate-pulse shadow-lg">
+                <Badge className="bg-destructive text-white font-bold text-sm px-3 py-1 animate-pulse shadow-lg">
                   -{game.discountPercentage}% OFF
                 </Badge>
               )}
@@ -167,7 +167,7 @@ export const PixelHero = () => {
             </div>
 
             <div className="space-y-3">
-              <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl text-white drop-shadow-xl line-clamp-2 leading-tight uppercase">
+              <h1 className="font-headline text-4xl font-semibold tracking-tighter sm:text-5xl md:text-6xl text-white drop-shadow-xl line-clamp-2 leading-tight uppercase">
                 {game.name}
               </h1>
               <p className="max-w-[600px] text-muted-foreground text-sm md:text-lg font-body leading-relaxed line-clamp-3 min-h-[4.8em]">
@@ -183,7 +183,7 @@ export const PixelHero = () => {
                 </span>
               )}
               <span className={cn(
-                "text-4xl md:text-5xl font-black tracking-tight",
+                "text-4xl md:text-5xl font-bold tracking-tight",
                 hasDiscount ? "text-primary" : "text-white"
               )}>
                 {formatCurrency(game.finalPrice ?? game.price)}
@@ -193,22 +193,22 @@ export const PixelHero = () => {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-black font-black text-lg h-14 px-8 shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                className="bg-primary hover:bg-primary/90 text-black font-bold text-lg h-14 px-8 shadow-2xl transition-all duration-300 hover:-translate-y-1"
                 onClick={() => addToCart(game)}
                 disabled={game.stock <= 0}
               >
                 <ShoppingCart className="mr-2 h-6 w-6" />
-                {game.stock > 0 ? "ADQUIRIR YA" : "AGOTADO"}
+                {game.stock > 0 ? "COMPRAR AHORA" : "AGOTADO"}
               </Button>
 
               <Button
                 variant="outline"
                 size="lg"
-                className="h-14 px-8 border-white/10 hover:bg-white/5 text-white font-bold transition-all"
+                className="h-14 px-8 border-white/10 hover:bg-white/5 text-white font-semibold transition-all"
                 asChild
               >
                 <Link href={`/productos/${game.id}`}>
-                  FICHA TÉCNICA <ArrowRight className="ml-2 h-5 w-5 opacity-50" />
+                  VER DETALLES <ArrowRight className="ml-2 h-5 w-5 opacity-50" />
                 </Link>
               </Button>
             </div>
@@ -289,7 +289,7 @@ export const PixelHero = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
                     <div className="flex items-center gap-3 text-white font-mono bg-primary/20 backdrop-blur-md px-4 py-2 rounded-full border border-primary/30">
                       <Zap className="h-4 w-4 text-primary fill-current" />
-                      <span className="text-xs font-black tracking-[0.2em] uppercase">Oferta Vigente</span>
+                      <span className="text-xs font-bold tracking-[0.2em] uppercase">Oferta Vigente</span>
                     </div>
                   </div>
                 </div>

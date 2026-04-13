@@ -180,16 +180,16 @@ export function SearchDialog({
                         ) : loading && results.length === 0 ? (
                             <div className="py-12 flex flex-col items-center justify-center gap-4">
                                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                                <p className="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Sincronizando Base de Datos</p>
+                                <p className="text-[10px] uppercase font-medium text-muted-foreground tracking-widest">Sincronizando Base de Datos</p>
                             </div>
                         ) : results.length === 0 ? (
                             <div className="py-12 text-center space-y-2">
-                                <p className="text-sm text-white font-bold uppercase tracking-tight">Sin coincidencias fácticas</p>
+                                <p className="text-sm text-white font-semibold uppercase tracking-tight">Sin coincidencias fácticas</p>
                                 <p className="text-xs text-muted-foreground">No hay resultados registrados para: &quot;{query}&quot;</p>
                             </div>
                         ) : (
                             <div className="grid gap-2">
-                                <p className="px-3 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary bg-primary/5 rounded border border-primary/10">
+                                <p className="px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-primary bg-primary/5 rounded border border-primary/10">
                                     Localizados: {totalResults} ítems encontrados
                                 </p>
                                 {results.map((product) => (
@@ -208,7 +208,7 @@ export function SearchDialog({
                                             />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-bold text-white group-hover:text-primary transition-colors truncate uppercase tracking-tight">{product.name}</p>
+                                            <p className="text-sm font-semibold text-white group-hover:text-primary transition-colors truncate uppercase tracking-tight">{product.name}</p>
                                             <p className="text-[10px] text-muted-foreground truncate uppercase font-mono tracking-tighter opacity-80">
                                                 {typeof product.platform === 'object' ? product.platform.name : product.platform}
                                                 {product.developer && ` · ${product.developer}`}
@@ -218,10 +218,10 @@ export function SearchDialog({
                                             {(product.discountPercentage ?? 0) > 0 ? (
                                                 <div className="flex flex-col items-end">
                                                     <span className="text-[10px] line-through text-destructive/60 font-mono">{formatCurrency(product.price)}</span>
-                                                    <p className="text-sm font-black text-primary">{formatCurrency(product.finalPrice ?? product.price)}</p>
+                                                    <p className="text-sm font-bold text-primary">{formatCurrency(product.finalPrice ?? product.price)}</p>
                                                 </div>
                                             ) : (
-                                                <p className="text-sm font-black text-white">{formatCurrency(product.price)}</p>
+                                                <p className="text-sm font-bold text-white">{formatCurrency(product.price)}</p>
                                             )}
                                         </div>
                                     </button>
@@ -229,7 +229,7 @@ export function SearchDialog({
                                 {totalResults > MAX_PREVIEW && (
                                     <Button
                                         variant="ghost"
-                                        className="justify-between h-10 px-4 text-xs font-black uppercase tracking-widest mt-2 hover:bg-primary/10 hover:text-primary border border-white/5"
+                                        className="justify-between h-10 px-4 text-xs font-medium uppercase tracking-widest mt-2 hover:bg-primary/10 hover:text-primary border border-white/5"
                                         onClick={handleSearch}
                                     >
                                         <span>Expandir Resultados Completos</span>
@@ -241,7 +241,7 @@ export function SearchDialog({
                     </div>
 
                     {/* Barra de Atajos y Estado Operativo */}
-                    <div className="py-2.5 px-5 bg-muted/40 text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground flex items-center justify-between border-t border-white/5">
+                    <div className="py-2.5 px-5 bg-muted/40 text-[9px] font-medium uppercase tracking-[0.2em] text-muted-foreground flex items-center justify-between border-t border-white/5">
                         <span className="flex items-center gap-2">
                             <kbd className="h-5 min-w-8 flex items-center justify-center rounded border border-white/10 bg-black/40 px-1.5 font-mono text-white opacity-100 shadow-sm">
                                 Enter

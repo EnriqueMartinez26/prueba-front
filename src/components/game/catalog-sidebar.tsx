@@ -81,14 +81,14 @@ export function CatalogSidebar({
             <div className="flex items-center justify-between py-4">
                 <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-primary" />
-                    <h3 className="font-headline text-sm font-black text-white uppercase tracking-widest">Configuración Técnica</h3>
+                    <h3 className="font-headline text-sm font-medium text-white uppercase tracking-widest">Configuración Técnica</h3>
                 </div>
                 {(selectedPlatforms.length > 0 || selectedGenres.length > 0 || priceRange[0] !== 0 || priceRange[1] !== 500) && (
                     <Button 
                         variant="ghost" 
                         size="sm" 
                         onClick={onClear} 
-                        className="h-8 px-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all rounded-full"
+                        className="h-8 px-3 text-[10px] font-medium uppercase tracking-widest text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all rounded-full"
                     >
                         <X className="mr-1 h-3 w-3" />
                         Limpiar
@@ -102,7 +102,7 @@ export function CatalogSidebar({
                 
                 {/* RN - Segmentación Financiera: Control de Rango de Inversión */}
                 <AccordionItem value="price" className="border-white/5">
-                    <AccordionTrigger className="font-bold text-xs uppercase tracking-widest hover:text-primary transition-colors py-6">
+                    <AccordionTrigger className="font-medium text-xs uppercase tracking-widest hover:text-primary transition-colors py-6">
                         <div className="flex items-center gap-3">
                             <BarChart className="h-4 w-4 text-primary/60" />
                             Rango de Valorización (ARS)
@@ -120,13 +120,13 @@ export function CatalogSidebar({
                                 className="py-4"
                             />
                             <div className="flex items-center justify-between">
-                                <div className="bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg">
-                                    <span className="text-[10px] text-muted-foreground uppercase font-black block leading-none mb-1">Mínimo</span>
-                                    <span className="text-sm font-black text-white">$ {priceRange[0]}</span>
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-[10px] text-muted-foreground uppercase font-bold block leading-none mb-1">Mínimo</span>
+                                    <span className="text-sm font-bold text-white">$ {priceRange[0]}</span>
                                 </div>
-                                <div className="bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-right">
-                                    <span className="text-[10px] text-muted-foreground uppercase font-black block leading-none mb-1">Máximo</span>
-                                    <span className="text-sm font-black text-white">$ {priceRange[1]}</span>
+                                <div className="flex flex-col gap-1 text-right">
+                                    <span className="text-[10px] text-muted-foreground uppercase font-bold block leading-none mb-1">Máximo</span>
+                                    <span className="text-sm font-bold text-white">$ {priceRange[1]}</span>
                                 </div>
                             </div>
                         </div>
