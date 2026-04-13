@@ -281,7 +281,7 @@ export function ProductReviews({ productId, productName }: ProductReviewsProps) 
                     <Input
                       value={formTitle}
                       onChange={(e) => setFormTitle(e.target.value)}
-                      placeholder="Excelente juego, muy entretenido"
+                      placeholder=""
                       className="bg-background/50 border-white/10"
                       disabled={submitting}
                     />
@@ -292,7 +292,7 @@ export function ProductReviews({ productId, productName }: ProductReviewsProps) 
                     <Textarea
                       value={formText}
                       onChange={(e) => setFormText(e.target.value)}
-                      placeholder="Contanos que te gusto del juego y como fue tu experiencia."
+                      placeholder=""
                       rows={5}
                       className="bg-background/50 border-white/10 resize-none"
                       disabled={submitting}

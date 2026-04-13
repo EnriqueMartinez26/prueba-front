@@ -20,7 +20,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "ignoreDeprecations": "6.0",
     "incremental": true,
     "plugins": [
       {
@@ -31,9 +30,8 @@
      * RN - Mantenibilidad: Alias de resolución de rutas.
      * Permite importaciones limpias (ej. '@/lib/api') evitando rutas relativas complejas.
      */
-    "baseUrl": "src",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

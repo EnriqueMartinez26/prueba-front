@@ -253,34 +253,6 @@ export const PixelHero = () => {
               </div>
             )}
 
-            <div className="pt-3">
-              <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-bold mb-2">
-                Todas las ofertas disponibles
-              </p>
-              <div className="flex gap-2 overflow-x-auto pb-2 pr-1">
-                {games.map((offer, i) => (
-                  <button
-                    key={offer.id}
-                    onClick={() => {
-                      if (i !== current) {
-                        setTransitioning(true);
-                        setTimeout(() => { setCurrent(i); setTransitioning(false); }, 300);
-                      }
-                    }}
-                    className={cn(
-                      "min-w-[180px] rounded-xl border px-3 py-2 text-left transition-all",
-                      i === current
-                        ? "border-primary/50 bg-primary/10"
-                        : "border-white/10 bg-white/5 hover:border-white/20"
-                    )}
-                    aria-label={`Seleccionar oferta ${offer.name}`}
-                  >
-                    <p className="truncate text-xs font-bold text-white">{offer.name}</p>
-                    <p className="text-[11px] font-black text-green-400">{formatCurrency(offer.finalPrice ?? offer.price)}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Columna: Composición Visual (Box Art Inmersivo) */}
