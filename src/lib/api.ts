@@ -130,9 +130,18 @@ export class ApiClient {
   static async deleteUser(id: string) { return this.request(`/users/${id}`, { method: 'DELETE' }); }
 
   // ─── DASHBOARD (Pilar 5 — Reportes y BI) ───
-  static async getDashboardStats() { return this.request<any>('/dashboard/stats'); }
-  static async getSalesChart() { return this.request<any>('/dashboard/sales-chart'); }
-  static async getTopProducts() { return this.request<any>('/dashboard/top-products'); }
+  static async getDashboardStats() { 
+    const res = await this.request<any>('/dashboard/stats');
+    return res.data || res;
+  }
+  static async getSalesChart() { 
+    const res = await this.request<any>('/dashboard/sales-chart');
+    return res.data || res;
+  }
+  static async getTopProducts() { 
+    const res = await this.request<any>('/dashboard/top-products');
+    return res.data || res;
+  }
 
   // ─── DIGITAL KEYS (Gestión de Licencias — RN Core) ───
   static async getKeysByProduct(productId: string) { return this.request<any>(`/keys/product/${productId}`); }
