@@ -112,11 +112,11 @@ export default function CheckoutPage() {
     const orderData = {
       userId: user.id,
       orderItems: cart.map(item => ({
-        product: item.productId,
-        name: item.name,
+        product: item.productId || item.product?.id || item.product?._id,
+        name: item.name || item.product?.title || item.product?.name,
         quantity: item.quantity,
-        price: item.price,
-        image: item.image
+        price: item.price || item.product?.price || 0,
+        image: item.image || item.product?.picture_url || item.product?.image || ''
       })),
       shippingAddress: {
         fullName: user.name,
