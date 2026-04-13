@@ -37,7 +37,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Image from "next/image";
-import { Loader2, UserPlus, ShieldCheck, ArrowRight, IdCard } from "lucide-react";
+import { Loader2, UserPlus, ArrowRight, IdCard } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterSchema, type RegisterValues } from "@/lib/schemas";
@@ -146,7 +146,6 @@ export default function RegisterPage() {
                       <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Nombre de usuario</FormLabel>
                         <FormControl>
                         <Input
-                        placeholder="EjemploGamer"
                             disabled={isSubmitting}
                             className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
                             {...field}
@@ -164,7 +163,6 @@ export default function RegisterPage() {
                       <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Correo electronico</FormLabel>
                         <FormControl>
                         <Input
-                            placeholder="tu@email.com"
                             type="email"
                             disabled={isSubmitting}
                             className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
@@ -187,7 +185,6 @@ export default function RegisterPage() {
                         <FormControl>
                         <Input
                             type="password"
-                            placeholder="••••••••"
                             disabled={isSubmitting}
                             className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
                             {...field}
@@ -206,7 +203,6 @@ export default function RegisterPage() {
                         <FormControl>
                         <Input
                             type="password"
-                            placeholder="••••••••"
                             disabled={isSubmitting}
                             className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
                             {...field}
@@ -243,10 +239,6 @@ export default function RegisterPage() {
             </Link>
           </div>
           
-          <div className="flex items-center justify-center gap-2 opacity-30 select-none pt-4">
-              <ShieldCheck className="h-4 w-4 text-primary" />
-              <span className="text-[9px] font-black uppercase tracking-[0.4em]">Secure Onboarding TFI v1.2</span>
-          </div>
         </CardFooter>
       </Card>
     </div>

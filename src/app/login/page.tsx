@@ -140,7 +140,6 @@ function LoginForm() {
                     <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Identificador de Correo</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="usuario@dominio.com"
                         type="email"
                         disabled={isSubmitting}
                         className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
@@ -160,7 +159,6 @@ function LoginForm() {
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="••••••••"
                         disabled={isSubmitting}
                         className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
                         {...field}
