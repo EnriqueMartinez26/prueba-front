@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Capa de Interfaz: Central de Consultas Frecuentes (FAQ Dialog)
+ * Capa de Interfaz: Consultas Frecuentes (FAQ Dialog)
  * --------------------------------------------------------------------------
  * Provee un repositorio de respuestas técnicas y operativas para el usuario.
  * Documenta la logística de entrega de licencias, la integración con 

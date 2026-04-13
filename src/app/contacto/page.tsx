@@ -104,8 +104,8 @@ export default function ContactoPage() {
                 <Mail className="h-6 w-6 text-primary" />
             </div>
             <div>
-                <CardTitle className="text-4xl font-headline font-bold text-white tracking-tighter">Central de Consultas</CardTitle>
-                <CardDescription className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground opacity-70">Canal Directo de Soporte y Asesoría Técnica</CardDescription>
+                <CardTitle className="text-4xl font-headline font-bold text-white tracking-tighter">Consultas</CardTitle>
+                <CardDescription className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground opacity-70">Soporte y Asesoría</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -116,7 +116,7 @@ export default function ContactoPage() {
                 <Label htmlFor="firstName" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                     <User className="h-3 w-3" /> Nombre
                 </Label>
-                <Input id="firstName" {...register("firstName")} className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20" placeholder="Ej: Juan" />
+                <Input id="firstName" {...register("firstName")} className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20" placeholder="" />
                 {errors.firstName && (
                   <p className="text-[10px] font-bold text-destructive uppercase tracking-tighter">{errors.firstName.message}</p>
                 )}
@@ -125,7 +125,7 @@ export default function ContactoPage() {
                 <Label htmlFor="lastName" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                     <User className="h-3 w-3" /> Apellido
                 </Label>
-                <Input id="lastName" {...register("lastName")} className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20" placeholder="Ej: Pérez" />
+                <Input id="lastName" {...register("lastName")} className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20" placeholder="" />
                 {errors.lastName && (
                   <p className="text-[10px] font-bold text-destructive uppercase tracking-tighter">{errors.lastName.message}</p>
                 )}
@@ -144,12 +144,12 @@ export default function ContactoPage() {
 
             <div className="space-y-3">
               <Label htmlFor="message" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                  <MessageSquare className="h-3 w-3" /> Cuerpo del Requerimiento
+                  <MessageSquare className="h-3 w-3" /> Mensaje
               </Label>
               <Textarea
                 id="message"
                 className="min-h-[160px] bg-white/5 border-white/10 rounded-2xl focus:ring-primary/40 text-white placeholder:opacity-20 resize-none p-4"
-                placeholder="Describa de forma detallada su consulta o inconveniente técnico..."
+                placeholder="Describa su consulta..."
                 {...register("message")}
               />
               {errors.message && (
@@ -160,18 +160,18 @@ export default function ContactoPage() {
             <div className="flex justify-end pt-4">
               <Button 
                 type="submit" 
-                disabled={isSubmitting} 
-                className="h-14 px-10 bg-primary text-black hover:bg-primary/90 font-black uppercase text-[10px] tracking-widest transition-all rounded-xl shadow-xl shadow-primary/20 group"
+                disabled={isSubmitting}
+                className="h-14 px-10 bg-primary text-black hover:bg-primary/90 font-black uppercase text-sm tracking-widest transition-all rounded-xl shadow-xl shadow-primary/20 group"
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-3 h-5 w-5 animate-spin" />
-                    Procesando Registro...
+                    Enviando...
                   </>
                 ) : (
                   <>
                     <Send className="mr-3 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    Despachar Requerimiento
+                    Enviar
                   </>
                 )}
               </Button>
