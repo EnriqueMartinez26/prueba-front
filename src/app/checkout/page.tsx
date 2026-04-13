@@ -136,8 +136,8 @@ export default function CheckoutPage() {
       const response = await ApiClient.createOrder(orderData as any);
 
       if (response.paymentLink) {
-        toast({ title: "Orden Sincronizada", description: "Redirigiendo a pasarela certificada..." });
-        window.location.href = response.paymentLink;
+        toast({ title: "Orden Sincronizada", description: "Redirigiendo a pantalla de liquidación..." });
+        router.push(`/checkout/success?payment_link=${encodeURIComponent(response.paymentLink)}&order_id=${response.orderId}`);
       } else {
         throw new Error("No se pudo obtener el enlace de liquidación de la pasarela.");
       }
