@@ -87,6 +87,23 @@ export default function AdminOrdersPage() {
         }
     };
 
+    const handleMarkAsPaid = async (orderId: string) => {
+        try {
+            await ApiClient.updateOrderToPaid(orderId);
+            toast({
+                title: "Pago Confirmado",
+                description: "Orden marcada como pagada y claves digitales enviadas por correo cuando corresponda."
+            });
+            fetchOrders();
+        } catch (error) {
+            toast({
+                title: "Error Operativo",
+                description: "No se pudo marcar la orden como pagada.",
+                variant: "destructive"
+            });
+        }
+    };
+
     /**
      * MVVM: Transformación a ViewModels para orquestación de reportes.
      */
@@ -266,8 +283,8 @@ export default function AdminOrdersPage() {
                                                     <DropdownMenuContent align="end" className="bg-card/95 backdrop-blur-xl border-white/10 text-white">
                                                         <DropdownMenuLabel className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Logística de Orden</DropdownMenuLabel>
                                                         <DropdownMenuSeparator className="bg-white/5" />
-                                                        <DropdownMenuItem onClick={() => handleStatusChange(vm.getRawData().id, 'shipped')} className="text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer">
-                                                            <RefreshCw className="mr-2 h-4 w-4" /> Marcar como Despachado
+                                                        <DropdownMenuItem onClick={() => handleMarkAsPaid(vm.getRawData().id)} className="text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer">
+                                                            <RefreshCw className="mr-2 h-4 w-4" /> Marcar como Pagado
                                                         </DropdownMenuItem>
                                                         <DropdownMenuItem onClick={() => handleStatusChange(vm.getRawData().id, 'delivered')} className="text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer">
                                                             <RefreshCw className="mr-2 h-4 w-4" /> Marcar como Entregado

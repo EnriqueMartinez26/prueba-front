@@ -198,6 +198,7 @@ export class ApiClient {
     return this.request<{ success: boolean; orders: Order[]; total: number; totalPages: number }>(`/orders${qs}`); 
   }
   static async updateOrderStatus(id: string, status: string) { return this.request(`/orders/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }); }
+  static async updateOrderToPaid(id: string) { return this.request(`/orders/${id}/pay`, { method: 'PUT' }); }
 
   // ─── REVIEWS ───
   static async getProductReviews(productId: string, params?: any) {
