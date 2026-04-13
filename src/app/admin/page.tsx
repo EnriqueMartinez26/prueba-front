@@ -6,7 +6,7 @@
  * Orquesta la visualización de Inteligencia de Negocios (BI) en tiempo real. 
  * Implementa indicadores clave de desempeño (KPI) para el seguimiento de 
  * ingresos, usuarios y salud del inventario. Utiliza motores de gráficos 
- * dinámicos para el análisis de tendencias transaccionales. (MVC / Page)
+ * dinámicos para el análisis de tendencias. (MVC / Page)
  */
 
 import { useEffect, useState } from "react";
@@ -115,10 +115,10 @@ export default function AdminDashboardPage() {
                 <div className="space-y-1">
                     <h1 className="text-4xl font-headline font-bold text-white tracking-tight flex items-center gap-3">
                         <Activity className="h-10 w-10 text-primary" />
-                        Consola de Inteligencia
+                        Panel de Administración
                     </h1>
                     <p className="text-muted-foreground uppercase tracking-[0.2em] text-[10px] font-black opacity-80 pl-1">
-                        Resumen Operativo y Análisis de Tracción en Tiempo Real
+                        Resumen de Ventas y Actividad en Tiempo Real
                     </p>
                 </div>
                 <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-2 rounded-full">
@@ -135,7 +135,7 @@ export default function AdminDashboardPage() {
                         <div className="p-2 bg-primary/10 rounded-lg group-hover:scale-110 transition-transform"><DollarSign className="h-4 w-4 text-primary" /></div>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-3xl font-black text-white tracking-tighter">{formatCurrency(stats?.totalRevenue || 0)}</div>
+                        <div className="text-3xl font-bold text-white tracking-tighter">{formatCurrency(stats?.totalRevenue || 0)}</div>
                         <div className="flex items-center gap-2 mt-2">
                             <Badge variant="outline" className={cn("text-[9px] font-black border-none py-0", (stats?.monthlyGrowth || 0) >= 0 ? "text-green-400 bg-green-400/10" : "text-destructive bg-destructive/10")}>
                                 {(stats?.monthlyGrowth || 0) >= 0 ? <TrendingUp className="h-3 w-3 mr-1" /> : <AlertTriangle className="h-3 w-3 mr-1" />}
@@ -148,29 +148,29 @@ export default function AdminDashboardPage() {
 
                 <Card className="border-none bg-card/40 backdrop-blur-md shadow-2xl overflow-hidden group">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Nómina de Usuarios</CardTitle>
+                        <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Usuarios Registrados</CardTitle>
                         <div className="p-2 bg-blue-500/10 rounded-lg group-hover:scale-110 transition-transform"><Users className="h-4 w-4 text-blue-400" /></div>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-3xl font-black text-white tracking-tighter">{stats?.totalUsers || 0}</div>
-                        <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter mt-2">Registros de Identidad Activos</p>
+                        <div className="text-3xl font-bold text-white tracking-tighter">{stats?.totalUsers || 0}</div>
+                        <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter mt-2">Clientes Activos</p>
                     </CardContent>
                 </Card>
 
                 <Card className="border-none bg-card/40 backdrop-blur-md shadow-2xl overflow-hidden group">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Activos en Catálogo</CardTitle>
+                        <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Productos en Catálogo</CardTitle>
                         <div className="p-2 bg-purple-500/10 rounded-lg group-hover:scale-110 transition-transform"><Package className="h-4 w-4 text-purple-400" /></div>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-3xl font-black text-white tracking-tighter">{stats?.activeProducts || 0}</div>
-                        <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter mt-2">Entidades Disponibles para Tracción</p>
+                        <div className="text-3xl font-bold text-white tracking-tighter">{stats?.activeProducts || 0}</div>
+                        <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tighter mt-2">Productos Disponibles</p>
                     </CardContent>
                 </Card>
 
                 <Card className={cn("border-none bg-card/40 backdrop-blur-md shadow-2xl overflow-hidden group", stats?.lowStockProducts ? "ring-1 ring-destructive/30" : "")}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Alerta de Existencias</CardTitle>
+                        <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Alerta de Stock</CardTitle>
                         <div className={cn("p-2 rounded-lg group-hover:scale-110 transition-transform", stats?.lowStockProducts ? "bg-destructive/10" : "bg-green-500/10")}>
                             <AlertTriangle className={cn("h-4 w-4", stats?.lowStockProducts ? 'text-destructive' : 'text-green-400')} />
                         </div>

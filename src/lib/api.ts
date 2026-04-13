@@ -3,11 +3,10 @@ import type { PaginatedResponse, User, Order, CartItem, OrderStatus, ApiResponse
 import { Logger } from './logger';
 
 /**
- * Capa de Infraestructura: Cliente de Red (API Gateway)
+ * Capa de Servicios: Cliente de API
  * --------------------------------------------------------------------------
- * Centraliza la comunicación con el Backend mediante el API de Fetch.
- * Implementa un marco de seguridad para el manejo de sesiones (JWT) y 
- * adaptadores para eludir restricciones de origen cruzado (CORS). (MVC / Lib)
+ * Centraliza la comunicación con el Backend mediante Fetch.
+ * Implementa el manejo de sesiones (JWT). (MVC / Lib)
  */
 
 const getBaseUrl = () => {
@@ -68,7 +67,7 @@ export class ApiClient {
   static async changePassword(data: any) { return this.request('/auth/change-password', { method: 'PUT', body: JSON.stringify(data) }); }
 
   /**
-   * RN - Protocolo de Recuperación: Inicia el flujo de restauración de identidad.
+   * RN - Recuperación: Inicia el flujo de recuperación de contraseña.
    */
   static async forgotPassword(email: string) {
     return this.request('/auth/forgot-password', {
@@ -78,7 +77,7 @@ export class ApiClient {
   }
 
   /**
-   * RN - Protocolo de Mutación: Actualiza la credencial mediante un token de sesión.
+   * RN - Actualización: Cambia la contraseña mediante un token.
    */
   static async resetPassword(token: string, password: string) {
     return this.request(`/auth/reset-password/${token}`, {
@@ -143,7 +142,7 @@ export class ApiClient {
     return res.data || res;
   }
 
-  // ─── DIGITAL KEYS (Gestión de Licencias — RN Core) ───
+  // ─── CODIGOS DIGITALES (Gestión de Licencias) ───
   static async getKeysByProduct(productId: string) { return this.request<any>(`/keys/product/${productId}`); }
   static async addKeys(productId: string, keys: string[]) { return this.request<any>('/keys', { method: 'POST', body: JSON.stringify({ productId, keys }) }); }
   static async deleteKey(keyId: string) { return this.request(`/keys/${keyId}`, { method: 'DELETE' }); }
@@ -189,7 +188,7 @@ export class ApiClient {
     return this.request<{ success: boolean; message: string }>(`/auth/verify-email/${token}`);
   }
 
-  // ─── UTILS & ASSETS ───
+  // ─── UTILIDADES E IMAGENES ───
   static async uploadImage(file: File): Promise<string> {
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'dxlbwdqop';
     const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || '4fun_preset';

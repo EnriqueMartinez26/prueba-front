@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Capa de Interfaz: Ficha Técnica Detallada (Product Detail View)
+ * Capa de Interfaz: Detalles del Producto
  * --------------------------------------------------------------------------
  * Orquesta la visualización pormenorizada de un producto del catálogo.
  * Gestiona la integración multimedia (Trailers de YouTube, Galerías),
@@ -71,10 +71,10 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
             <main className="container mx-auto px-4 pt-28 max-w-7xl animate-in fade-in slide-in-from-bottom-4 duration-700">
                 
                 {/* Jerarquía de Navegación (Breadcrumbs) */}
-                <nav className="mb-8 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                <nav className="mb-8 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/60">
                     <Link href="/productos" className="hover:text-primary transition-colors">Catálogo Maestro</Link>
                     <span className="opacity-30">/</span>
-                    <span className="text-primary/80">{game.genre?.name || "Activo General"}</span>
+                    <span className="text-primary/80">{game.genre?.name || "Producto"}</span>
                 </nav>
 
                 <div className="mb-10">
@@ -82,7 +82,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                         {game.name}
                     </h1>
                     <div className="flex items-center gap-4">
-                        <Badge className="bg-primary/10 text-primary border-primary/20 font-bold uppercase tracking-widest text-[10px]">OFICIAL STORE</Badge>
+                        <Badge className="bg-primary/10 text-primary border-primary/20 font-semibold uppercase tracking-widest text-[10px]">OFICIAL STORE</Badge>
                         <div className="flex items-center gap-1 text-yellow-500">
                             {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
                         </div>
@@ -91,7 +91,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 xl:gap-16">
                     
-                    {/* Columna de Contenidos: Multimedia y Auditoría Técnica */}
+                    {/* Columna de Contenidos: Multimedia y Detalles */}
                     <div className="lg:col-span-2 space-y-12">
 
                         {/* Motor Multimedia: Despliegue de Trailer / Imagen Master */}
@@ -120,7 +120,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
 
                         {/* Descripción y Reglas de Dominio */}
                         <div className="space-y-6">
-                            <h2 className="text-2xl font-bold font-headline text-white flex items-center gap-3">
+                            <h2 className="text-2xl font-semibold font-headline text-white flex items-center gap-3">
                                 <div className="h-8 w-1 bg-primary rounded-full shadow-glow-primary" />
                                 Descripción
                             </h2>
@@ -151,7 +151,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                             </Card>
                         )}
 
-                        {/* Capa de Auditoría: Opiniones y Feedback del Ecosistema. */}
+                        {/* Opiniones y Valoraciones. */}
                         <div className="pt-8">
                              <ProductReviews productId={game.id} productName={game.name} />
                         </div>
@@ -172,7 +172,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                     <div className="space-y-1">
                                         {(game.discountPercentage ?? 0) > 0 && (
                                             <div className="flex items-center gap-3">
-                                                <span className="text-xl text-muted-foreground line-through opacity-50 font-bold">
+                                                <span className="text-xl text-muted-foreground line-through opacity-50 font-semibold">
                                                     {formatCurrency(game.price)}
                                                 </span>
                                                 <Badge className="bg-destructive text-white font-bold text-[10px] px-2 py-0 border-none">
@@ -180,34 +180,34 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                                 </Badge>
                                             </div>
                                         )}
-                                        <div className="text-5xl font-bold text-white tracking-tighter drop-shadow-md">
+                                        <div className="text-5xl font-semibold text-white tracking-tighter drop-shadow-md">
                                             {formatCurrency(game.finalPrice ?? game.price)}
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="text-5xl font-black text-primary animate-pulse tracking-tighter">FREE ACCESS</div>
+                                    <div className="text-5xl font-bold text-primary animate-pulse tracking-tighter">FREE ACCESS</div>
                                 )}
 
                                 {/* Acciones de Conversión Primaria */}
                                 <div className="flex flex-col gap-4">
                                     <Button
                                         size="lg"
-                                        className="w-full text-lg font-bold h-16 bg-primary hover:bg-primary/90 text-black shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1 group"
+                                        className="w-full text-lg font-semibold h-16 bg-primary hover:bg-primary/90 text-black shadow-primary/20 hover:shadow-primary/40 transition-all hover:-translate-y-1 group"
                                         onClick={() => {
                                             addToCart(game);
-                                            toast({ title: "Cesta Actualizada", description: `${game.name} ha sido reservado.` });
+                                            toast({ title: "Carrito Actualizado", description: `${game.name} ha sido agregado.` });
                                         }}
                                         disabled={game.stock === 0}
                                     >
                                         <ShoppingCart className="mr-3 h-6 w-6 group-hover:rotate-12 transition-transform" />
-                                        {game.stock === 0 ? "STOCK AGOTADO" : "AÑADIR AL CARRITO"}
+                                        {game.stock === 0 ? "STOCK AGOTADO" : "AGREGAR AL CARRITO"}
                                     </Button>
 
                                     <Button
                                         variant="outline"
                                         size="lg"
                                         className={cn(
-                                            "w-full h-14 border-white/10 hover:bg-white/5 font-bold uppercase tracking-widest text-[10px]", 
+                                            "w-full h-14 border-white/10 hover:bg-white/5 font-semibold uppercase tracking-widest text-[10px]", 
                                             isWishlisted && "border-destructive/30 text-destructive bg-destructive/5"
                                         )}
                                         onClick={() => toggleWishlist(game)}
@@ -218,7 +218,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
 
                                     {/* RN - Acceso Administrativo (RBAC) */}
                                     {user?.role === 'admin' && (
-                                        <Button asChild variant="ghost" size="lg" className="w-full h-10 text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground hover:text-white mt-4 border border-dashed border-white/5">
+                                        <Button asChild variant="ghost" size="lg" className="w-full h-10 text-[10px] font-semibold uppercase tracking-[0.3em] text-muted-foreground hover:text-white mt-4 border border-dashed border-white/5">
                                             <Link href={`/admin/products/${game.id}`}>
                                                 EDITAR PRODUCTO
                                             </Link>
@@ -229,7 +229,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
 
                             <Separator className="bg-white/5" />
 
-                            {/* Tabla Registral de Metadatos Industriales */}
+                            {/* Información General */}
                             <div className="space-y-4">
                                 <MetaRow icon={<Globe className="w-4 h-4 text-primary/60" />} label="Desarrollador" value={game.developer ?? undefined} />
                                 <MetaRow icon={<Layers className="w-4 h-4 text-primary/60" />} label="Plataforma" value={game.platform?.name} />
@@ -252,7 +252,7 @@ function MetaRow({ icon, label, value }: { icon: React.ReactNode, label: string,
     if (!value) return null;
     return (
         <div className="flex justify-between items-center py-2 border-b border-transparent hover:border-white/5 transition-all">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
                 {icon} {label}
             </span>
             <span className="text-white text-xs font-semibold text-right">{value}</span>
@@ -267,7 +267,7 @@ function SpecItem({ label, value, highlight }: { label: string, value?: string, 
     if (!value) return null;
     return (
         <div className="flex flex-col gap-1 pb-2 md:pb-0">
-            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">{label}</span>
+            <span className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground/60">{label}</span>
             <span className={cn("text-xs font-semibold leading-tight", highlight ? "text-primary uppercase" : "text-white")}>{value}</span>
         </div>
     );

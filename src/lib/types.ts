@@ -8,7 +8,7 @@
 // ─── ENTIDADES DE REFERENCIA ───
 
 /**
- * RN - Taxonomía: Interfaz base para entidades maestras (Plataformas, Géneros).
+ * RN - Categorización: Interfaz base para entidades maestras (Plataformas, Géneros).
  */
 export interface ReferenceEntity {
   id: string;
@@ -79,7 +79,7 @@ export type CartItem = {
 export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
 /**
- * RN - Auditoría: Estructura del ticket de compra y trazabilidad.
+ * RN - Trazabilidad: Estructura del resumen de compra.
  */
 export interface Order {
   id: string;
@@ -136,7 +136,7 @@ export interface ReviewStats {
   sentiment: Record<string, number>;
 }
 
-// ─── RESPUESTAS DE RED (INFRASTRUCTURE) ───
+// ─── RESPUESTAS DE API ───
 
 export type Meta = {
   total: number;

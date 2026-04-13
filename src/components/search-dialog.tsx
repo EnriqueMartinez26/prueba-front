@@ -1,12 +1,9 @@
 "use client";
 
 /**
- * Capa de Interfaz: Motor de Búsqueda Modal (Search Dialog)
- * --------------------------------------------------------------------------
- * Provee un punto de acceso global y reactivo para la localización de productos.
- * Implementa una estrategia de mitigación de latencia (Debouncing), gestión 
- * de concurrencia mediante AbortController y una previsualización de 
- * resultados indexados en tiempo real. (MVC / View)
+ * Provee un punto de acceso global para la búsqueda de productos.
+ * Implementa debouncing y gestión de concurrencia para una previsualización 
+ * de resultados en tiempo real. (MVC / View)
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -152,7 +149,7 @@ export function SearchDialog({
             <Dialog open={showOpen} onOpenChange={setShowOpen}>
                 <DialogContent className="sm:max-w-[600px] p-0 overflow-hidden gap-0 bg-card/95 backdrop-blur-xl border-white/10 shadow-3xl">
                     <DialogHeader className="px-5 py-4 border-b border-white/5 bg-muted/20">
-                        <DialogTitle className="sr-only">Motor de Localización</DialogTitle>
+                        <DialogTitle className="sr-only">Buscador</DialogTitle>
                         <form onSubmit={handleSearch} className="flex items-center gap-3">
                             <Search className="h-5 w-5 shrink-0 text-primary opacity-80" />
                             <input
@@ -170,8 +167,8 @@ export function SearchDialog({
                         {query.trim().length === 0 ? (
                             <div className="py-12 text-center space-y-2">
                                 <Search className="h-10 w-10 mx-auto text-muted-foreground opacity-20" />
-                                <p className="text-sm text-muted-foreground font-medium uppercase tracking-[0.2em]">Indexador Activo</p>
-                                <p className="text-xs text-muted-foreground opacity-60">Ingrese términos técnicos para iniciar la localización.</p>
+                                <p className="text-sm text-muted-foreground font-semibold uppercase tracking-[0.2em]">Buscador Activo</p>
+                                <p className="text-xs text-muted-foreground opacity-60">Ingrese un nombre para iniciar la búsqueda.</p>
                             </div>
                         ) : query.trim().length < 2 ? (
                             <div className="py-12 text-center text-xs text-muted-foreground italic">
@@ -180,17 +177,17 @@ export function SearchDialog({
                         ) : loading && results.length === 0 ? (
                             <div className="py-12 flex flex-col items-center justify-center gap-4">
                                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                                <p className="text-[10px] uppercase font-medium text-muted-foreground tracking-widest">Sincronizando Base de Datos</p>
+                                <p className="text-[10px] uppercase font-semibold text-muted-foreground tracking-widest">Buscando...</p>
                             </div>
                         ) : results.length === 0 ? (
                             <div className="py-12 text-center space-y-2">
-                                <p className="text-sm text-white font-semibold uppercase tracking-tight">Sin coincidencias fácticas</p>
+                                <p className="text-sm text-white font-semibold uppercase tracking-tight">Sin resultados</p>
                                 <p className="text-xs text-muted-foreground">No hay resultados registrados para: &quot;{query}&quot;</p>
                             </div>
                         ) : (
                             <div className="grid gap-2">
-                                <p className="px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-primary bg-primary/5 rounded border border-primary/10">
-                                    Localizados: {totalResults} ítems encontrados
+                                <p className="px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary bg-primary/5 rounded border border-primary/10">
+                                    Resultados: {totalResults} productos encontrados
                                 </p>
                                 {results.map((product) => (
                                     <button
@@ -232,7 +229,7 @@ export function SearchDialog({
                                         className="justify-between h-10 px-4 text-xs font-medium uppercase tracking-widest mt-2 hover:bg-primary/10 hover:text-primary border border-white/5"
                                         onClick={handleSearch}
                                     >
-                                        <span>Expandir Resultados Completos</span>
+                                        <span>Ver todos los resultados</span>
                                         <ArrowRight className="h-4 w-4" />
                                     </Button>
                                 )}
@@ -246,13 +243,13 @@ export function SearchDialog({
                             <kbd className="h-5 min-w-8 flex items-center justify-center rounded border border-white/10 bg-black/40 px-1.5 font-mono text-white opacity-100 shadow-sm">
                                 Enter
                             </kbd>{" "}
-                            Audit General
+                            Ver resultados
                         </span>
                         <span className="flex items-center gap-2">
                             <kbd className="h-5 min-w-8 flex items-center justify-center rounded border border-white/10 bg-black/40 px-1.5 font-mono text-white opacity-100 shadow-sm">
                                 Esc
                             </kbd>{" "}
-                            Cancelar Operación
+                            Cerrar
                         </span>
                     </div>
                 </DialogContent>

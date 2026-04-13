@@ -58,7 +58,7 @@ export default async function Home() {
       {/* Sección Hero: Impacto visual inicial y Call to Action (CTA). */}
       <PixelHero />
 
-      {/* Sección: Explorar por Plataforma (RN - Taxonomía Industrial) */}
+      {/* Sección: Explorar por Plataforma (RN - Taxonomía de Productos) */}
       <section className="relative w-full overflow-hidden bg-background py-12 md:py-16">
         {/* RN - Estética TFI: Fondo decorativo con grid geométrico. */}
         <div className="absolute inset-0 z-0 opacity-[0.03]"
@@ -71,7 +71,7 @@ export default async function Home() {
 
         <div className="container relative z-10 mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="font-headline text-3xl font-bold md:text-4xl text-center md:text-left">Explorar por Plataforma</h2>
+            <h2 className="font-headline text-3xl font-semibold md:text-4xl text-center md:text-left">Explorar por Plataforma</h2>
             <Button variant="outline" asChild className="hidden md:flex">
               <Link href="/productos">Ver todo</Link>
             </Button>
@@ -109,7 +109,7 @@ export default async function Home() {
 
         <div className="container relative z-10 mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="font-headline text-3xl font-bold md:text-4xl text-center md:text-left">Explorar por Género</h2>
+            <h2 className="font-headline text-3xl font-semibold md:text-4xl text-center md:text-left">Explorar por Género</h2>
             <Button variant="outline" asChild className="hidden md:flex">
               <Link href="/productos">Ver todo</Link>
             </Button>

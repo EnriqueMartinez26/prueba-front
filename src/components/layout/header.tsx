@@ -4,9 +4,8 @@
  * Capa de Interfaz: Cabecera Global de Navegación (Header)
  * --------------------------------------------------------------------------
  * Orquesta la navegación principal y el acceso a funciones críticas del sistema.
- * Implementa el control de acceso basado en roles (RBAC) para la consola de 
- * gestión, integra el buscador avanzado y sincroniza los contadores de 
- * persistencia (Carrito/Deseos). (MVC / View-Global)
+ * Implementa el control de acceso basado en roles (RBAC) para el panel 
+ * de administración, integra el buscador avanzado y sincroniza los contadores. (MVC / View-Global)
  */
 
 import Link from "next/link";
@@ -34,7 +33,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 md:h-20 max-w-screen-2xl items-center px-4">
         
-        {/* Identidad de Marca: Ancla a la página de inicio. */}
+        {/* Logo: Ancla a la página de inicio. */}
         <Link href="/" className="flex items-center mr-6 hover:opacity-80 transition-opacity">
           <Image src="/logo.png" alt="4Fun Logo" width={80} height={80} className="h-14 w-14 md:h-20 md:w-20 object-contain" priority />
         </Link>
@@ -50,9 +49,9 @@ export function Header() {
 
           {/* RN - Control de Acceso: Acceso a gestión reservado para administradores. */}
           {user && user.role === 'admin' && (
-            <Link href="/admin" className="transition-colors text-primary font-bold flex items-center gap-1.5 animate-pulse">
+            <Link href="/admin" className="transition-colors text-primary font-semibold flex items-center gap-1.5 animate-pulse">
               <Settings className="h-4 w-4" />
-              ADMINISTRACIÓN
+              PANEL ADMIN
             </Link>
           )}
         </nav>
@@ -65,7 +64,7 @@ export function Header() {
               <Button variant="outline" className="hidden lg:flex w-[240px] xl:w-[320px] justify-between text-muted-foreground relative h-10 px-4 bg-muted/20 border-white/10 hover:bg-white/5">
                 <span className="inline-flex items-center text-xs uppercase tracking-tighter">
                   <Search className="mr-3 h-4 w-4 text-primary" />
-                  Buscar juegos...
+                  Buscar productos...
                 </span>
                 <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-white/10 bg-black/40 px-2 font-mono text-[10px] text-white">
                   ⌘ K
@@ -96,7 +95,7 @@ export function Header() {
             <Link href="/cart" aria-label="Carrito de Compras">
               <ShoppingCart className="h-5 w-5" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-black text-[10px] font-bold flex items-center justify-center shadow-lg animate-in zoom-in">
+                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-black text-[10px] font-semibold flex items-center justify-center shadow-lg animate-in zoom-in">
                   {cartCount}
                 </span>
               )}
@@ -111,7 +110,7 @@ export function Header() {
                   {user.avatar ? (
                     <Avatar className="h-full w-full">
                       <AvatarImage src={user.avatar} alt={user.name} />
-                      <AvatarFallback className="text-xs font-bold bg-primary text-black">{(user.name || 'U')[0].toUpperCase()}</AvatarFallback>
+                      <AvatarFallback className="text-xs font-semibold bg-primary text-black">{(user.name || 'U')[0].toUpperCase()}</AvatarFallback>
                     </Avatar>
                   ) : (
                     <User className="h-5 w-5 text-white" />
@@ -121,8 +120,8 @@ export function Header() {
               <DropdownMenuContent align="end" className="w-56 bg-card/95 backdrop-blur-xl border-white/10">
                 <DropdownMenuLabel className="font-semibold text-white">
                   <p className="truncate">{user.name || user.email}</p>
-                  <span className="block text-[10px] text-primary uppercase font-bold tracking-widest mt-0.5">
-                    Perfil {user.role}
+                  <span className="block text-[10px] text-primary uppercase font-semibold tracking-widest mt-0.5">
+                    Cuenta {user.role}
                   </span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-white/5" />

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Capa de Interfaz: Catálogo Maestros de Activos (Game Catalog)
+ * Capa de Interfaz: Catálogo de Productos
  * --------------------------------------------------------------------------
  * Orquesta la experiencia de exploración principal del ecosistema. 
  * Gestiona la sincronización asíncrona de filtros dinámicos, la disposición 
@@ -45,8 +45,8 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
         
         {/* Cabecera del Módulo */}
         <div className="space-y-2">
-            <h2 className="font-headline text-4xl font-bold md:text-5xl text-white tracking-tight">Catálogo de Activos</h2>
-            <p className="text-muted-foreground text-sm uppercase tracking-widest font-black opacity-80 pl-1 border-l-4 border-primary/40">Exploración de Ecosistemas y Licencias Digitales</p>
+            <h2 className="font-headline text-4xl font-bold md:text-5xl text-white tracking-tight">Catálogo de Productos</h2>
+            <p className="text-muted-foreground text-sm uppercase tracking-widest font-semibold opacity-80 pl-1 border-l-4 border-primary/40">Exploración de Ecosistemas y Licencias Digitales</p>
         </div>
 
         {/* Arquitectura de Layout: Control Lateral e Ingesta de Datos */}
@@ -65,14 +65,14 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
             </div>
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" className="h-12 border-primary/30 text-primary hover:bg-primary/10 transition-all font-black uppercase tracking-widest text-[10px]">
-                  <SlidersHorizontal className="mr-2 h-4 w-4" /> Configuración de Filtros
+                <Button variant="outline" className="h-12 border-primary/30 text-primary hover:bg-primary/10 transition-all font-bold uppercase tracking-widest text-[10px]">
+                  <SlidersHorizontal className="mr-2 h-4 w-4" /> Configurar Filtros
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px] sm:w-[500px] overflow-y-auto bg-card/95 backdrop-blur-2xl border-white/5 custom-scrollbar">
                 <SheetHeader className="mb-8">
-                  <SheetTitle className="font-headline text-3xl font-bold text-white uppercase tracking-tighter">Parámetros Técnicos</SheetTitle>
-                  <SheetDescription className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Personalización del Entorno de Búsqueda</SheetDescription>
+                  <SheetTitle className="font-headline text-3xl font-bold text-white uppercase tracking-tighter">Filtros Avanzados</SheetTitle>
+                  <SheetDescription className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Personalización de la Búsqueda</SheetDescription>
                 </SheetHeader>
                 <CatalogSidebar
                   platforms={platforms}
@@ -115,12 +115,12 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
             </div>
           </aside>
 
-          {/* Layer - Grid de Activos (Sincronización Dinámica) */}
+          {/* Layer - Grid de Productos (Sincronización Dinámica) */}
           <div className="flex-1 min-h-[600px] w-full">
             {loading ? (
               <div className="h-[500px] flex flex-col items-center justify-center opacity-50 bg-card/5 rounded-3xl border-2 border-dashed border-white/5">
                 <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground animate-pulse">Recuperando registros del catálogo...</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground animate-pulse">Recuperando registros del catálogo...</p>
               </div>
             ) : games.length > 0 ? (
               <div className="space-y-16">
@@ -159,8 +159,8 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
                   </Button>
                   
                   <div className="flex flex-col items-center">
-                      <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] mb-1">Página</span>
-                      <span className="text-2xl font-black text-primary tracking-tighter">{page} / {totalPages}</span>
+                      <span className="text-[10px] font-bold text-white uppercase tracking-[0.3em] mb-1">Página</span>
+                      <span className="text-2xl font-bold text-primary tracking-tighter">{page} / {totalPages}</span>
                   </div>
 
                   <Button
@@ -181,8 +181,8 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
                 </div>
                 <h3 className="font-headline text-3xl font-bold text-white uppercase tracking-tight">Sin Coincidencias</h3>
                 <p className="text-muted-foreground mt-3 max-w-sm leading-relaxed text-sm font-medium">No se hallaron registros que operen bajo los criterios técnicos y financieros aplicados al filtro.</p>
-                <Button onClick={resetFilters} variant="outline" className="mt-8 border-primary/20 text-primary font-black uppercase tracking-widest text-[10px] h-12 px-8 rounded-full hover:bg-primary hover:text-black transition-all">
-                  Restablecer Parámetros Maestros
+                <Button onClick={resetFilters} variant="outline" className="mt-8 border-primary/20 text-primary font-bold uppercase tracking-widest text-[10px] h-12 px-8 rounded-full hover:bg-primary hover:text-black transition-all">
+                  Restablecer Filtros
                 </Button>
               </div>
             )}

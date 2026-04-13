@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Capa de Interfaz: Confirmación de Transacción Exitosa (Checkout Success)
  * --------------------------------------------------------------------------
@@ -114,10 +116,6 @@ export default function SuccessPage() {
       <Suspense fallback={<div className="h-40 w-40 animate-pulse bg-white/5 rounded-full" />}>
         <SuccessContent />
       </Suspense>
-    </div>
-  );
-}
-4005a0a
     </div>
   );
 }
