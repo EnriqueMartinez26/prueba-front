@@ -42,7 +42,7 @@ export const PixelHero = () => {
         const res = await ApiClient.getProducts({ discounted: true });
         // Validación de Margen: Filtra únicamente productos con descuento efectivo > 0.
         const withRealDiscount = res.products.filter(
-          (p) => (p.discountPercentage ?? 0) > 0 && p.finalPrice < p.price
+          (p) => (p.discountPercentage ?? 0) > 0 && (p.finalPrice ?? 0) < p.price
         );
         if (withRealDiscount.length > 0) {
           setGames(withRealDiscount);
@@ -118,7 +118,7 @@ export const PixelHero = () => {
   const imageUrl = (game.imageId && (game.imageId.startsWith('http') || game.imageId.startsWith('/')))
     ? game.imageId : DEFAULT_IMAGE;
 
-  const hasDiscount = (game.discountPercentage ?? 0) > 0 && game.finalPrice < game.price;
+  const hasDiscount = (game.discountPercentage ?? 0) > 0 && (game.finalPrice ?? 0) < game.price;
 
   return (
     <section className="relative w-full overflow-hidden bg-background py-8 md:py-12 lg:py-16">
@@ -186,7 +186,7 @@ export const PixelHero = () => {
                 "text-4xl md:text-5xl font-black tracking-tight",
                 hasDiscount ? "text-primary" : "text-white"
               )}>
-                {formatCurrency(game.finalPrice)}
+                {formatCurrency(game.finalPrice ?? game.price)}
               </span>
             </div>
 

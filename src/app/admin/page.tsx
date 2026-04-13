@@ -18,6 +18,7 @@ import { ApiClient } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { DashboardCardSkeleton } from "@/components/ui/skeletons";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface DashboardStats {

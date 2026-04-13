@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 /**
- * Capa de Administración: Alta de Nuevos Productos (Create Product)
+ * Capa de AdministraciÃ³n: Alta de Nuevos Productos (Create Product)
  * --------------------------------------------------------------------------
- * Orquesta la creación e integración de nuevas entidades al catálogo maestro.
- * Implementa esquemas de validación rigurosos (Zod) para asegurar la integridad 
- * de la taxonomía del sistema desde la ingesta. (MVC / View-Admin)
+ * Orquesta la creaciÃ³n e integraciÃ³n de nuevas entidades al catÃ¡logo maestro.
+ * Implementa esquemas de validaciÃ³n rigurosos (Zod) para asegurar la integridad 
+ * de la taxonomÃ­a del sistema desde la ingesta. (MVC / View-Admin)
  */
 
 import { useState, useEffect } from "react";
@@ -45,7 +45,7 @@ export default function NewProductPage() {
   const [genres, setGenres] = useState<any[]>([]);
 
   /**
-   * RN - Hidratación Taxonómica: Recupera los clasificadores necesarios para el alta.
+   * RN - HidrataciÃ³n TaxonÃ³mica: Recupera los clasificadores necesarios para el alta.
    */
   useEffect(() => {
     Promise.all([ApiClient.getPlatforms(), ApiClient.getGenres()])
@@ -55,7 +55,7 @@ export default function NewProductPage() {
       })
       .catch(err => {
         console.error("[NewProduct] Error loading taxonomy:", err);
-        toast({ variant: "destructive", title: "Error de Red", description: "Fallo al sincronizar taxonomías de red." });
+        toast({ variant: "destructive", title: "Error de Red", description: "Fallo al sincronizar taxonomÃ­as de red." });
       });
   }, [toast]);
 
@@ -76,7 +76,7 @@ export default function NewProductPage() {
   });
 
   /**
-   * RN - Gestión de Multimedia: Orquesta la carga del asset de portada.
+   * RN - GestiÃ³n de Multimedia: Orquesta la carga del asset de portada.
    */
   const { isUploading, handleImageUpload } = useImageUpload({
     onSuccess: (url) => form.setValue("imageUrl", url),
@@ -88,12 +88,12 @@ export default function NewProductPage() {
    */
   const onSubmit = async (data: AdminProductBaseValues) => {
     try {
-      await ApiClient.createProduct(data);
-      toast({ title: "Alta Exitosa", description: "El producto ha sido integrado al catálogo maestro con éxito." });
+      await ApiClient.createProduct({ ...data, developer: data.developer || '' });
+      toast({ title: "Alta Exitosa", description: "El producto ha sido integrado al catÃ¡logo maestro con Ã©xito." });
       router.push("/admin/products");
       router.refresh();
     } catch (error: any) {
-      toast({ variant: "destructive", title: "Error en Creación", description: error.message || "Fallo persistente al registrar el ítem." });
+      toast({ variant: "destructive", title: "Error en CreaciÃ³n", description: error.message || "Fallo persistente al registrar el Ã­tem." });
     }
   };
 
@@ -101,7 +101,7 @@ export default function NewProductPage() {
     <div className="max-w-4xl mx-auto py-8 lg:py-12 px-4 space-y-8 animate-in fade-in duration-700">
       <div className="flex items-center justify-between">
         <Button variant="ghost" asChild className="hover:bg-primary/10 hover:text-primary font-bold text-xs uppercase tracking-widest">
-          <Link href="/admin/products"><ArrowLeft className="mr-2 h-4 w-4" /> Cancelar Operación</Link>
+          <Link href="/admin/products"><ArrowLeft className="mr-2 h-4 w-4" /> Cancelar OperaciÃ³n</Link>
         </Button>
       </div>
 
@@ -132,8 +132,8 @@ export default function NewProductPage() {
 
                     <FormField control={form.control} name="description" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Descripción Detallada</FormLabel>
-                        <FormControl><Textarea placeholder="Especificaciones, sinopsis y detalles técnicos..." className="min-h-[140px] bg-background/50 border-white/10 leading-relaxed" {...field} /></FormControl>
+                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">DescripciÃ³n Detallada</FormLabel>
+                        <FormControl><Textarea placeholder="Especificaciones, sinopsis y detalles tÃ©cnicos..." className="min-h-[140px] bg-background/50 border-white/10 leading-relaxed" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -169,7 +169,7 @@ export default function NewProductPage() {
                     )} />
                     <FormField control={form.control} name="genreId" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Género Dominante</FormLabel>
+                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">GÃ©nero Dominante</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl><SelectTrigger className="h-12 bg-background/50 border-white/10"><SelectValue placeholder="Seleccionar Entidad" /></SelectTrigger></FormControl>
                           <SelectContent className="bg-card/95 backdrop-blur-xl">{genres.map((g) => (<SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>))}</SelectContent>
@@ -202,7 +202,7 @@ export default function NewProductPage() {
 
                   <FormField control={form.control} name="specPreset" render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Requisitos Técnicos (PC)</FormLabel>
+                      <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Requisitos TÃ©cnicos (PC)</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl><SelectTrigger className="h-12 bg-background/50 border-white/10"><SelectValue placeholder="Nivel de Carga" /></SelectTrigger></FormControl>
                         <SelectContent className="bg-card/95 backdrop-blur-xl">{SPEC_PRESETS.map((preset) => (<SelectItem key={preset} value={preset}>{preset}</SelectItem>))}</SelectContent>
@@ -212,7 +212,7 @@ export default function NewProductPage() {
                   )} />
 
                   <Button type="submit" className="w-full h-14 font-black text-lg tracking-widest shadow-2xl transition-all hover:-translate-y-1" disabled={form.formState.isSubmitting || isUploading}>
-                    {form.formState.isSubmitting ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <><Package className="mr-2 h-6 w-6" /> PERSISTIR EN CATÁLOGO</>}
+                    {form.formState.isSubmitting ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <><Package className="mr-2 h-6 w-6" /> PERSISTIR EN CATÃLOGO</>}
                   </Button>
                 </form>
               </Form>
@@ -231,7 +231,7 @@ export default function NewProductPage() {
                <div className="relative group">
                  <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-inner">
                    {form.watch("imageUrl") ? (
-                      <Image src={form.watch("imageUrl")} alt="Preview" fill className="object-cover animate-in zoom-in-95 duration-500" />
+                      <Image src={form.watch("imageUrl") || ""} alt="Preview" fill className="object-cover animate-in zoom-in-95 duration-500" />
                     ) : (
                       <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-2 opacity-20">
                          <ImageIcon className="h-12 w-12" />

@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Loader2, Download, FileSpreadsheet, FilePieChart, ShoppingBag, Eye, RefreshCw } from "lucide-react";
+import { Search, Loader2, Download, FileSpreadsheet, FilePieChart, ShoppingBag, Eye, RefreshCw, MoreHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ApiClient } from "@/lib/api";
@@ -266,10 +266,10 @@ export default function AdminOrdersPage() {
                                                     <DropdownMenuContent align="end" className="bg-card/95 backdrop-blur-xl border-white/10 text-white">
                                                         <DropdownMenuLabel className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Logística de Orden</DropdownMenuLabel>
                                                         <DropdownMenuSeparator className="bg-white/5" />
-                                                        <DropdownMenuItem onClick={() => handleStatusChange(vm.order.id, 'shipped')} className="text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer">
+                                                        <DropdownMenuItem onClick={() => handleStatusChange(vm.getRawData().id, 'shipped')} className="text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer">
                                                             <RefreshCw className="mr-2 h-4 w-4" /> Marcar como Despachado
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => handleStatusChange(vm.order.id, 'delivered')} className="text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer">
+                                                        <DropdownMenuItem onClick={() => handleStatusChange(vm.getRawData().id, 'delivered')} className="text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer">
                                                             <RefreshCw className="mr-2 h-4 w-4" /> Marcar como Entregado
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator className="bg-white/5" />

@@ -93,6 +93,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         if (id !== 'new') {
           const p = await ApiClient.getProductById(id);
           if (p) {
+            // RN - Normalización: Verifica si el desarrollador está en la lista preconfigurada o es personalizado.
             const devInList = DEVELOPERS.includes(p.developer as any);
             if (!devInList && p.developer) setIsCustomDev(true);
 
@@ -100,12 +101,12 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               name: p.name,
               description: p.description,
               stock: p.stock,
-              platformId: p.platform.id,
-              genreId: p.genre.id,
+              platformId: p.platform?.id || "",
+              genreId: p.genre?.id || "",
               type: p.type as "Digital" | "Physical",
-              developer: p.developer,
-              specPreset: ((p as any).specPreset || "Mid") as any,
-              imageUrl: p.imageId,
+              developer: p.developer || "",
+              specPreset: (p.specPreset || "Mid") as any,
+              imageUrl: p.imageId || "",
               trailerUrl: p.trailerUrl || "",
               isDiscounted: (p.discountPercentage ?? 0) > 0,
               discountPercentage: p.discountPercentage || 0,
@@ -343,7 +344,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 <div className="relative group">
                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 bg-black/40 shadow-inner">
                       {form.watch("imageUrl") ? (
-                        <Image src={form.watch("imageUrl")} alt="Preview" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+                        <Image src={form.watch("imageUrl") || ""} alt="Preview" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
                       ) : (
                         <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-2">
                            <Info className="h-8 w-8 opacity-20" />

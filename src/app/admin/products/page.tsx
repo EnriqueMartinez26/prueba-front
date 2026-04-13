@@ -227,8 +227,8 @@ export default function AdminProductsPage() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="font-black text-white">{formatCurrency(p.finalPrice)}</div>
-                          {p.discountPercentage > 0 && <Badge variant="outline" className="text-[8px] py-0 border-destructive/30 text-destructive mt-1 font-black">-{p.discountPercentage}%</Badge>}
+                          <div className="font-black text-white">{formatCurrency(p.finalPrice ?? p.price)}</div>
+                          {(p.discountPercentage ?? 0) > 0 && <Badge variant="outline" className="text-[8px] py-0 border-destructive/30 text-destructive mt-1 font-black">-{p.discountPercentage}%</Badge>}
                         </TableCell>
                         <TableCell>
                           <Badge 

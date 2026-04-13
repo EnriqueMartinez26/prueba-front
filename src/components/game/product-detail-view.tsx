@@ -20,6 +20,7 @@ import { formatCurrency, cn, getImageUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShoppingCart, Heart, Monitor, Gamepad2, Disc, Globe, Layers, Info, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ProductReviews } from "@/components/game/product-reviews";
@@ -144,7 +145,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                         <SpecItem label="Memoria Operativa" value={game.requirements.memory} />
                                         <SpecItem label="Aceleración Gráfica" value={game.requirements.graphics} />
                                         <SpecItem label="Almacenamiento" value={game.requirements.storage} />
-                                        <SpecItem label="Perfil de Hardware" value={game.specPreset} highlight />
+                                        <SpecItem label="Perfil de Hardware" value={game.specPreset ?? undefined} highlight />
                                     </div>
                                 </CardContent>
                             </Card>
@@ -167,7 +168,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
 
                             {/* Valorización y Promociones Transaccionales */}
                             <div className="space-y-6">
-                                {game.finalPrice > 0 ? (
+                                {(game.finalPrice ?? 0) > 0 ? (
                                     <div className="space-y-1">
                                         {(game.discountPercentage ?? 0) > 0 && (
                                             <div className="flex items-center gap-3">
@@ -180,7 +181,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                             </div>
                                         )}
                                         <div className="text-5xl font-black text-white tracking-tighter drop-shadow-md">
-                                            {formatCurrency(game.finalPrice)}
+                                            {formatCurrency(game.finalPrice ?? game.price)}
                                         </div>
                                     </div>
                                 ) : (
@@ -230,11 +231,11 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
 
                             {/* Tabla Registral de Metadatos Industriales */}
                             <div className="space-y-4">
-                                <MetaRow icon={<Globe className="w-4 h-4 text-primary/60" />} label="Desarrollador" value={game.developer} />
+                                <MetaRow icon={<Globe className="w-4 h-4 text-primary/60" />} label="Desarrollador" value={game.developer ?? undefined} />
                                 <MetaRow icon={<Layers className="w-4 h-4 text-primary/60" />} label="Plataforma" value={game.platform?.name} />
                                 <MetaRow icon={<Gamepad2 className="w-4 h-4 text-primary/60" />} label="Categoría" value={game.genre?.name} />
                                 <MetaRow icon={<Disc className="w-4 h-4 text-primary/60" />} label="Distribución" value={game.type === 'Physical' ? 'Medio Físico' : 'Licencia Digital'} />
-                                <MetaRow icon={<Info className="w-4 h-4 text-primary/60" />} label="Lanzamiento" value={new Date(game.releaseDate).toLocaleDateString("es-AR")} />
+                                <MetaRow icon={<Info className="w-4 h-4 text-primary/60" />} label="Lanzamiento" value={game.releaseDate ? new Date(game.releaseDate).toLocaleDateString("es-AR") : undefined} />
                             </div>
                         </div>
                     </div>

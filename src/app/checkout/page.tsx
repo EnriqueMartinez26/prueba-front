@@ -28,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, CreditCard, ShieldCheck, MapPin, CheckCircle2, ArrowRight, ArrowLeft, ShoppingBag } from "lucide-react";
 import { formatCurrency, cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
 /**
  * RN - Arquitectura de Flujo: Definición de fases del ciclo de checkout.

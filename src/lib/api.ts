@@ -106,9 +106,38 @@ export class ApiClient {
   static async deleteProduct(id: string) { return this.request(`/products/${id}`, { method: 'DELETE' }); }
   static async reorderProduct(id: string, newPosition: number) { return this.request(`/products/${id}/reorder`, { method: 'PATCH', body: JSON.stringify({ newPosition }) }); }
 
-  // ─── TAXONOMIES ───
+  // ─── TAXONOMIES (CRUD Completo — Pilar 3 TFI) ───
   static async getPlatforms() { return this.request<any>('/platforms'); }
   static async getGenres() { return this.request<any>('/genres'); }
+  static async getPlatformById(id: string) { return this.request<any>(`/platforms/${id}`); }
+  static async getGenreById(id: string) { return this.request<any>(`/genres/${id}`); }
+  static async createPlatform(data: any) { return this.request<any>('/platforms', { method: 'POST', body: JSON.stringify(data) }); }
+  static async createGenre(data: any) { return this.request<any>('/genres', { method: 'POST', body: JSON.stringify(data) }); }
+  static async updatePlatform(id: string, data: any) { return this.request<any>(`/platforms/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
+  static async updateGenre(id: string, data: any) { return this.request<any>(`/genres/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
+  static async deletePlatform(id: string) { return this.request(`/platforms/${id}`, { method: 'DELETE' }); }
+  static async deleteGenre(id: string) { return this.request(`/genres/${id}`, { method: 'DELETE' }); }
+  static async deletePlatformsBulk(ids: string[]) { return this.request('/platforms/bulk-delete', { method: 'POST', body: JSON.stringify({ ids }) }); }
+  static async deleteGenresBulk(ids: string[]) { return this.request('/genres/bulk-delete', { method: 'POST', body: JSON.stringify({ ids }) }); }
+
+  // ─── USERS (CRUD Completo — Pilar 3 y 4 TFI) ───
+  static async getUsers(params?: any) {
+    const qs = this.buildQuery(params);
+    return this.request<{ success: boolean; data: User[]; totalPages: number; total: number }>(`/users${qs}`);
+  }
+  static async getUserById(id: string) { return this.request<{ success: boolean; data: User }>(`/users/${id}`); }
+  static async updateUser(id: string, data: Partial<User>) { return this.request<{ success: boolean; data: User }>(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
+  static async deleteUser(id: string) { return this.request(`/users/${id}`, { method: 'DELETE' }); }
+
+  // ─── DASHBOARD (Pilar 5 — Reportes y BI) ───
+  static async getDashboardStats() { return this.request<any>('/dashboard/stats'); }
+  static async getSalesChart() { return this.request<any>('/dashboard/sales-chart'); }
+  static async getTopProducts() { return this.request<any>('/dashboard/top-products'); }
+
+  // ─── DIGITAL KEYS (Gestión de Licencias — RN Core) ───
+  static async getKeysByProduct(productId: string) { return this.request<any>(`/keys/product/${productId}`); }
+  static async addKeys(productId: string, keys: string[]) { return this.request<any>('/keys', { method: 'POST', body: JSON.stringify({ productId, keys }) }); }
+  static async deleteKey(keyId: string) { return this.request(`/keys/${keyId}`, { method: 'DELETE' }); }
 
   // ─── CART ───
   static async getCart() { return this.request<{ success: boolean; cart: { items: CartItem[] } }>('/cart'); }
@@ -132,8 +161,24 @@ export class ApiClient {
   static async updateOrderStatus(id: string, status: string) { return this.request(`/orders/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }); }
 
   // ─── REVIEWS ───
-  static async getProductReviews(productId: string) { return this.request<{ reviews: Review[]; stats: ReviewStats }>(`/reviews/product/${productId}`); }
-  static async createReview(productId: string, data: { rating: number; comment: string }) { return this.request(`/reviews/product/${productId}`, { method: 'POST', body: JSON.stringify(data) }); }
+  static async getProductReviews(productId: string, params?: any) {
+    const qs = this.buildQuery(params);
+    return this.request<{ reviews: Review[]; stats: ReviewStats; pagination?: any }>(`/reviews/product/${productId}${qs}`);
+  }
+  static async createReview(productId: string, data: { rating: number; comment?: string; title?: string; text?: string }) {
+    return this.request(`/reviews/product/${productId}`, { method: 'POST', body: JSON.stringify(data) });
+  }
+  static async getProductRatingStats(productId: string) { return this.request<{ data: ReviewStats }>(`/reviews/product/${productId}/stats`); }
+  static async voteReviewHelpful(reviewId: string) { return this.request<{ data: { helpfulCount: number } }>(`/reviews/${reviewId}/helpful`, { method: 'POST' }); }
+  static async deleteReview(reviewId: string) { return this.request(`/reviews/${reviewId}`, { method: 'DELETE' }); }
+
+  // ─── NOTIFICACIONES Y VERIFICACIÓN ───
+  static async sendContactMessage(data: { name?: string; firstName?: string; lastName?: string; email: string; message: string }) {
+    return this.request('/contact', { method: 'POST', body: JSON.stringify(data) });
+  }
+  static async verifyEmail(token: string) {
+    return this.request<{ success: boolean; message: string }>(`/auth/verify-email/${token}`);
+  }
 
   // ─── UTILS & ASSETS ───
   static async uploadImage(file: File): Promise<string> {

@@ -37,7 +37,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Image from "next/image";
-import { Loader2, UserPlus, ShieldCheck, ArrowRight, IdentificationCard } from "lucide-react";
+import { Loader2, UserPlus, ShieldCheck, ArrowRight, IdCard } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterSchema, type RegisterValues } from "@/lib/schemas";
@@ -120,7 +120,7 @@ export default function RegisterPage() {
             <div className="relative group">
                 <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
                 <div className="h-20 w-20 flex items-center justify-center bg-white/5 rounded-2xl border border-white/10 relative z-10">
-                    <IdentificationCard className="h-10 w-10 text-primary" />
+                    <IdCard className="h-10 w-10 text-primary" />
                 </div>
             </div>
           </div>

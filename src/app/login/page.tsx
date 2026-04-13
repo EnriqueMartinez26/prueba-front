@@ -37,7 +37,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Image from "next/image";
-import { Loader2, LogIn, ShieldCheck, ArrowRight, UserKey } from "lucide-react";
+import { Loader2, LogIn, ShieldCheck, ArrowRight, KeyRound } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, type LoginValues } from "@/lib/schemas";

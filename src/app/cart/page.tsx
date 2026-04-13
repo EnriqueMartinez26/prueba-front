@@ -21,6 +21,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { formatCurrency, getImageUrl } from "@/lib/utils";
 import { Trash2, ShoppingBag, LogIn, UserPlus, ArrowRight, ShieldCheck, BadgeCheck } from "lucide-react";
 

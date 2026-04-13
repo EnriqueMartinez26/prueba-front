@@ -104,7 +104,7 @@ export default function UsersPage() {
             });
 
             if (res.success) {
-                setUsers(Array.isArray(res.data) ? res.data : []);
+                setUsers((Array.isArray(res.data) ? res.data : []) as any[]);
                 setTotalPages(res.totalPages || 1);
             }
         } catch (error) {

@@ -21,11 +21,40 @@ export const ProductSchema = z.object({
   price: z.number().min(0, 'El precio no puede ser negativo'),
   finalPrice: z.number().optional(),
   discountPercentage: z.number().min(0).max(100).optional(),
+  discountEndDate: z.string().optional().nullable(),
   stock: z.number().int().min(0),
   type: z.enum(['Physical', 'Digital']),
   imageId: z.string().optional().nullable(),
   platform: z.object({ id: z.string(), name: z.string() }).optional(),
   genre: z.object({ id: z.string(), name: z.string() }).optional(),
+  developer: z.string().optional().nullable(),
+  trailerUrl: z.string().optional().nullable(),
+  specPreset: z.string().optional().nullable(),
+  releaseDate: z.string().optional().nullable(),
+  requirements: z.object({
+    os: z.string().optional(),
+    processor: z.string().optional(),
+    memory: z.string().optional(),
+    graphics: z.string().optional(),
+    storage: z.string().optional(),
+  }).optional().nullable(),
+});
+
+/**
+ * RN - Gestión Administrativa: Esquema base para la creación/edición de registros.
+ * Enfocado en la captura de IDs de relación y metadatos operativos.
+ */
+export const adminProductBaseSchema = z.object({
+  name: z.string().min(2, 'Nombre obligatorio (mín 2 caracteres)'),
+  description: z.string().min(10, 'Descripción obligatoria (mín 10 caracteres)'),
+  price: z.coerce.number().min(0, 'El precio no puede ser negativo'),
+  stock: z.coerce.number().int().min(0, 'El stock no puede ser negativo'),
+  platformId: z.string().min(1, 'Seleccione una plataforma'),
+  genreId: z.string().min(1, 'Seleccione un género'),
+  type: z.enum(['Physical', 'Digital']),
+  developer: z.string().optional(),
+  specPreset: z.string().optional(),
+  imageUrl: z.string().optional(),
 });
 
 // ─── DOMINIO: SEGURIDAD Y AUTH ───
@@ -54,6 +83,7 @@ export const RegisterSchema = z.object({
 
 // Tipos inferidos para el motor de Tipado Progresivo de TypeScript.
 export type Product = z.infer<typeof ProductSchema>;
+export type AdminProductBaseValues = z.infer<typeof adminProductBaseSchema>;
 export type LoginValues = z.infer<typeof LoginSchema>;
 export type RegisterValues = z.infer<typeof RegisterSchema>;
 export type RegisterPayload = Omit<RegisterValues, 'confirmPassword'>;

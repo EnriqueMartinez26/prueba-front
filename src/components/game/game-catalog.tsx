@@ -174,8 +174,8 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
                 </div>
               </div>
             ) : (
-              {/* RN - Gestión de Búsqueda Fallida: Estado para ausencia de coincidencias. */}
               <div className="h-[500px] flex flex-col items-center justify-center text-center p-12 bg-card/20 rounded-3xl border-2 border-dashed border-white/5 animate-in zoom-in-95 duration-500">
+                {/* RN - Gestión de Búsqueda Fallida: Estado vacío para ausencia de coincidencias. */}
                 <div className="h-20 w-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
                     <Search className="h-10 w-10 text-muted-foreground opacity-20" />
                 </div>

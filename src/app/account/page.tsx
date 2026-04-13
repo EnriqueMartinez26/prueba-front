@@ -48,6 +48,7 @@ import {
   Phone,
   MapPin,
   Lock,
+  Settings,
   CheckCircle2,
   XCircle,
   Trash2,
@@ -58,6 +59,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Order } from "@/lib/types";
 

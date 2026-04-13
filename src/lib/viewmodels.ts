@@ -1,20 +1,54 @@
 /**
- * Capa de Presentación: ViewModels (MVVM Pattern)
+ * Capa de Presentación: ViewModels (Patrón MVVM)
  * --------------------------------------------------------------------------
- * Esta capa implementa los pilares de la Programación Orientada a Objetos (POO).
+ * Implementación formal de los 4 pilares de la Programación Orientada a Objetos:
+ *
+ * 1. ABSTRACCIÓN: `BaseViewModel<T>` define el contrato común (interfaz pública)
+ *    sin exponer detalles de implementación a las capas superiores.
+ *
+ * 2. ENCAPSULAMIENTO: `_data` es privado (prefijo convencional). El acceso a
+ *    la entidad subyacente se controla mediante `getRawData()` para auditorías
+ *    específicas, evitando mutaciones directas desde la Vista.
+ *
+ * 3. HERENCIA: `ProductViewModel` y `OrderViewModel` heredan de `BaseViewModel<T>`,
+ *    reutilizando `getSummaryLine()` sin reescribirlo.
+ *
+ * 4. POLIMORFISMO: El método `toReportRow()` se comporta de forma diferente en
+ *    `ProductViewModel` (columnas de inventario) y `OrderViewModel` (columnas
+ *    transaccionales), respetando el mismo contrato del padre.
+ *
+ * (MVC / ViewModel Layer)
  */
 
 import type { Product, Order } from './types';
 
+/**
+ * RN - Abstracción Base: Contrato genérico para todas las entidades del sistema.
+ * Las clases concretas deben implementar la transformación de datos a representación visual.
+ */
 export abstract class BaseViewModel<T> {
   public readonly _data: T;
   constructor(data: T) { this._data = data; }
   abstract getDisplayId(): string;
   abstract toDisplayPrice(): string;
+
+  /** Herencia: Método compartido disponible para todas las subclases sin reimplementación. */
   getSummaryLine(): string { return `[${this.getDisplayId()}] — ${this.toDisplayPrice()}`; }
+
+  /**
+   * Encapsulamiento Controlado: Expone la entidad subyacente solo cuando
+   * la capa de presentación lo requiere explícitamente (ej. auditoría de órdenes).
+   */
+  getRawData(): T { return this._data; }
+
   abstract toReportRow(): string[];
 }
 
+/**
+ * RN - Activo de Catálogo (ViewModel): Transforma la entidad `Product` en
+ * representaciones visuales y datos de auditoría para el panel administrativo.
+ * Polimorfismo: `toReportRow()` genera columnas de inventario específicas.
+ */
 export class ProductViewModel extends BaseViewModel<Product> {
   constructor(product: Product) { super(product); }
 
@@ -23,7 +57,6 @@ export class ProductViewModel extends BaseViewModel<Product> {
     return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(this._data.finalPrice ?? this._data.price);
   }
 
-  // Getters para UI
   isOnSale(): boolean { return (this._data.discountPercentage ?? 0) > 0; }
   getDiscountBadge(): string { return `-${this._data.discountPercentage}%`; }
   getOriginalPrice(): string {
@@ -49,6 +82,7 @@ export class ProductViewModel extends BaseViewModel<Product> {
     return (url && (url.startsWith('http') || url.startsWith('/'))) ? url : 'https://placehold.co/600x400?text=No+Image';
   }
 
+  /** Polimorfismo: Genera columnas de inventario para reportes de stock. */
   toReportRow(): string[] {
     return [
       this._data.id,
@@ -61,6 +95,11 @@ export class ProductViewModel extends BaseViewModel<Product> {
   }
 }
 
+/**
+ * RN - Registro Transaccional (ViewModel): Transforma la entidad `Order` en
+ * representaciones visuales para el panel de auditoría de órdenes.
+ * Polimorfismo: `toReportRow()` genera columnas transaccionales específicas.
+ */
 export class OrderViewModel extends BaseViewModel<Order> {
   constructor(order: Order) { super(order); }
 
@@ -70,7 +109,6 @@ export class OrderViewModel extends BaseViewModel<Order> {
     return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(total);
   }
 
-  // Getters para UI
   getCustomerName(): string { return this._data.user?.name || 'Invitado'; }
   getCustomerEmail(): string { return this._data.user?.email || 'N/A'; }
   isPaid(): boolean { return !!this._data.isPaid; }
@@ -114,10 +152,17 @@ export class OrderViewModel extends BaseViewModel<Order> {
       : { label: 'Pendiente', color: 'text-yellow-500' };
   }
 
+  /** RN - Auditoría de Fecha: Formato legible de la fecha de creación del registro. */
   getFormattedDate(): string {
     return new Date(this._data.createdAt).toLocaleDateString('es-AR');
   }
 
+  /** Alias técnico de getFormattedDate() para compatibilidad con la capa de vista. */
+  getOrderDate(): string {
+    return this.getFormattedDate();
+  }
+
+  /** Polimorfismo: Genera columnas transaccionales para reportes de órdenes. */
   toReportRow(): string[] {
     return [
       this.getDisplayId(),
@@ -129,3 +174,4 @@ export class OrderViewModel extends BaseViewModel<Order> {
     ];
   }
 }
+

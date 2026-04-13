@@ -200,7 +200,7 @@ export function SearchDialog({
                                     >
                                         <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted/20 border border-white/10 shadow-inner">
                                             <Image
-                                                src={product.imageId}
+                                                src={product.imageId || ''}
                                                 alt={product.name}
                                                 fill
                                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -215,10 +215,10 @@ export function SearchDialog({
                                             </p>
                                         </div>
                                         <div className="text-right shrink-0">
-                                            {product.discountPercentage > 0 ? (
+                                            {(product.discountPercentage ?? 0) > 0 ? (
                                                 <div className="flex flex-col items-end">
                                                     <span className="text-[10px] line-through text-destructive/60 font-mono">{formatCurrency(product.price)}</span>
-                                                    <p className="text-sm font-black text-primary">{formatCurrency(product.finalPrice)}</p>
+                                                    <p className="text-sm font-black text-primary">{formatCurrency(product.finalPrice ?? product.price)}</p>
                                                 </div>
                                             ) : (
                                                 <p className="text-sm font-black text-white">{formatCurrency(product.price)}</p>

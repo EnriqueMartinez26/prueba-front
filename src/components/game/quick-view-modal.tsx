@@ -77,7 +77,7 @@ export function QuickViewModal({ game, open, onOpenChange }: QuickViewModalProps
                             {/* RN - Visualización de Valorización Financiera */}
                             <div className="flex items-end justify-between border-t border-white/5 pt-6">
                                 <div className="flex flex-col">
-                                    {(game.discountPercentage ?? 0) > 0 && game.finalPrice < game.price && (
+                                    {(game.discountPercentage ?? 0) > 0 && (game.finalPrice ?? 0) < game.price && (
                                         <div className="flex items-center gap-2 mb-1">
                                             <span className="text-sm text-muted-foreground line-through opacity-40 font-bold">
                                                 {formatCurrency(game.price)}
@@ -88,7 +88,7 @@ export function QuickViewModal({ game, open, onOpenChange }: QuickViewModalProps
                                         </div>
                                     )}
                                     <span className="text-4xl font-black text-white tracking-tighter">
-                                        {formatCurrency(game.finalPrice)}
+                                        {formatCurrency(game.finalPrice ?? game.price)}
                                     </span>
                                 </div>
                                 {!hasStock && (
