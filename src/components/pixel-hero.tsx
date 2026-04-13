@@ -39,7 +39,7 @@ export const PixelHero = () => {
   useEffect(() => {
     const fetchDiscounted = async () => {
       try {
-        const res = await ApiClient.getProducts({ discounted: true });
+        const res = await ApiClient.getProducts({ discounted: true, page: 1, limit: 200, sort: 'order' });
         // Validación de Margen: Filtra únicamente productos con descuento efectivo > 0.
         const withRealDiscount = res.products.filter(
           (p) => (p.discountPercentage ?? 0) > 0 && (p.finalPrice ?? 0) < p.price
@@ -154,7 +154,7 @@ export const PixelHero = () => {
           <div className="space-y-6">
             <div className="flex flex-wrap gap-2">
               {hasDiscount && (
-                <Badge className="bg-destructive text-white font-bold text-sm px-3 py-1 animate-pulse shadow-lg">
+                <Badge className="bg-green-500 text-white font-bold text-sm px-3 py-1 animate-pulse shadow-lg shadow-green-500/20">
                   -{game.discountPercentage}% OFF
                 </Badge>
               )}
@@ -178,7 +178,7 @@ export const PixelHero = () => {
             {/* RN - Desglose de Costes: Visualización clara del beneficio económico. */}
             <div className="flex items-end gap-3 py-2">
               {hasDiscount && (
-                <span className="text-xl md:text-2xl text-muted-foreground line-through decoration-destructive/60 opacity-50 font-medium">
+                <span className="text-xl md:text-2xl text-muted-foreground line-through decoration-green-500/70 opacity-50 font-medium">
                   {formatCurrency(game.price)}
                 </span>
               )}
@@ -252,6 +252,35 @@ export const PixelHero = () => {
                 </button>
               </div>
             )}
+
+            <div className="pt-3">
+              <p className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground font-bold mb-2">
+                Todas las ofertas disponibles
+              </p>
+              <div className="flex gap-2 overflow-x-auto pb-2 pr-1">
+                {games.map((offer, i) => (
+                  <button
+                    key={offer.id}
+                    onClick={() => {
+                      if (i !== current) {
+                        setTransitioning(true);
+                        setTimeout(() => { setCurrent(i); setTransitioning(false); }, 300);
+                      }
+                    }}
+                    className={cn(
+                      "min-w-[180px] rounded-xl border px-3 py-2 text-left transition-all",
+                      i === current
+                        ? "border-primary/50 bg-primary/10"
+                        : "border-white/10 bg-white/5 hover:border-white/20"
+                    )}
+                    aria-label={`Seleccionar oferta ${offer.name}`}
+                  >
+                    <p className="truncate text-xs font-bold text-white">{offer.name}</p>
+                    <p className="text-[11px] font-black text-green-400">{formatCurrency(offer.finalPrice ?? offer.price)}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Columna: Composición Visual (Box Art Inmersivo) */}

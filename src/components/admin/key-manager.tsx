@@ -22,14 +22,17 @@ import { cn } from "@/lib/utils";
 interface KeyManagerProps {
     productId: string;
     productName: string;
+    onStockSync?: (nextStock: number) => void;
 }
 
-export function KeyManager({ productId, productName }: KeyManagerProps) {
+export function KeyManager({ productId, productName, onStockSync }: KeyManagerProps) {
     const { toast } = useToast();
     const [keys, setKeys] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [inputKeys, setInputKeys] = useState("");
     const [isSaving, setIsSaving] = useState(false);
+
+    const getKeyId = (key: any) => key?.id || key?._id;
 
     /**
      * RN - Auditoría de Stock: Recupera el listado completo de licencias vinculadas al producto.
@@ -75,6 +78,7 @@ export function KeyManager({ productId, productName }: KeyManagerProps) {
                     title: "Inventario Sincronizado",
                     description: `Integradas: ${res.addedCount} | Ignoradas (Duplicadas): ${res.ignoredCount}`
                 });
+                if (typeof res.currentStock === 'number') onStockSync?.(res.currentStock);
                 setInputKeys("");
                 loadKeys();
             }
@@ -92,9 +96,10 @@ export function KeyManager({ productId, productName }: KeyManagerProps) {
         if (!confirm(`¿Confirma la eliminación de la licencia técnica: ${keyVal}?`)) return;
 
         try {
-            await ApiClient.deleteKey(id);
+            const res = await ApiClient.deleteKey(id);
             toast({ title: "Licencia Eliminada" });
-            setKeys(keys.filter(k => k._id !== id));
+            if (typeof res?.currentStock === 'number') onStockSync?.(res.currentStock);
+            setKeys(prev => prev.filter(k => getKeyId(k) !== id));
         } catch (error) {
             toast({ variant: "destructive", title: "Fallo en Operación", description: "No se pudo procesar la baja." });
         }
@@ -105,7 +110,7 @@ export function KeyManager({ productId, productName }: KeyManagerProps) {
             <CardHeader className="border-b border-white/5">
                 <CardTitle className="flex items-center gap-2 text-white font-headline">
                     <Key className="h-5 w-5 text-primary" />
-                    Gestión de Licencias Digitales (E-Keys)
+                    Gestión de Keys
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6 pt-6">
@@ -152,8 +157,10 @@ export function KeyManager({ productId, productName }: KeyManagerProps) {
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                keys.map((k) => (
-                                    <TableRow key={k._id} className="border-white/5 hover:bg-white/5 transition-colors">
+                                keys.map((k) => {
+                                    const keyId = getKeyId(k);
+                                    return (
+                                    <TableRow key={keyId} className="border-white/5 hover:bg-white/5 transition-colors">
                                         <TableCell className="font-mono text-xs md:text-sm text-white">{k.clave}</TableCell>
                                         <TableCell className="text-center">
                                             <Badge 
@@ -172,15 +179,15 @@ export function KeyManager({ productId, productName }: KeyManagerProps) {
                                             <Button 
                                                 variant="ghost" 
                                                 size="icon" 
-                                                onClick={() => handleDelete(k._id, k.clave)} 
-                                                disabled={k.estado === 'VENDIDA'}
+                                                onClick={() => keyId && handleDelete(keyId, k.clave)} 
+                                                disabled={k.estado === 'VENDIDA' || !keyId}
                                                 className="hover:bg-destructive/20 hover:text-destructive"
                                             >
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>
                                         </TableCell>
                                     </TableRow>
-                                ))
+                                )})
                             )}
                         </TableBody>
                     </Table>

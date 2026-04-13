@@ -99,6 +99,18 @@ export class ApiClient {
       meta: response.pagination || response.meta || { total: parsedProducts.length, page: 1, limit: 20, totalPages: 1 }
     };
   }
+  static async getProductsAdmin(params?: any, options?: RequestInit): Promise<PaginatedResponse<Product>> {
+    const queryString = this.buildQuery(params);
+    const response = await this.request<any>(`/products/admin${queryString}`, options);
+    const rawProducts = response.data || response.products || (Array.isArray(response) ? response : []);
+    const parsedProducts = rawProducts.map((item: any) => {
+      try { return ProductSchema.parse(item); } catch (e) { return null; }
+    }).filter(Boolean) as Product[];
+    return {
+      products: parsedProducts,
+      meta: response.pagination || response.meta || { total: parsedProducts.length, page: 1, limit: 20, totalPages: 1 }
+    };
+  }
   static async getProductById(id: string): Promise<Product> {
     const response = await this.request<any>(`/products/${id}`);
     return this.extractProductFromEnvelope(response, `/products/${id}`);
@@ -157,7 +169,7 @@ export class ApiClient {
 
   // ─── CODIGOS DIGITALES (Gestión de Licencias) ───
   static async getKeysByProduct(productId: string) { return this.request<any>(`/keys/product/${productId}`); }
-  static async addKeys(productId: string, keys: string[]) { return this.request<any>('/keys', { method: 'POST', body: JSON.stringify({ productId, keys }) }); }
+  static async addKeys(productId: string, keys: string[]) { return this.request<any>('/keys/bulk', { method: 'POST', body: JSON.stringify({ productId, keys }) }); }
   static async deleteKey(keyId: string) { return this.request(`/keys/${keyId}`, { method: 'DELETE' }); }
 
   // ── CART ──

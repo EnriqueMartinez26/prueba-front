@@ -159,7 +159,7 @@ export default function NewProductPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField control={form.control} name="platformId" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Ecosistema</FormLabel>
+                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Plataforma</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl><SelectTrigger className="h-12 bg-background/50 border-white/10"><SelectValue placeholder="Seleccionar Entidad" /></SelectTrigger></FormControl>
                           <SelectContent className="bg-card/95 backdrop-blur-xl">{platforms.map((p) => (<SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>))}</SelectContent>
@@ -169,7 +169,7 @@ export default function NewProductPage() {
                     )} />
                     <FormField control={form.control} name="genreId" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">GÃ©nero Dominante</FormLabel>
+                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Género</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl><SelectTrigger className="h-12 bg-background/50 border-white/10"><SelectValue placeholder="Seleccionar Entidad" /></SelectTrigger></FormControl>
                           <SelectContent className="bg-card/95 backdrop-blur-xl">{genres.map((g) => (<SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>))}</SelectContent>

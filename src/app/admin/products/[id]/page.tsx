@@ -80,6 +80,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     successMessage: "Activo visual sincronizado correctamente."
   });
 
+  const isDigitalProduct = form.watch('type') === 'Digital';
+
   /**
    * RN - Hidratación de Datos: Recupera el estado maestro del producto y taxonomías.
    */
@@ -165,7 +167,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                  <div className="p-3 bg-primary/10 rounded-xl"><Package className="h-6 w-6 text-primary" /></div>
                  <div>
                     <CardTitle className="text-2xl font-headline font-bold text-white uppercase tracking-tight">Ficha Técnica del Producto</CardTitle>
-                    <CardDescription className="text-xs text-muted-foreground font-medium uppercase tracking-widest">Edición de Atributos Críticos y Reglas de Negocio</CardDescription>
                  </div>
               </div>
             </CardHeader>
@@ -202,7 +203,23 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     <FormField control={form.control} name="stock" render={({ field }) => (
                       <FormItem className="space-y-3">
                         <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Existencias (Stock)</FormLabel>
-                        <FormControl><Input type="number" className="h-12 bg-background/50 border-white/10 font-black text-white" {...field} /></FormControl>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            className={cn(
+                              "h-12 bg-background/50 border-white/10 font-black text-white",
+                              isDigitalProduct && "cursor-not-allowed opacity-80"
+                            )}
+                            readOnly={isDigitalProduct}
+                            disabled={isDigitalProduct}
+                            {...field}
+                          />
+                        </FormControl>
+                        {isDigitalProduct && (
+                          <FormDescription className="text-[10px] font-bold uppercase tracking-widest text-primary/80">
+                            El stock digital se actualiza solo desde Gestión de Keys.
+                          </FormDescription>
+                        )}
                         <FormMessage className="text-[10px] font-bold uppercase" />
                       </FormItem>
                     )} />
@@ -263,7 +280,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField control={form.control} name="platformId" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Ecosistema / Plataforma</FormLabel>
+                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Plataforma</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl><SelectTrigger className="h-12 bg-background/50 border-white/10"><SelectValue placeholder="Seleccionar Entidad" /></SelectTrigger></FormControl>
                           <SelectContent className="bg-card/95 backdrop-blur-xl">{platforms.map((p) => (<SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>))}</SelectContent>
@@ -273,7 +290,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     )} />
                     <FormField control={form.control} name="genreId" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Taxonomía / Género</FormLabel>
+                        <FormLabel className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Género</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl><SelectTrigger className="h-12 bg-background/50 border-white/10"><SelectValue placeholder="Seleccionar Entidad" /></SelectTrigger></FormControl>
                           <SelectContent className="bg-card/95 backdrop-blur-xl">{genres.map((g) => (<SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>))}</SelectContent>
@@ -324,12 +341,23 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                   )} />
 
                   <Button type="submit" className="w-full h-14 font-black text-lg tracking-widest shadow-2xl transition-all hover:-translate-y-1" disabled={form.formState.isSubmitting || isUploading}>
-                    {form.formState.isSubmitting ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <><Save className="mr-2 h-6 w-6" /> ACTUALIZAR REGISTRO MAESTRO</>}
+                    {form.formState.isSubmitting ? <Loader2 className="mr-2 h-6 w-6 animate-spin" /> : <><Save className="mr-2 h-6 w-6" /> ACTUALIZAR</>}
                   </Button>
                 </form>
               </Form>
             </CardContent>
           </Card>
+
+          {/* RN - Despacho Digital: Gestión de keys bajo el formulario principal. */}
+          {id !== 'new' && isDigitalProduct && (
+            <div className="animate-in slide-in-from-top-2 duration-700">
+              <KeyManager
+                productId={id}
+                productName={form.getValues('name')}
+                onStockSync={(nextStock) => form.setValue('stock', nextStock)}
+              />
+            </div>
+          )}
         </div>
 
         {/* Barra Lateral: Assets e Inventario Dinámico */}
@@ -362,13 +390,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 </div>
              </CardContent>
           </Card>
-
-          {/* RN - Despacho Digital: Orquesta las keys para venta inmediata. */}
-          {id !== 'new' && form.watch('type') === 'Digital' && (
-            <div className="animate-in slide-in-from-right duration-1000">
-               <KeyManager productId={id} productName={form.getValues('name')} />
-            </div>
-          )}
         </div>
       </div>
     </div>

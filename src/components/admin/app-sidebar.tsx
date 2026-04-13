@@ -73,6 +73,11 @@ export function AppSidebar() {
     const { user, logout } = useAuth();
     const pathname = usePathname();
 
+    const isItemActive = (url: string) => {
+        if (url === "/admin") return pathname === "/admin";
+        return pathname === url || pathname.startsWith(`${url}/`);
+    };
+
     return (
         <Sidebar collapsible="icon" className="!top-16 md:!top-20 !h-[calc(100svh-4rem)] md:!h-[calc(100svh-5rem)] z-40 border-r border-white/5 bg-card/95 backdrop-blur-xl">
             <SidebarHeader>
@@ -82,7 +87,7 @@ export function AppSidebar() {
                     </div>
                     <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                         <span className="truncate font-headline font-bold text-white uppercase tracking-tight">4Fun Admin</span>
-                        <span className="truncate text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Panel de Control</span>
+                        <span className="truncate text-[10px] lg:text-xs text-muted-foreground uppercase font-bold tracking-widest">Panel de Control</span>
                     </div>
                 </div>
             </SidebarHeader>
@@ -90,14 +95,14 @@ export function AppSidebar() {
             
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel className="text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground mb-2">Gestión Operativa</SidebarGroupLabel>
+                    <SidebarGroupLabel className="text-[10px] lg:text-xs uppercase font-bold tracking-[0.2em] text-muted-foreground mb-2">Gestión Operativa</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton 
                                         asChild 
-                                        isActive={pathname === item.url || pathname.startsWith(item.url + '/')} 
+                                        isActive={isItemActive(item.url)} 
                                         className="h-11 lg:h-12 transition-all duration-200 hover:bg-primary/10 data-[active=true]:bg-primary/20 data-[active=true]:text-primary"
                                     >
                                         <Link href={item.url} className="flex items-center gap-3">
@@ -121,11 +126,11 @@ export function AppSidebar() {
                         <div className="flex items-center gap-3 p-3 group-data-[collapsible=icon]:hidden">
                             <Avatar className="h-8 w-8 ring-1 ring-white/10">
                                 {user?.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
-                                <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs">{user?.name?.[0] || "A"}</AvatarFallback>
+                                <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs lg:text-sm">{user?.name?.[0] || "A"}</AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-xs leading-tight min-w-0">
                                 <span className="truncate font-bold text-white">{user?.name}</span>
-                                <span className="truncate text-[9px] text-muted-foreground uppercase opacity-70 italic">{user?.role}</span>
+                                <span className="truncate text-[9px] lg:text-[10px] text-muted-foreground uppercase opacity-70 italic">{user?.role}</span>
                             </div>
                             <Button 
                                 variant="ghost" 

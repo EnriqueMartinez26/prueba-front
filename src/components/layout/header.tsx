@@ -62,11 +62,11 @@ export function Header() {
           <SearchDialog
             trigger={
               <Button variant="outline" className="hidden lg:flex w-[240px] xl:w-[320px] justify-between text-muted-foreground relative h-10 px-4 bg-muted/20 border-white/10 hover:bg-white/5">
-                <span className="inline-flex items-center text-xs uppercase tracking-tighter">
-                  <Search className="mr-3 h-4 w-4 text-primary" />
+                <span className="inline-flex items-center text-xs lg:text-sm uppercase tracking-tighter">
+                  <Search className="mr-3 h-4 w-4 lg:h-5 lg:w-5 text-primary" />
                   Buscar productos...
                 </span>
-                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-white/10 bg-black/40 px-2 font-mono text-[10px] text-white">
+                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-white/10 bg-black/40 px-2 font-mono text-[10px] lg:text-xs text-white">
                   ⌘ K
                 </kbd>
               </Button>
@@ -83,17 +83,17 @@ export function Header() {
 
           {/* RN - Persistencia de Interés: Lista de Deseos (Solo Autenticados). */}
           {user && (
-            <Button variant="ghost" size="icon" asChild className="text-white hover:text-destructive hover:bg-destructive/10">
+            <Button variant="ghost" size="icon" asChild className="h-10 w-10 lg:h-11 lg:w-11 text-white hover:text-destructive hover:bg-destructive/10">
               <Link href="/wishlist" aria-label="Favoritos">
-                <Heart className="h-5 w-5" />
+                <Heart className="h-5 w-5 lg:h-6 lg:w-6" />
               </Link>
             </Button>
           )}
 
           {/* RN - Logística Transaccional: Acceso permanente al resumen de cesta. */}
-          <Button variant="ghost" size="icon" asChild className="relative text-white hover:text-primary hover:bg-primary/10">
+          <Button variant="ghost" size="icon" asChild className="relative h-10 w-10 lg:h-11 lg:w-11 text-white hover:text-primary hover:bg-primary/10">
             <Link href="/cart" aria-label="Carrito de Compras">
-              <ShoppingCart className="h-5 w-5" />
+              <ShoppingCart className="h-5 w-5 lg:h-6 lg:w-6" />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-black text-[10px] font-semibold flex items-center justify-center shadow-lg animate-in zoom-in">
                   {cartCount}
@@ -106,14 +106,14 @@ export function Header() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative h-9 w-9 rounded-full text-white hover:text-primary hover:bg-primary/10">
+                <Button variant="ghost" size="icon" className="relative h-9 w-9 lg:h-11 lg:w-11 rounded-full text-white hover:text-primary hover:bg-primary/10">
                   {user.avatar ? (
                     <Avatar className="h-full w-full">
                       <AvatarImage src={user.avatar} alt={user.name} />
                       <AvatarFallback className="text-xs font-semibold bg-primary text-black">{(user.name || 'U')[0].toUpperCase()}</AvatarFallback>
                     </Avatar>
                   ) : (
-                    <User className="h-5 w-5 text-white" />
+                    <User className="h-5 w-5 lg:h-6 lg:w-6 text-white" />
                   )}
                 </Button>
               </DropdownMenuTrigger>

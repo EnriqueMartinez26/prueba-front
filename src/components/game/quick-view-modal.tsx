@@ -82,7 +82,7 @@ export function QuickViewModal({ game, open, onOpenChange }: QuickViewModalProps
                                             <span className="text-sm text-muted-foreground line-through opacity-40 font-bold">
                                                 {formatCurrency(game.price)}
                                             </span>
-                                            <Badge className="bg-destructive text-white text-[9px] font-black border-none px-1.5 py-0">
+                                            <Badge className="bg-green-500 text-white text-[9px] font-black border-none px-1.5 py-0 shadow-sm shadow-green-500/20">
                                                 -{game.discountPercentage}%
                                             </Badge>
                                         </div>

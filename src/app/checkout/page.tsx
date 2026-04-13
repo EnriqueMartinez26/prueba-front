@@ -136,8 +136,14 @@ export default function CheckoutPage() {
       const response = await ApiClient.createOrder(orderData as any);
 
       if (response.paymentLink) {
+        const resolvedOrderId = response.orderId || response.order?.id || response.order?._id;
+        const query = new URLSearchParams({
+          payment_link: String(response.paymentLink),
+        });
+        if (resolvedOrderId) query.set("order_id", String(resolvedOrderId));
+
         toast({ title: "Orden Sincronizada", description: "Redirigiendo a pantalla de liquidación..." });
-        router.push(`/checkout/success?payment_link=${encodeURIComponent(response.paymentLink)}&order_id=${response.orderId}`);
+        router.push(`/checkout/success?${query.toString()}`);
       } else {
         throw new Error("No se pudo obtener el enlace de liquidación de la pasarela.");
       }

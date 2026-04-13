@@ -19,13 +19,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, ShoppingBag, ArrowRight, ExternalLink, ShieldAlert, CreditCard, ReceiptText } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
+const safeQueryValue = (value: string | null) => {
+  if (!value) return null;
+  if (value === "undefined" || value === "null") return null;
+  return value;
+};
+
 function SuccessContent() {
   const { clearCart } = useCart();
   const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
   
-  const paymentLink = searchParams.get("payment_link") || 'https://link.mercadopago.com.ar/4funstore';
-  const orderId = searchParams.get("order_id");
+  const paymentLink = safeQueryValue(searchParams.get("payment_link")) || 'https://link.mercadopago.com.ar/4funstore';
+  const orderId = safeQueryValue(searchParams.get("order_id"));
 
   useEffect(() => {
     setMounted(true);

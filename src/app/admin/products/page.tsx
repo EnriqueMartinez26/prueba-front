@@ -18,7 +18,7 @@ import { TableSkeleton } from "@/components/ui/skeletons";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
-import { Search, Download, Plus, Pencil, Trash2, Package, FileSpreadsheet, FilePieChart, ExternalLink } from "lucide-react";
+import { Search, Download, Plus, Pencil, Trash2, Package, FileSpreadsheet, FilePieChart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/lib/utils";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -228,7 +228,7 @@ export default function AdminProductsPage() {
                         </TableCell>
                         <TableCell>
                           <div className="font-black text-white">{formatCurrency(p.finalPrice ?? p.price)}</div>
-                          {(p.discountPercentage ?? 0) > 0 && <Badge variant="outline" className="text-[8px] py-0 border-destructive/30 text-destructive mt-1 font-black">-{p.discountPercentage}%</Badge>}
+                          {(p.discountPercentage ?? 0) > 0 && <Badge variant="outline" className="text-[8px] py-0 border-green-500/30 text-green-400 mt-1 font-black">-{p.discountPercentage}%</Badge>}
                         </TableCell>
                         <TableCell>
                           <Badge 
