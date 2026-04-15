@@ -4,6 +4,12 @@ import { ProductDetailView } from '@/components/game/product-detail-view';
 import { notFound } from 'next/navigation';
 import { Game } from '@/lib/types';
 
+const isValidProductPayload = (payload: unknown): payload is Game => {
+    if (!payload || typeof payload !== 'object') return false;
+    const candidate = payload as Partial<Game>;
+    return typeof candidate.id === 'string' && candidate.id.length > 0 && typeof candidate.name === 'string';
+};
+
 /**
  * Capa de Presentación: Controlador de Ficha Técnica Dinámica (Product Details SSR)
  * --------------------------------------------------------------------------
@@ -40,6 +46,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+
+    // Protección temprana: evita consultas inválidas y estados ambiguos en SSR.
+    if (!id || typeof id !== 'string' || id.trim().length < 8) {
+        notFound();
+    }
     
     try {
         /**
@@ -47,9 +58,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
          * Resiliencia: Si el activo no existe en el motor de persistencia, activa 
          * el protocolo de excepción 404 (Not Found).
          */
-        const game = await ApiClient.getProductById(id) as unknown as Game;
+        const game = await ApiClient.getProductById(id);
         
-        if (!game) {
+        if (!isValidProductPayload(game)) {
             console.warn(`[ProductDetail] Activo ID ${id} no localizado en el padrón.`);
             notFound();
         }
@@ -61,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         return <ProductDetailView game={game} />;
         
     } catch (error) {
-        if (error instanceof ApiError && error.status === 404) {
+        if (error instanceof ApiError && (error.status === 404 || error.status === 400 || error.status === 422)) {
             notFound();
         }
 

@@ -129,7 +129,6 @@ export default function ResetPasswordPage({
                       <div className="relative group">
                         <Input
                           type={showPassword ? "text" : "password"}
-                          placeholder="••••••••"
                           disabled={isSubmitting}
                           className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20 pr-12"
                           {...field}
@@ -163,7 +162,6 @@ export default function ResetPasswordPage({
                       <div className="relative group">
                         <Input
                           type={showConfirm ? "text" : "password"}
-                          placeholder="••••••••"
                           disabled={isSubmitting}
                           className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20 pr-12"
                           {...field}

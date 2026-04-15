@@ -52,6 +52,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
 
     const isWishlisted = isInWishlist(game.id);
     const imageUrl = getImageUrl(game.imageId, "https://placehold.co/600x800/222/FFF?text=Sin+Imagen");
+    const breadcrumbLabel = (game.name || "").trim() || "Detalle";
 
     return (
         <div className="min-h-screen bg-background text-foreground pb-20 relative overflow-x-hidden">
@@ -74,7 +75,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                 <nav className="mb-8 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/60">
                     <Link href="/productos" className="hover:text-primary transition-colors">Productos</Link>
                     <span className="opacity-30">/</span>
-                    <span className="text-primary/80">{game.name || 'Producto'}</span>
+                    <span className="text-primary/80 truncate max-w-[240px] md:max-w-[420px]">{breadcrumbLabel}</span>
                 </nav>
 
                 <div className="mb-10">
@@ -82,7 +83,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                         {game.name}
                     </h1>
                     <div className="flex items-center gap-4">
-                        <Badge className="bg-primary/10 text-primary border-primary/20 font-semibold uppercase tracking-widest text-[10px]">OFICIAL STORE</Badge>
+                        <Badge className="bg-primary/10 text-primary border-primary/20 font-semibold uppercase tracking-widest text-[10px]">Tienda oficial</Badge>
                         <div className="flex items-center gap-1 text-yellow-500">
                             {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
                         </div>
@@ -213,7 +214,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                         onClick={() => toggleWishlist(game)}
                                     >
                                         <Heart className={cn("mr-2 h-4 w-4", isWishlisted && "fill-current")} />
-                                        {isWishlisted ? "Deseado" : "Favoritos"}
+                                        {isWishlisted ? "En favoritos" : "Agregar a favoritos"}
                                     </Button>
 
                                     {/* RN - Acceso Administrativo (RBAC) */}
