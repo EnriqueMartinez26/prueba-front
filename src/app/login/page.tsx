@@ -1,23 +1,14 @@
 "use client";
 
 /**
- * Capa de Interfaz: Terminal de Acceso y Autenticación (Login Page)
+ * Capa de Interfaz: Ingreso de Usuario (Login Page)
  * --------------------------------------------------------------------------
- * Orquesta el ingreso de identidades al sistema central. 
- * Responsabilidades:
- * 1. Validación de Credenciales: Aplica esquemas de seguridad (Zod) para 
- *    prevenir la inyección de datos malformados.
- * 2. Orquestación de Sesión: Sincroniza con el AuthContext para la 
- *    persistencia de tokens JWT.
- * 3. Gestión de Redirección: Implementa lógica de retorno post-autenticación 
- *    mediante parámetros de búsqueda (Search Params).
- * (MVC / View)
+ * Componente asintomático (Dumb Component). Toda la lógica de conexión,
+ * Zod validations y ruteo es delegada al ViewModel.
  */
 
-import { useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
-import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,70 +28,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import Image from "next/image";
-import { Loader2, LogIn, ShieldCheck, ArrowRight, KeyRound } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema, type LoginValues } from "@/lib/schemas";
-import { useToast } from "@/hooks/use-toast";
+import { Loader2, LogIn, ArrowRight } from "lucide-react";
+
+// ✅ INYECCIÓN MVC
+import { useLoginViewModel } from "@/hooks/use-login-view-model";
 
 function LoginForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectPath = searchParams.get('redirect') || '/';
-  const { toast } = useToast();
+  const { form, isSubmitting, authLoading, onSubmit } = useLoginViewModel();
 
-  const { login, loading: authLoading } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  /**
-   * RN - Integridad de Captura: React Hook Form con persistencia Zod.
-   */
-  const form = useForm<LoginValues>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  /**
-   * RN - Protocolo de Ingreso: Procesa la validación de identidad.
-   */
-  const onSubmit = async (values: LoginValues) => {
-    setIsSubmitting(true);
-    try {
-      const result = await login(values.email, values.password);
-
-      if (result.success) {
-        toast({
-          title: "Sincronización Exitosa",
-          description: "Bienvenido al ecosistema 4Fun. Sesión iniciada.",
-          className: "bg-green-50/10 border-green-500/20 text-green-400"
-        });
-        router.push(redirectPath);
-        router.refresh();
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Fallo de Identidad",
-          description: result.message || "Las credenciales no coinciden con nuestros registros.",
-        });
-      }
-    } catch (err: any) {
-      console.error("[LoginModule] Error crítico:", err);
-      toast({
-        variant: "destructive",
-        title: "Interrupción Técnica",
-        description: err.message || "Ocurrió una anomalía al procesar el acceso.",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  /**
-   * Estado de Carga Inicial (Hydration)
-   */
   if (authLoading) {
     return (
       <div className="min-h-[85vh] flex items-center justify-center">
@@ -116,37 +51,37 @@ function LoginForm() {
           <div className="flex justify-center mb-2">
             <div className="relative group">
                 <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
-                <Image src="/logo.png" alt="4Fun Logo" width={100} height={100} className="h-20 w-20 object-contain relative z-10" />
+                <Image src="/logo.png" alt="4Fun Logo" width={100} height={100} className="h-20 w-20 object-contain relative z-10 hover:scale-110 transition-transform duration-500" />
             </div>
           </div>
           <div className="space-y-1">
-            <CardTitle className="text-3xl font-headline font-bold text-white tracking-tighter italic">
-              Terminal de Acceso
+            <CardTitle className="text-3xl font-headline font-bold text-white tracking-tight">
+              Iniciar sesión
             </CardTitle>
-            <CardDescription className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground opacity-60">
-              Protocolo de Autenticación Centralizada
+            <CardDescription className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground opacity-80">
+              Entrá a tu cuenta
             </CardDescription>
           </div>
         </CardHeader>
         
         <CardContent className="px-10 pb-8">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={onSubmit} className="space-y-6">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem className="space-y-3">
-                    <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Identificador de Correo</FormLabel>
+                    <FormLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Tu email</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
                         disabled={isSubmitting}
-                        className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
+                        className="h-12 bg-white/5 border-white/5 rounded-2xl focus:ring-primary/40 text-white placeholder:opacity-20 transition-all hover:bg-white/10"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-tighter" />
+                    <FormMessage className="text-[10px] font-bold text-destructive tracking-wide ml-1" />
                   </FormItem>
                 )}
               />
@@ -155,55 +90,49 @@ function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem className="space-y-3">
-                    <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Credencial de Seguridad</FormLabel>
+                    <FormLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Contraseña</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
                         disabled={isSubmitting}
-                        className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
+                        className="h-12 bg-white/5 border-white/5 rounded-2xl focus:ring-primary/40 text-white placeholder:opacity-20 transition-all hover:bg-white/10"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-tighter" />
+                    <FormMessage className="text-[10px] font-bold text-destructive tracking-wide ml-1" />
                   </FormItem>
                 )}
               />
-              <div className="flex justify-end">
+              <div className="flex justify-end pt-2">
                 <Link
                   href="/forgot-password"
-                  className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+                  className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary/70 hover:text-primary transition-colors underline-offset-4 hover:underline"
                 >
-                  ¿Restaurar Acceso?
+                  ¿Olvidaste tu contraseña?
                 </Link>
               </div>
-              <Button type="submit" className="w-full h-14 bg-primary text-black hover:bg-primary/90 font-black uppercase text-[10px] tracking-[0.2em] rounded-xl shadow-xl shadow-primary/20 transition-all group" disabled={isSubmitting}>
+              <Button type="submit" className="w-full h-14 mt-6 bg-white/5 text-white hover:bg-primary hover:text-black border border-white/10 hover:border-primary font-black uppercase text-xs tracking-[0.15em] rounded-2xl shadow-xl hover:shadow-primary/20 transition-all duration-300 group" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-3 h-5 w-5 animate-spin" />
-                    Validando Identidad...
+                    Entrando...
                   </>
                 ) : (
                   <>
-                    <LogIn className="mr-3 h-4 w-4" />
-                    Ingresar al Sistema
+                    <LogIn className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform" />
+                    Entrar
                   </>
                 )}
               </Button>
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-6 text-center px-10 pb-12">
-          <div className="w-full h-px bg-white/5" />
-          <div className="text-xs text-muted-foreground">
-            ¿No posee credenciales activas?{" "}
-            <Link href="/register" className="text-primary hover:text-white transition-colors font-black uppercase tracking-widest text-[10px] ml-2 flex items-center justify-center mt-3 gap-2 group">
-              Iniciar Registro <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+        <CardFooter className="flex flex-col space-y-6 text-center px-10 pb-12 mt-2">
+          <div className="text-sm text-muted-foreground/80 font-medium tracking-tight">
+            ¿No tenés una cuenta?{" "}
+            <Link href="/register" className="text-white hover:text-primary transition-colors font-bold flex items-center justify-center mt-3 gap-2 group">
+              ¡Registrate ahora! <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform text-primary" />
             </Link>
-          </div>
-          
-          <div className="flex items-center justify-center gap-2 opacity-30 select-none pt-4">
-              <ShieldCheck className="h-4 w-4 text-primary" />
-              <span className="text-[9px] font-black uppercase tracking-[0.4em]">Secure Auth Node TFI v1.2</span>
           </div>
         </CardFooter>
       </Card>

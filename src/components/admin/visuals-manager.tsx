@@ -207,9 +207,9 @@ function VisualTable({ items, type, onUpdate }: { items: VisualItem[], type: Vis
                                     onCheckedChange={handleSelectAll}
                                 />
                             </TableHead>
-                            <TableHead className="w-[120px]">Activo</TableHead>
-                            <TableHead>Nombre</TableHead>
-                            <TableHead className="text-right">Acciones</TableHead>
+                            <TableHead className="w-[120px] font-bold uppercase tracking-widest text-xs text-muted-foreground">Activo</TableHead>
+                            <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground">Nombre</TableHead>
+                            <TableHead className="text-right font-bold uppercase tracking-widest text-xs text-muted-foreground">Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -233,8 +233,8 @@ function VisualTable({ items, type, onUpdate }: { items: VisualItem[], type: Vis
                                     </div>
                                 </TableCell>
                                 <TableCell>
-                                    <div className="font-bold text-white">{item.name}</div>
-                                    <div className="text-[10px] font-mono text-muted-foreground uppercase opacity-70 tracking-tighter">{item.id}</div>
+                                    <div className="font-bold text-white text-base">{item.name}</div>
+                                    <div className="text-xs font-mono text-muted-foreground uppercase opacity-70 tracking-tighter">{item.id}</div>
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">

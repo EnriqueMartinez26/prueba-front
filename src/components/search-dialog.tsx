@@ -215,8 +215,8 @@ export function SearchDialog({
                                         <div className="text-right shrink-0">
                                             {(product.discountPercentage ?? 0) > 0 ? (
                                                 <div className="flex flex-col items-end">
-                                                    <span className="text-[10px] line-through text-destructive/60 font-mono">{formatCurrency(product.price)}</span>
-                                                    <p className="text-sm font-bold text-primary">{formatCurrency(product.finalPrice ?? product.price)}</p>
+                                                    <span className="text-[10px] text-muted-foreground line-through decoration-red-500 font-mono italic opacity-90">{formatCurrency(product.price)}</span>
+                                                    <p className="text-sm font-black text-white tracking-tight">{formatCurrency(product.finalPrice ?? product.price)}</p>
                                                 </div>
                                             ) : (
                                                 <p className="text-sm font-bold text-white">{formatCurrency(product.price)}</p>
@@ -227,7 +227,7 @@ export function SearchDialog({
                                 {totalResults > MAX_PREVIEW && (
                                     <Button
                                         variant="ghost"
-                                        className="justify-between h-10 px-4 text-xs font-medium uppercase tracking-widest mt-2 hover:bg-primary/10 hover:text-primary border border-white/5"
+                                        className="justify-between w-full mt-2"
                                         onClick={handleSearch}
                                     >
                                         <span>Ver todos los resultados</span>

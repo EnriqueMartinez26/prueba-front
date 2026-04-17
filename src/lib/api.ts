@@ -65,6 +65,7 @@ export class ApiClient {
   static async logout() { return this.request('/auth/logout', { method: 'POST' }); }
   static async updateProfile(data: Partial<User>) { return this.request('/auth/profile', { method: 'PUT', body: JSON.stringify(data) }); }
   static async changePassword(data: any) { return this.request('/auth/password', { method: 'PUT', body: JSON.stringify(data) }); }
+  static async becomeSeller(data: any) { return this.request<{ success: boolean; message: string; user: User }>('/auth/become-seller', { method: 'POST', body: JSON.stringify(data) }); }
 
   /**
    * RN - Recuperación: Inicia el flujo de recuperación de contraseña.
@@ -115,6 +116,10 @@ export class ApiClient {
     const response = await this.request<any>(`/products/${id}`);
     return this.extractProductFromEnvelope(response, `/products/${id}`);
   }
+  static async getProductForManagement(id: string): Promise<Product> {
+    const response = await this.request<any>(`/products/${id}/management`);
+    return this.extractProductFromEnvelope(response, `/products/${id}/management`);
+  }
   static async getProductByIdAdmin(id: string): Promise<Product> {
     const response = await this.request<any>(`/products/admin/${id}`);
     return this.extractProductFromEnvelope(response, `/products/admin/${id}`);
@@ -123,6 +128,19 @@ export class ApiClient {
   static async updateProduct(id: string, data: Partial<ProductInput>) { return this.request<Product>(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) }); }
   static async deleteProduct(id: string) { return this.request(`/products/${id}`, { method: 'DELETE' }); }
   static async reorderProduct(id: string, newPosition: number) { return this.request(`/products/${id}/reorder`, { method: 'PUT', body: JSON.stringify({ newPosition }) }); }
+  
+  static async getSellerProducts(params?: any): Promise<PaginatedResponse<Product>> {
+    const queryString = this.buildQuery(params);
+    const response = await this.request<any>(`/products/seller/me${queryString}`);
+    const rawProducts = response.data || response.products || [];
+    const parsedProducts = rawProducts.map((item: any) => {
+      try { return ProductSchema.parse(item); } catch (e) { return null; }
+    }).filter(Boolean) as Product[];
+    return {
+      products: parsedProducts,
+      meta: response.pagination || response.meta || { total: parsedProducts.length, page: 1, limit: 20, totalPages: 1 }
+    };
+  }
 
   // ─── TAXONOMIES (CRUD Completo — Pilar 3 TFI) ───
   static async getPlatforms() { 
@@ -191,7 +209,10 @@ export class ApiClient {
 
   // ─── ORDERS & CHECKOUT ───
   static async createOrder(orderData: Partial<Order>) { return this.request('/orders', { method: 'POST', body: JSON.stringify(orderData) }); }
-  static async getMyOrders() { return this.request<Order[]>('/orders/my-orders'); }
+  static async getMyOrders(params?: any) {
+    const qs = this.buildQuery(params);
+    return this.request<{ success: boolean; orders: Order[]; total: number; totalPages: number; page: number }>(`/orders/my-orders${qs}`);
+  }
   static async getOrderById(id: string) { return this.request<Order>(`/orders/${id}`); }
   static async getAllOrders(params?: any) { 
     const qs = this.buildQuery(params);

@@ -179,7 +179,7 @@ export default function AdminProductsPage() {
           <div className="relative mb-8 max-w-md">
             <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground opacity-50" />
             <input
-              className="w-full bg-muted/20 border border-white/10 rounded-xl h-12 pl-12 pr-4 text-sm text-white placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+              className="w-full bg-muted/20 border border-white/10 rounded-xl h-12 pl-12 pr-4 text-base text-white placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
               placeholder="Buscar por Título o SKU..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -190,10 +190,10 @@ export default function AdminProductsPage() {
             <Table>
               <TableHeader className="bg-muted/30">
                 <TableRow className="hover:bg-transparent border-white/5">
-                  <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Producto</TableHead>
-                  <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Precio</TableHead>
-                  <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Existencias</TableHead>
-                  <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground text-right">Acciones</TableHead>
+                  <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground">Producto</TableHead>
+                  <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground">Precio</TableHead>
+                  <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground">Existencias</TableHead>
+                  <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -214,21 +214,21 @@ export default function AdminProductsPage() {
                       <TableRow key={p.id} className="border-white/5 hover:bg-white/5 transition-colors group">
                         <TableCell>
                           <div className="space-y-1">
-                            <p className="font-bold text-white text-sm group-hover:text-primary transition-colors">{p.name}</p>
-                            <p className="text-[10px] font-mono text-muted-foreground uppercase tracking-tighter opacity-70">
+                            <p className="font-bold text-white text-base group-hover:text-primary transition-colors">{p.name}</p>
+                            <p className="text-xs font-mono text-muted-foreground uppercase tracking-tighter opacity-70">
                               {typeof p.platform === 'object' ? p.platform.name : p.platform} · {p.type}
                             </p>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="font-black text-white">{formatCurrency(p.finalPrice ?? p.price)}</div>
-                          {(p.discountPercentage ?? 0) > 0 && <Badge variant="outline" className="text-[8px] py-0 border-green-500/30 text-green-400 mt-1 font-black">-{p.discountPercentage}%</Badge>}
+                          <div className="font-black text-white text-lg">{formatCurrency(p.finalPrice ?? p.price)}</div>
+                          {(p.discountPercentage ?? 0) > 0 && <Badge variant="outline" className="text-[10px] py-0.5 border-green-500/30 text-green-400 mt-1 font-black">-{p.discountPercentage}%</Badge>}
                         </TableCell>
                         <TableCell>
                           <Badge 
                             variant="outline" 
                             className={cn(
-                              "text-[10px] font-bold py-0.5 px-3",
+                              "text-xs font-bold py-1 px-4",
                               hasStock ? "border-green-500/30 text-green-400 bg-green-500/5" : "border-destructive/30 text-destructive bg-destructive/5 animate-pulse"
                             )}
                           >
@@ -255,11 +255,11 @@ export default function AdminProductsPage() {
           
           {/* Paginación Operativa */}
           {meta.totalPages > 1 && (
-            <div className="flex items-center justify-between mt-8 text-xs font-bold text-muted-foreground uppercase tracking-widest px-2">
+            <div className="flex items-center justify-between mt-8 text-sm font-bold text-muted-foreground uppercase tracking-widest px-2">
               <p>Página {meta.page} de {meta.totalPages} ({meta.total} totales)</p>
               <div className="flex gap-2">
-                 <Button variant="outline" size="sm" disabled={meta.page === 1} onClick={() => loadProducts(meta.page - 1, search)} className="border-white/10">Anterior</Button>
-                 <Button variant="outline" size="sm" disabled={meta.page === meta.totalPages} onClick={() => loadProducts(meta.page + 1, search)} className="border-white/10">Siguiente</Button>
+                 <Button variant="outline" size="default" disabled={meta.page === 1} onClick={() => loadProducts(meta.page - 1, search)} className="border-white/10 h-10 px-6">Anterior</Button>
+                 <Button variant="outline" size="default" disabled={meta.page === meta.totalPages} onClick={() => loadProducts(meta.page + 1, search)} className="border-white/10 h-10 px-6">Siguiente</Button>
               </div>
             </div>
           )}

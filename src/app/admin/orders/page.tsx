@@ -58,7 +58,7 @@ export default function AdminOrdersPage() {
         try {
             const res = await ApiClient.getAllOrders({
                 page,
-                limit: 15,
+                limit: 5,
                 status: statusFilter !== "all" ? statusFilter : undefined,
             });
             setOrders(res.orders || []);
@@ -213,14 +213,14 @@ export default function AdminOrdersPage() {
                         <div className="relative flex-1 w-full">
                             <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground opacity-50" />
                             <input 
-                                className="w-full bg-muted/20 border border-white/10 rounded-xl h-12 pl-12 pr-4 text-sm text-white placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                                className="w-full bg-muted/20 border border-white/10 rounded-xl h-12 pl-12 pr-4 text-base text-white placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
                                 placeholder="ID de Orden o Nombre del Solicitante..." 
                                 value={searchTerm} 
                                 onChange={(e) => setSearchTerm(e.target.value)} 
                             />
                         </div>
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
-                            <SelectTrigger className="w-full md:w-[220px] h-12 bg-muted/20 border-white/10 rounded-xl text-white font-bold text-xs uppercase tracking-widest">
+                            <SelectTrigger className="w-full md:w-[220px] h-12 bg-muted/20 border-white/10 rounded-xl text-white font-bold text-sm uppercase tracking-widest">
                                 <SelectValue placeholder="FILTRAR ESTADO" />
                             </SelectTrigger>
                             <SelectContent className="bg-card/95 backdrop-blur-xl border-white/10 text-white">
@@ -237,12 +237,12 @@ export default function AdminOrdersPage() {
                         <Table>
                             <TableHeader className="bg-muted/30">
                                 <TableRow className="hover:bg-transparent border-white/5">
-                                    <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Ticket ID</TableHead>
-                                    <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Solicitante</TableHead>
-                                    <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Estado Operativo</TableHead>
-                                    <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Liquidez / Pago</TableHead>
-                                    <TableHead className="text-right font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Total Transado</TableHead>
-                                    <TableHead className="text-right font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Acciones</TableHead>
+                                    <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground">Ticket ID</TableHead>
+                                    <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground">Solicitante</TableHead>
+                                    <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground">Estado Operativo</TableHead>
+                                    <TableHead className="font-bold uppercase tracking-widest text-xs text-muted-foreground">Liquidez / Pago</TableHead>
+                                    <TableHead className="text-right font-bold uppercase tracking-widest text-xs text-muted-foreground">Total Transado</TableHead>
+                                    <TableHead className="text-right font-bold uppercase tracking-widest text-xs text-muted-foreground">Acciones</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -257,24 +257,24 @@ export default function AdminOrdersPage() {
                                 ) : (
                                     filteredVMs.map((vm) => (
                                         <TableRow key={vm.getDisplayId()} className="border-white/5 hover:bg-white/5 transition-colors group">
-                                            <TableCell className="font-mono text-xs text-muted-foreground">#{vm.getDisplayId().slice(-8)}</TableCell>
+                                            <TableCell className="font-mono text-sm text-muted-foreground">#{vm.getDisplayId().slice(-8)}</TableCell>
                                             <TableCell>
                                                 <div className="space-y-1">
-                                                    <p className="font-bold text-white text-sm">{vm.getCustomerName()}</p>
-                                                    <p className="text-[10px] text-muted-foreground opacity-70 italic">{vm.getOrderDate()}</p>
+                                                    <p className="font-bold text-white text-base">{vm.getCustomerName()}</p>
+                                                    <p className="text-xs text-muted-foreground opacity-70 italic">{vm.getOrderDate()}</p>
                                                 </div>
                                             </TableCell>
                                             <TableCell>
-                                                <Badge variant="outline" className={cn("text-[10px] font-black uppercase py-0", vm.getStatusBadgeVariant() === 'default' ? "border-primary/50 text-primary" : "border-muted-foreground/30 text-muted-foreground")}>
+                                                <Badge variant="outline" className={cn("text-xs font-black uppercase py-0.5 px-3", vm.getStatusBadgeVariant() === 'default' ? "border-primary/50 text-primary" : "border-muted-foreground/30 text-muted-foreground")}>
                                                     {vm.getStatusLabel()}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>
-                                                <Badge variant="outline" className={cn("text-[10px] font-bold py-0.5 px-3 uppercase", vm.isPaid() ? "border-green-500/30 text-green-400 bg-green-500/5" : "border-destructive/30 text-destructive bg-destructive/5")}>
+                                                <Badge variant="outline" className={cn("text-xs font-bold py-1 px-4 uppercase", vm.isPaid() ? "border-green-500/30 text-green-400 bg-green-500/5" : "border-destructive/30 text-destructive bg-destructive/5")}>
                                                     {vm.isPaid() ? "LIQUIDADO" : "PENDIENTE DE PAGO"}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="text-right font-black text-white">{vm.toDisplayPrice()}</TableCell>
+                                            <TableCell className="text-right font-black text-white text-lg">{vm.toDisplayPrice()}</TableCell>
                                             <TableCell className="text-right">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild>
@@ -305,11 +305,11 @@ export default function AdminOrdersPage() {
 
                     {/* Navegación Paginada */}
                     {totalPages > 1 && (
-                        <div className="flex items-center justify-between mt-8 text-xs font-bold text-muted-foreground uppercase tracking-widest px-2">
+                        <div className="flex items-center justify-between mt-8 text-sm font-bold text-muted-foreground uppercase tracking-widest px-2">
                              <p>Página {page} de {totalPages} ({total} totales)</p>
                              <div className="flex gap-2">
-                                <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage(p => p - 1)} className="border-white/10">Anterior</Button>
-                                <Button variant="outline" size="sm" disabled={page === totalPages} onClick={() => setPage(p => p + 1)} className="border-white/10">Siguiente</Button>
+                                <Button variant="outline" size="default" disabled={page === 1} onClick={() => setPage(p => p - 1)} className="border-white/10 h-10 px-6">Anterior</Button>
+                                <Button variant="outline" size="default" disabled={page === totalPages} onClick={() => setPage(p => p + 1)} className="border-white/10 h-10 px-6">Siguiente</Button>
                              </div>
                         </div>
                     )}

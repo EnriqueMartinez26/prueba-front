@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "==== Ejecutando Lint-staged (ESLint + Prettier) ===="
+npx lint-staged
+
+echo "==== Ejecutando Typechecking estricto (TypeScript) ===="
+npm run typecheck
+
+echo "✅ QA aprobado exitosamente. Procediendo con el commit..."

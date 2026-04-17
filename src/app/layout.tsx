@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { AppProviders } from './providers';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Inter, Outfit } from 'next/font/google';
 
 /**
  * Capa de Infraestructura: Layout de Raíz (Root Layout)
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
  * mejorar el tiempo de primera pintura (FCP) y evitar saltos de layout (CLS).
  */
 const inter = Inter({ subsets: ['latin'], variable: '--font-body', display: 'swap' });
-const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-headline', display: 'swap' });
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-headline', display: 'swap' });
 
 export default function RootLayout({
   children,
@@ -53,7 +53,7 @@ export default function RootLayout({
         className={cn(
           'min-h-screen bg-background font-body antialiased',
           inter.variable,
-          spaceGrotesk.variable
+          outfit.variable
         )}
       >
         {/* RN - Arquitectura de Estado: Inyección de proveedores de contexto globales. */}

@@ -13,22 +13,18 @@
  * (MVC / View)
  */
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCart } from "@/context/CartContext";
-import { useAuth } from "@/hooks/use-auth";
-import { ApiClient } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useToast } from "@/hooks/use-toast";
 import { Loader2, CreditCard, ShieldCheck, MapPin, CheckCircle2, ArrowRight, ArrowLeft, ShoppingBag } from "lucide-react";
 import { formatCurrency, cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+// ✅ INYECCIÓN DE DEPENDENCIA DEL VIEWMODEL (Patrón MVC / QA Aprobado)
+import { useCheckoutViewModel } from "@/hooks/use-checkout-view-model";
 
 /**
  * RN - Arquitectura de Flujo: Definición de fases del ciclo de checkout.
@@ -40,21 +36,18 @@ const steps = [
 ];
 
 export default function CheckoutPage() {
-  const { cart, cartTotal } = useCart();
-  const { user } = useAuth();
-  const router = useRouter();
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
-
-  const [formData, setFormData] = useState({
-    street: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "Argentina",
-    paymentMethod: "mercadopago"
-  });
+  // Conexión pasiva de la Capa de Vista contra la Capa Funcional (ViewModel)
+  const {
+    cart,
+    cartTotal,
+    isSubmitting,
+    currentStep,
+    formData,
+    handleChange,
+    nextStep,
+    prevStep,
+    handleSubmit
+  } = useCheckoutViewModel();
 
   /**
    * RN - Integración de Estado: Previene discrepancias si el carro se vacía en sesión.
@@ -67,97 +60,12 @@ export default function CheckoutPage() {
         </div>
         <h1 className="text-4xl font-headline font-semibold mb-4 text-white tracking-tight">Carrito Vacío</h1>
         <p className="text-muted-foreground mb-10 text-sm uppercase tracking-widest font-medium opacity-60">No tienes productos seleccionados todavía.</p>
-        <Button onClick={() => router.push("/productos")} className="h-12 px-8 rounded-full font-medium uppercase tracking-widest text-[10px] bg-primary text-black hover:bg-primary/90 shadow-xl transition-all">
-            Ir al Catálogo
+        <Button asChild variant="outline" className="px-8 leading-none">
+            <Link href="/productos">Ir al Catálogo</Link>
         </Button>
       </div>
     );
   }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  /**
-   * RN - Validación de Fases: Controla el avance del stepper tras auditoría de datos.
-   */
-  const nextStep = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (currentStep === 1) {
-      if (!formData.street || !formData.city || !formData.zipCode) {
-        toast({ variant: "destructive", title: "Error de Validación", description: "Los parámetros de localización son obligatorios para el despacho." });
-        return;
-      }
-    }
-    setCurrentStep(prev => Math.min(prev + 1, 3));
-  };
-
-  const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
-  };
-
-  /**
-   * RN - Generación de Orden y Checkout: Orquesta la persistencia y el cobro.
-   * Delega el protocolo financiero a Mercado Pago mediante un token de preferencia.
-   */
-  const handleSubmit = async () => {
-    if (!user) {
-      toast({ variant: "destructive", title: "Fallo de Sesión", description: "Inicie sesión para normalizar la transacción." });
-      router.push("/login");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    const orderData = {
-      userId: user.id,
-      orderItems: cart.map(item => ({
-        product: item.productId,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-        image: item.image || ''
-      })),
-      shippingAddress: {
-        fullName: user.name,
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        zip: formData.zipCode,
-        country: formData.country
-      },
-      paymentMethod: formData.paymentMethod,
-      itemsPrice: cartTotal,
-      shippingPrice: 0,
-      totalPrice: cartTotal,
-    };
-
-    try {
-      const response = await ApiClient.createOrder(orderData as any);
-
-      if (response.paymentLink) {
-        const resolvedOrderId = response.orderId || response.order?.id || response.order?._id;
-        const query = new URLSearchParams({
-          payment_link: String(response.paymentLink),
-        });
-        if (resolvedOrderId) query.set("order_id", String(resolvedOrderId));
-
-        toast({ title: "Orden Sincronizada", description: "Redirigiendo a pantalla de liquidación..." });
-        router.push(`/checkout/success?${query.toString()}`);
-      } else {
-        throw new Error("No se pudo obtener el enlace de liquidación de la pasarela.");
-      }
-    } catch (error: any) {
-      console.error("[CheckoutEngine] Error Crítico:", error);
-      toast({
-        variant: "destructive",
-        title: "Interrupción en Transacción",
-        description: error.message || "Fallo en la comunicación con el motor de pagos."
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <div className="container mx-auto max-w-screen-xl px-4 py-16 animate-in fade-in duration-1000">
@@ -245,7 +153,7 @@ export default function CheckoutPage() {
                     <p className="text-[10px] font-bold text-muted-foreground flex items-center gap-2">
                         <ShieldCheck className="h-3 w-3 text-primary" /> Datos protegidos vía SSL
                     </p>
-                    <Button type="submit" form="shipping-form" className="h-12 px-8 bg-primary text-black font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-primary/90 transition-all">
+                    <Button type="submit" form="shipping-form" className="px-8">
                         Seleccionar Método <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </CardFooter>
@@ -285,7 +193,7 @@ export default function CheckoutPage() {
                     <Button variant="ghost" onClick={prevStep} className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-white transition-all">
                         <ArrowLeft className="mr-2 h-4 w-4" /> Volver
                     </Button>
-                    <Button onClick={() => nextStep()} className="h-12 px-8 bg-primary text-black font-bold uppercase text-[10px] tracking-widest rounded-xl hover:bg-primary/90 transition-all shadow-xl shadow-primary/10">
+                    <Button onClick={() => nextStep()} className="px-8">
                         Siguiente Paso <CheckCircle2 className="ml-2 h-4 w-4" />
                     </Button>
                   </CardFooter>
@@ -335,9 +243,9 @@ export default function CheckoutPage() {
                     <Button variant="ghost" onClick={prevStep} className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-white transition-all">
                         <ArrowLeft className="mr-2 h-4 w-4" /> Instrumentos
                     </Button>
-                    <Button className="h-14 px-10 bg-primary text-black font-black uppercase text-[10px] tracking-[0.2em] rounded-xl hover:bg-primary/90 transition-all shadow-2xl shadow-primary/30" onClick={handleSubmit} disabled={isSubmitting}>
-                      {isSubmitting ? <Loader2 className="animate-spin mr-3 h-5 w-5" /> : <ShieldCheck className="mr-3 h-5 w-5" />}
-                      Finalizar y Ejecutar Pago
+                    <Button className="px-10" onClick={handleSubmit} disabled={isSubmitting}>
+                      {isSubmitting ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : <ShieldCheck className="mr-2 h-4 w-4" />}
+                      Finalizar Pago
                     </Button>
                   </CardFooter>
                 </Card>

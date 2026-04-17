@@ -206,10 +206,10 @@ export default function UsersPage() {
                     <div className="space-y-1">
                         <CardTitle className="text-3xl font-headline font-bold text-white flex items-center gap-3">
                             <Users className="h-8 w-8 text-primary" />
-                            Gestión de Cuentas y Accesos
+                            Cuentas
                         </CardTitle>
                         <CardDescription className="text-muted-foreground uppercase tracking-widest text-[10px] font-bold">
-                            Control RBAC, Moderación de Perfiles y Auditoría de Identidad
+                            Administración de usuarios y perfiles
                         </CardDescription>
                     </div>
                     
@@ -250,7 +250,7 @@ export default function UsersPage() {
                         <div className="relative flex-1 w-full">
                             <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground opacity-50" />
                             <input
-                                className="w-full bg-muted/20 border border-white/10 rounded-xl h-12 pl-12 pr-4 text-sm text-white placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
+                                className="w-full bg-muted/20 border border-white/10 rounded-xl h-12 pl-12 pr-4 text-base text-white placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
                                 placeholder="Localizar por ID, Nombre o E-mail..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -259,7 +259,7 @@ export default function UsersPage() {
 
                         <div className="flex items-center gap-2 w-full md:w-auto">
                             <Select value={roleFilter} onValueChange={setRoleFilter}>
-                                <SelectTrigger className="w-full md:w-[220px] h-12 bg-muted/20 border-white/10 rounded-xl text-white font-bold text-xs uppercase tracking-widest">
+                                <SelectTrigger className="w-full md:w-[220px] h-12 bg-muted/20 border-white/10 rounded-xl text-white font-bold text-sm uppercase tracking-widest">
                                     <div className="flex items-center gap-2">
                                         <Filter className="h-4 w-4" />
                                         <SelectValue placeholder="FILTRAR ROL" />
@@ -278,12 +278,12 @@ export default function UsersPage() {
                         <Table>
                             <TableHeader className="bg-muted/30">
                                 <TableRow className="hover:bg-transparent border-white/5">
-                                    <TableHead className="w-[80px] font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Activo</TableHead>
-                                    <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Identidad de Usuario</TableHead>
-                                    <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground text-center">Jerarquía</TableHead>
-                                    <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground text-center">Estado</TableHead>
-                                    <TableHead className="font-bold uppercase tracking-widest text-[10px] text-muted-foreground text-center">Alta</TableHead>
-                                    <TableHead className="text-right font-bold uppercase tracking-widest text-[10px] text-muted-foreground">Acciones</TableHead>
+                                    <TableHead className="w-[80px] font-bold uppercase tracking-widest text-[11px] text-muted-foreground">Activo</TableHead>
+                                    <TableHead className="font-bold uppercase tracking-widest text-[11px] text-muted-foreground">Usuario</TableHead>
+                                    <TableHead className="font-bold uppercase tracking-widest text-[11px] text-muted-foreground text-center">Jerarquía</TableHead>
+                                    <TableHead className="font-bold uppercase tracking-widest text-[11px] text-muted-foreground text-center">Estado</TableHead>
+                                    <TableHead className="font-bold uppercase tracking-widest text-[11px] text-muted-foreground text-center">Alta</TableHead>
+                                    <TableHead className="text-right font-bold uppercase tracking-widest text-[11px] text-muted-foreground">Acciones</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -306,29 +306,29 @@ export default function UsersPage() {
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex flex-col">
-                                                    <span className="font-bold text-white text-sm group-hover:text-primary transition-colors">{user.name}</span>
-                                                    <span className="text-[10px] text-muted-foreground opacity-70 italic truncate max-w-[200px]">{user.email}</span>
+                                                    <span className="font-bold text-white text-base group-hover:text-primary transition-colors">{user.name}</span>
+                                                    <span className="text-xs text-muted-foreground opacity-70 italic truncate max-w-[200px]">{user.email}</span>
                                                 </div>
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 {user.role === 'admin' ? (
-                                                    <Badge variant="default" className="bg-destructive text-white border-none gap-1 py-0 font-black text-[9px] uppercase tracking-tighter">
+                                                    <Badge variant="default" className="bg-destructive text-white border-none gap-1 py-0 font-black text-[10px] uppercase tracking-tighter">
                                                         <ShieldAlert className="h-3 w-3" /> Admin
                                                     </Badge>
                                                 ) : (
-                                                    <Badge variant="secondary" className="gap-1 py-0 font-bold text-[9px] uppercase tracking-tighter bg-muted/30">
+                                                    <Badge variant="secondary" className="gap-1 py-0 font-bold text-[10px] uppercase tracking-tighter bg-muted/30">
                                                         <UserIcon className="h-3 w-3" /> Usuario
                                                     </Badge>
                                                 )}
                                             </TableCell>
                                             <TableCell className="text-center">
                                                 {user.isVerified ? (
-                                                    <Badge variant="outline" className="border-green-500/30 text-green-500 font-bold text-[9px] py-0 bg-green-500/5 uppercase">Verificado</Badge>
+                                                    <Badge variant="outline" className="border-green-500/30 text-green-500 font-bold text-[10px] py-0 bg-green-500/5 uppercase">Verificado</Badge>
                                                 ) : (
-                                                    <Badge variant="outline" className="border-yellow-500/30 text-yellow-500 font-bold text-[9px] py-0 bg-yellow-500/5 uppercase">Pendiente</Badge>
+                                                    <Badge variant="outline" className="border-yellow-500/30 text-yellow-500 font-bold text-[10px] py-0 bg-yellow-500/5 uppercase">Pendiente</Badge>
                                                 )}
                                             </TableCell>
-                                            <TableCell className="text-center text-xs font-mono text-muted-foreground opacity-60 italic">
+                                            <TableCell className="text-center text-sm font-mono text-muted-foreground opacity-60 italic">
                                                 {new Date(user.createdAt).toLocaleDateString('es-AR')}
                                             </TableCell>
                                             <TableCell className="text-right">
@@ -338,18 +338,18 @@ export default function UsersPage() {
                                                             {actionLoading === (user.id || user._id) ? <Loader2 className="h-4 w-4 animate-spin text-primary" /> : <MoreVertical className="h-4 w-4 text-muted-foreground" />}
                                                         </Button>
                                                     </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end" className="bg-card/95 backdrop-blur-xl border-white/10 text-white">
-                                                        <DropdownMenuLabel className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Moderación de Perfil</DropdownMenuLabel>
+                                                    <DropdownMenuContent align="end" className="bg-card/95 backdrop-blur-xl border-white/10 text-white min-w-[200px] p-2">
+                                                        <DropdownMenuLabel className="font-black text-xs uppercase tracking-[0.15em] text-muted-foreground/60 px-3 py-2">Moderación de Perfil</DropdownMenuLabel>
                                                         <DropdownMenuSeparator className="bg-white/5" />
-                                                        <DropdownMenuItem onClick={() => router.push(`/admin/users/${user.id || user._id}`)} className="text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer">
+                                                        <DropdownMenuItem onClick={() => router.push(`/admin/users/${user.id || user._id}`)} className="text-sm font-bold hover:bg-primary/10 hover:text-primary cursor-pointer px-3 py-2.5">
                                                             Visualizar Auditoría
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => handleRoleUpdate(user.id || user._id, user.role)} className={cn("text-xs font-bold hover:bg-primary/10 hover:text-primary cursor-pointer", user.role === 'admin' ? "text-destructive" : "text-green-400")}>
-                                                            <RefreshCw className="mr-2 h-4 w-4" /> {user.role === 'admin' ? 'Degradar a Cliente' : 'Elevar a Administrador'}
+                                                        <DropdownMenuItem onClick={() => handleRoleUpdate(user.id || user._id, user.role)} className={cn("text-sm font-bold hover:bg-primary/10 hover:text-primary cursor-pointer px-3 py-2.5", user.role === 'admin' ? "text-destructive" : "text-green-400")}>
+                                                            <RefreshCw className="mr-3 h-5 w-5" /> {user.role === 'admin' ? 'Degradar a Cliente' : 'Elevar a Administrador'}
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator className="bg-white/5" />
-                                                        <DropdownMenuItem className="text-red-500 font-black text-xs hover:bg-red-500/10 cursor-pointer" onClick={() => handleDelete(user.id || user._id, user.name)}>
-                                                            <Trash2 className="mr-2 h-4 w-4" /> DAR DE BAJA
+                                                        <DropdownMenuItem className="text-red-500 font-black text-sm hover:bg-red-500/10 cursor-pointer px-3 py-2.5" onClick={() => handleDelete(user.id || user._id, user.name)}>
+                                                            <Trash2 className="mr-3 h-5 w-5" /> DAR DE BAJA
                                                         </DropdownMenuItem>
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
@@ -362,11 +362,11 @@ export default function UsersPage() {
                     </div>
 
                     {/* Barra de Navegación de Nómina */}
-                    <div className="flex items-center justify-between mt-8 text-xs font-bold text-muted-foreground uppercase tracking-widest px-2">
+                    <div className="flex items-center justify-between mt-8 text-[11px] font-bold text-muted-foreground uppercase tracking-widest px-2">
                          <p>Página {page} de {totalPages}</p>
                          <div className="flex gap-2">
-                             <Button variant="outline" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1 || loading} className="border-white/10">Anterior</Button>
-                             <Button variant="outline" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages || loading} className="border-white/10">Siguiente</Button>
+                             <Button variant="outline" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1 || loading} className="border-white/10 h-8 text-[10px] font-black">Anterior</Button>
+                             <Button variant="outline" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages || loading} className="border-white/10 h-8 text-[10px] font-black">Siguiente</Button>
                          </div>
                     </div>
                 </CardContent>

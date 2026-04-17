@@ -1,23 +1,14 @@
 "use client";
 
 /**
- * Capa de Interfaz: Portal de Altas de Identidad (Register Page)
+ * Capa de Interfaz: Registro de Usuario (Register Page)
  * --------------------------------------------------------------------------
- * Orquesta el proceso de incorporación de nuevos usuarios al padrón.
- * Responsabilidades:
- * 1. Validación de Integridad: Aplica reglas de coincidencia de password y 
- *    complejidad mínima (Zod).
- * 2. Captura de Perfil: Recolecta biometría básica (Nombre, Email) para la 
- *    creación del recurso en el motor de identidades.
- * 3. Orquestación Operativa: Delega la persistencia al AuthContext y gestiona 
- *    el flujo de éxito post-registro.
- * (MVC / View)
+ * Componente asintomático (Dumb Component) que consume su respectivo
+ * ViewModel sin ensuciar la rama de renderizado.
  */
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
-import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -36,74 +27,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Image from "next/image";
-import { Loader2, UserPlus, ArrowRight, IdCard } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { RegisterSchema, type RegisterValues } from "@/lib/schemas";
-import { useToast } from "@/hooks/use-toast";
+import { Loader2, UserPlus, ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react";
 
-export default function RegisterPage() {
-  const router = useRouter();
-  const { register, loading: authLoading } = useAuth();
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+// ✅ INYECCIÓN MVC
+import { useRegisterViewModel } from "@/hooks/use-register-view-model";
 
-  /**
-   * RN - Integridad de Captura: React Hook Form con validación refinada (coincidencia).
-   */
-  const form = useForm<RegisterValues>({
-    resolver: zodResolver(RegisterSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-  });
+function RegisterForm() {
+  const { form, isSubmitting, authLoading, onSubmit } = useRegisterViewModel();
 
-  /**
-   * RN - Protocolo Registral: Procesa la creación de la nueva identidad.
-   */
-  const onSubmit = async (values: RegisterValues) => {
-    setIsSubmitting(true);
-    try {
-      const result = await register(
-        values.name,
-        values.email,
-        values.password
-      );
-
-      if (result.success) {
-        toast({
-          title: "Sincronización Exitosa",
-          description: "Identidad registrada en el padrón nacional. Redirigiendo...",
-          className: "bg-green-50/10 border-green-500/20 text-green-400"
-        });
-        router.push("/");
-        router.refresh();
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Fallo en Registro",
-          description: result.message || "No se ha podido consolidar la identidad solicitada.",
-        });
-      }
-    } catch (err: any) {
-      console.error("[RegisterModule] Error Crítico:", err);
-      toast({
-        variant: "destructive",
-        title: "Interrupción de Servicio",
-        description: err.message || "Anomalía técnica durante el despachamiento de datos.",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  /**
-   * Estado de Carga por Hidratación
-   */
   if (authLoading) {
     return (
       <div className="min-h-[85vh] flex items-center justify-center">
@@ -113,45 +44,49 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="container mx-auto flex items-center justify-center min-h-[90vh] py-12 px-4 animate-in fade-in zoom-in-95 duration-700">
-      <Card className="w-full max-w-lg border-none bg-card/40 backdrop-blur-3xl shadow-3xl rounded-[2.5rem] overflow-hidden ring-1 ring-white/10">
+    <div className="container mx-auto flex flex-col items-center justify-center min-h-[90vh] py-12 px-4 animate-in fade-in zoom-in-95 duration-700">
+      <Card className="w-full max-w-lg border-none bg-card/40 backdrop-blur-3xl shadow-3xl rounded-[2.5rem] overflow-hidden ring-1 ring-white/10 relative">
+        
+        {/* Adorno Top gradient */}
+        <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-80" />
+
         <CardHeader className="pt-12 pb-6 text-center space-y-4">
           <div className="flex justify-center mb-2">
             <div className="relative group">
-                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
-                <div className="h-20 w-20 flex items-center justify-center bg-white/5 rounded-2xl border border-white/10 relative z-10">
-                    <IdCard className="h-10 w-10 text-primary" />
+                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full opacity-50 transition-opacity duration-1000 group-hover:opacity-100" />
+                <div className="h-20 w-20 flex items-center justify-center bg-black/40 rounded-2xl border border-white/5 relative z-10 hover:rotate-6 transition-transform shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+                    <UserPlus className="h-10 w-10 text-primary" />
                 </div>
             </div>
           </div>
           <div className="space-y-1">
-            <CardTitle className="text-3xl font-headline font-bold text-white tracking-tighter italic">
-              Alta de Identidad
+            <CardTitle className="text-3xl font-headline font-bold text-white tracking-tight">
+              Creá tu cuenta
             </CardTitle>
-            <CardDescription className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground opacity-60">
-              Crea tu cuenta en segundos
+            <CardDescription className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground opacity-80">
+              Sumate a la comunidad
             </CardDescription>
           </div>
         </CardHeader>
 
-        <CardContent className="px-10 pb-8">
+        <CardContent className="px-6 md:px-10 pb-8">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={onSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 gap-6">
                 <FormField
                     control={form.control}
                     name="name"
                     render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Nombre de usuario</FormLabel>
+                      <FormLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Nombre de usuario</FormLabel>
                         <FormControl>
                         <Input
                             disabled={isSubmitting}
-                            className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
+                            className="h-12 bg-white/5 border-white/5 rounded-2xl focus:ring-primary/40 text-white placeholder:opacity-20 transition-all hover:bg-white/10"
                             {...field}
                         />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-tighter" />
+                        <FormMessage className="text-[10px] font-bold text-destructive tracking-wide ml-1" />
                     </FormItem>
                     )}
                 />
@@ -160,16 +95,16 @@ export default function RegisterPage() {
                     name="email"
                     render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Correo electronico</FormLabel>
+                      <FormLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Correo electrónico</FormLabel>
                         <FormControl>
                         <Input
                             type="email"
                             disabled={isSubmitting}
-                            className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
+                            className="h-12 bg-white/5 border-white/5 rounded-2xl focus:ring-primary/40 text-white placeholder:opacity-20 transition-all hover:bg-white/10"
                             {...field}
                         />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-tighter" />
+                        <FormMessage className="text-[10px] font-bold text-destructive tracking-wide ml-1" />
                     </FormItem>
                     )}
                 />
@@ -181,16 +116,16 @@ export default function RegisterPage() {
                     name="password"
                     render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Contrasena</FormLabel>
+                      <FormLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Contraseña</FormLabel>
                         <FormControl>
                         <Input
                             type="password"
                             disabled={isSubmitting}
-                            className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
+                            className="h-12 bg-white/5 border-white/5 rounded-2xl focus:ring-primary/40 text-white placeholder:opacity-20 transition-all hover:bg-white/10"
                             {...field}
                         />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-tighter" />
+                        <FormMessage className="text-[10px] font-bold text-destructive tracking-wide ml-1" />
                     </FormItem>
                     )}
                 />
@@ -199,48 +134,58 @@ export default function RegisterPage() {
                     name="confirmPassword"
                     render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Confirmar contrasena</FormLabel>
+                      <FormLabel className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground ml-1">Confirmá tu contraseña</FormLabel>
                         <FormControl>
                         <Input
                             type="password"
                             disabled={isSubmitting}
-                            className="h-12 bg-white/5 border-white/10 rounded-xl focus:ring-primary/40 text-white placeholder:opacity-20"
+                            className="h-12 bg-white/5 border-white/5 rounded-2xl focus:ring-primary/40 text-white placeholder:opacity-20 transition-all hover:bg-white/10"
                             {...field}
                         />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-tighter" />
+                        <FormMessage className="text-[10px] font-bold text-destructive tracking-wide ml-1" />
                     </FormItem>
                     )}
                 />
               </div>
 
-              <Button type="submit" className="w-full h-14 bg-primary text-black hover:bg-primary/90 font-black uppercase text-[10px] tracking-[0.2em] rounded-xl shadow-xl shadow-primary/20 transition-all group mt-4" disabled={isSubmitting}>
+              <Button type="submit" className="w-full h-14 bg-white/5 text-white hover:bg-primary hover:text-black border border-white/10 hover:border-primary font-black uppercase text-xs tracking-[0.15em] rounded-2xl shadow-xl hover:shadow-primary/20 transition-all duration-300 group mt-4" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-3 h-5 w-5 animate-spin" />
-                    Comprometiendo Identidad...
+                    Registrando...
                   </>
                 ) : (
                   <>
-                    <UserPlus className="mr-3 h-4 w-4" />
-                    Consolidar Registro
+                    <ShieldCheck className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform" />
+                    Crear mi cuenta
                   </>
                 )}
               </Button>
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-6 text-center px-10 pb-12">
-          <div className="w-full h-px bg-white/5" />
-          <div className="text-xs text-muted-foreground">
-            ¿Ya posee una identidad validada?{" "}
-            <Link href="/login" className="text-primary hover:text-white transition-colors font-black uppercase tracking-widest text-[10px] ml-2 flex items-center justify-center mt-3 gap-2 group">
-              Iniciar Sesión <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+        <CardFooter className="flex flex-col space-y-6 text-center px-10 pb-10 mt-2">
+          <div className="text-sm text-muted-foreground/80 font-medium tracking-tight">
+            ¿Ya tenés una cuenta activada?{" "}
+            <Link href="/login" className="text-white hover:text-primary transition-colors font-bold flex items-center justify-center mt-3 gap-2 group">
+               <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1.5 transition-transform text-primary" /> Volver al Inicio de Sesión
             </Link>
           </div>
-          
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+        <div className="min-h-[85vh] flex items-center justify-center">
+            <Loader2 className="h-10 w-10 animate-spin text-primary opacity-20" />
+        </div>
+    }>
+      <RegisterForm />
+    </Suspense>
   );
 }

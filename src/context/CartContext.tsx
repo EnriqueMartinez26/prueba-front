@@ -142,6 +142,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         toast({ variant: "destructive", title: "Error", description: e.message || "Fallo de conexión." });
       }
     } else {
+      // ✅ VALIDACIÓN ESTRICTA DE QA (E-COMMERCE) - Fase Local:
+      // Aún sin sesión, impedimos que se sume si el stock visualizado es menor. 
+      // (Luego en el checkout backend volverá a auditarse)
+      if (product.stock !== undefined && safeQuantity > product.stock) {
+        toast({ variant: "destructive", title: "Stock Agotado", description: "Límite de unidades excedido." });
+        return;
+      }
+
       // Ejecución Local: Almacena en el navegador para persistir entre recargas.
       setCart(prev => {
         const exist = prev.find(p => p.productId === product.id);

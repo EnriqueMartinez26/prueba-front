@@ -43,12 +43,6 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
     <section className="py-12 md:py-16 animate-in fade-in duration-700">
       <div className="flex flex-col gap-10">
         
-        {/* Cabecera del Módulo */}
-        <div className="space-y-2">
-            <h2 className="font-headline text-4xl font-bold md:text-5xl text-white tracking-tight">Catálogo de Productos</h2>
-            <p className="text-muted-foreground text-sm uppercase tracking-widest font-semibold opacity-80 pl-1 border-l-4 border-primary/40">Exploración de Ecosistemas y Licencias Digitales</p>
-        </div>
-
         {/* Arquitectura de Layout: Control Lateral e Ingesta de Datos */}
         <div className="flex flex-col lg:flex-row gap-10 items-start">
 
@@ -57,7 +51,7 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
             <div className="relative group flex-1">
               <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <Input
-                placeholder="Localizar título comercial..."
+                placeholder="Buscá tu próximo juego..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="h-12 bg-card/40 border-white/10 rounded-xl pl-12 text-white placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/50 transition-all font-medium"
@@ -122,26 +116,26 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
             {loading ? (
               <div className="h-[500px] flex flex-col items-center justify-center opacity-50 bg-card/5 rounded-3xl border-2 border-dashed border-white/5">
                 <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
-                <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground animate-pulse">Recuperando registros del catálogo...</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground animate-pulse">Cargando catálogo...</p>
               </div>
             ) : games.length > 0 ? (
               <div className="space-y-16">
                 {/* RN - Animación de Entrada: Implementación de Stagger Effect para suavidad visual. */}
                 <motion.div
-                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
                   initial="hidden"
                   animate="visible"
                   variants={{
                     hidden: { opacity: 0 },
-                    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                    visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.1 } }
                   }}
                 >
-                  {games.map((game) => (
+                  {games.map((game, idx) => (
                     <motion.div
                       key={game.id}
                       variants={{
-                        hidden: { opacity: 0, scale: 0.95, y: 30 },
-                        visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
+                        hidden: { opacity: 0, scale: 0.92, y: 40 },
+                        visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: idx * 0.05 } }
                       }}
                     >
                       <GameCard game={game} />
@@ -150,40 +144,42 @@ export function GameCatalog({ initialGames, initialTotalPages = 1 }: GameCatalog
                 </motion.div>
 
                 {/* RN - Control de Navegación (Paginación Operativa) */}
-                <div className="flex justify-center items-center gap-6 pt-12 border-t border-white/5">
+                <div className="flex justify-center items-center gap-6 pt-12 border-t border-white/10">
                   <Button
                     variant="outline"
-                    className="h-12 w-12 rounded-2xl border-white/10 hover:bg-primary hover:text-black hover:border-primary transition-all shadow-xl disabled:opacity-20"
+                    className="h-11 w-11 rounded-lg border-white/15 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     onClick={() => setPage(prev => Math.max(1, prev - 1))}
                     disabled={page === 1}
+                    aria-label="Página anterior"
                   >
                     <ChevronLeft className="h-5 w-5" />
                   </Button>
                   
-                  <div className="flex flex-col items-center">
-                      <span className="text-[10px] font-bold text-white uppercase tracking-[0.3em] mb-1">Página</span>
-                      <span className="text-2xl font-bold text-primary tracking-tighter">{page} / {totalPages}</span>
+                  <div className="flex flex-col items-center gap-1 px-6 py-2 bg-white/5 border border-white/10 rounded-lg">
+                      <span className="text-[9px] font-bold text-white uppercase tracking-widest">Página</span>
+                      <span className="text-xl font-bold text-primary tracking-tighter">{page}/{totalPages}</span>
                   </div>
 
                   <Button
                     variant="outline"
-                    className="h-12 w-12 rounded-2xl border-white/10 hover:bg-primary hover:text-black hover:border-primary transition-all shadow-xl disabled:opacity-20"
+                    className="h-11 w-11 rounded-lg border-white/15 hover:bg-primary/10 hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                     onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={page === totalPages}
+                    aria-label="Página siguiente"
                   >
                     <ChevronRight className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
             ) : (
-              <div className="h-[500px] flex flex-col items-center justify-center text-center p-12 bg-card/20 rounded-3xl border-2 border-dashed border-white/5 animate-in zoom-in-95 duration-500">
+              <div className="h-[500px] flex flex-col items-center justify-center text-center p-12 bg-card/10 rounded-2xl border-2 border-dashed border-white/10 animate-in zoom-in-95 duration-500">
                 {/* RN - Gestión de Búsqueda Fallida: Estado vacío para ausencia de coincidencias. */}
-                <div className="h-20 w-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
-                    <Search className="h-10 w-10 text-muted-foreground opacity-20" />
+                <div className="h-20 w-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6">
+                    <Search className="h-10 w-10 text-muted-foreground opacity-40" />
                 </div>
-                <h3 className="font-headline text-3xl font-bold text-white uppercase tracking-tight">Sin Coincidencias</h3>
-                <p className="text-muted-foreground mt-3 max-w-sm leading-relaxed text-sm font-medium">No se hallaron registros que operen bajo los criterios técnicos y financieros aplicados al filtro.</p>
-                <Button onClick={resetFilters} variant="outline" className="mt-8 border-primary/20 text-primary font-bold uppercase tracking-widest text-[10px] h-12 px-8 rounded-full hover:bg-primary hover:text-black transition-all">
+                <h3 className="font-headline text-2xl font-bold text-white uppercase tracking-tight">No encontramos nada</h3>
+                <p className="text-muted-foreground mt-3 max-w-sm leading-relaxed text-xs font-medium opacity-80">No encontramos juegos con esos filtros. ¡Probá con otros!</p>
+                <Button onClick={resetFilters} variant="outline" className="mt-8 border-primary/30 text-primary font-bold uppercase tracking-widest text-[9px] h-11 px-6 rounded-lg hover:bg-primary hover:text-black hover:border-primary transition-all duration-300">
                   Restablecer Filtros
                 </Button>
               </div>

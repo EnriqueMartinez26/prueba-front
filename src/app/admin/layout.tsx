@@ -1,51 +1,43 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react"
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/admin/app-sidebar";
 import { Separator } from "@/components/ui/separator";
+import { useAdminLayoutViewModel } from "@/hooks/use-admin-layout-view-model";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+  const { loading, isAuthorized } = useAdminLayoutViewModel();
 
-  useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        // Guardar la intención del usuario
-        router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
-      } else if (user.role !== "admin") {
-        router.push("/"); // Redirigir si no es admin
-      }
-    }
-  }, [user, loading, router]);
-
+  // Pantalla de carga profesional con el color primario de 4Fun
   if (loading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="h-screen w-full flex items-center justify-center bg-background">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
       </div>
     );
   }
 
-  if (!user || user.role !== "admin") {
+  // Si no está autorizado, no mostramos nada mientras el router hace su trabajo
+  if (!isAuthorized) {
     return null;
   }
 
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
+      <SidebarInset className="bg-background">
+        <header className="flex h-14 shrink-0 items-center gap-2 border-b border-white/5 bg-card/60 backdrop-blur-xl px-4 sticky top-0 z-10">
+          <SidebarTrigger className="-ml-1 text-muted-foreground hover:text-foreground transition-colors" />
+          <Separator orientation="vertical" className="mr-2 h-4 bg-white/10" />
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
+            4Fun Admin Dashboard
+          </span>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 lg:p-8">
+        
+        <main className="flex flex-1 flex-col gap-4 p-4 lg:p-6 xl:p-8 animate-in fade-in slide-in-from-bottom-2 duration-700">
           {children}
-        </div>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );

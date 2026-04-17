@@ -81,15 +81,21 @@ export function AppSidebar() {
     return (
         <Sidebar collapsible="icon" className="!top-16 md:!top-20 !h-[calc(100svh-4rem)] md:!h-[calc(100svh-5rem)] z-40 border-r border-white/5 bg-card/95 backdrop-blur-xl">
             <SidebarHeader>
-                <div className="flex items-center gap-2 px-2 py-2">
-                    <div className="flex aspect-square size-9 items-center justify-center rounded-lg bg-primary text-black font-black shadow-lg shadow-primary/20">
-                        <Package className="size-5" />
-                    </div>
-                    <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-                        <span className="truncate font-headline font-bold text-white uppercase tracking-tight">4Fun Admin</span>
-                        <span className="truncate text-[10px] lg:text-xs text-muted-foreground uppercase font-bold tracking-widest">Panel de Control</span>
-                    </div>
-                </div>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton size="lg" asChild className="hover:bg-white/5 hover:text-white transition-colors cursor-pointer">
+                            <Link href="/admin">
+                                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-black font-black shadow-lg shadow-primary/20">
+                                    <Package className="size-5" />
+                                </div>
+                                <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
+                                    <span className="truncate font-headline font-bold text-white uppercase tracking-tight">4Fun Dashboard</span>
+                                    <span className="truncate text-[10px] lg:text-xs text-muted-foreground uppercase font-bold tracking-widest">Panel de Dashboard</span>
+                                </div>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
             </SidebarHeader>
             <SidebarSeparator className="bg-white/5" />
             
@@ -122,39 +128,22 @@ export function AppSidebar() {
             <SidebarFooter className="border-t border-white/5 mt-auto">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        {/* Layer - Identidad del Operador */}
-                        <div className="flex items-center gap-3 p-3 group-data-[collapsible=icon]:hidden">
-                            <Avatar className="h-8 w-8 ring-1 ring-white/10">
+                        <SidebarMenuButton 
+                            size="lg" 
+                            onClick={() => logout()} 
+                            title="Finalizar Sesión Operativa"
+                            className="hover:bg-destructive/10 hover:text-destructive group/logout transition-colors cursor-pointer justify-between"
+                        >
+                            <Avatar className="h-8 w-8 rounded-lg ring-1 ring-white/10 group-hover/logout:ring-destructive/30 transition-colors">
                                 {user?.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
-                                <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs lg:text-sm">{user?.name?.[0] || "A"}</AvatarFallback>
+                                <AvatarFallback className="rounded-lg bg-primary/10 text-primary font-bold text-xs lg:text-sm group-hover/logout:bg-destructive/10 group-hover/logout:text-destructive transition-colors">{user?.name?.[0] || "A"}</AvatarFallback>
                             </Avatar>
-                            <div className="grid flex-1 text-left text-xs leading-tight min-w-0">
-                                <span className="truncate font-bold text-white">{user?.name}</span>
+                            <div className="grid flex-1 text-left text-xs leading-tight min-w-0 group-data-[collapsible=icon]:hidden">
+                                <span className="truncate font-bold text-white group-hover/logout:text-destructive transition-colors">{user?.name}</span>
                                 <span className="truncate text-[9px] lg:text-[10px] text-muted-foreground uppercase opacity-70 italic">{user?.role}</span>
                             </div>
-                            <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                onClick={() => logout()} 
-                                title="Finalizar Sesión Operativa"
-                                className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                            >
-                                <LogOut className="h-4 w-4" />
-                            </Button>
-                        </div>
-
-                        {/* Estado Colapsado: Fallback visual */}
-                        <div className="hidden group-data-[collapsible=icon]:flex items-center justify-center py-4">
-                            <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                onClick={() => logout()} 
-                                title="Cerrar Sesión"
-                                className="h-9 w-9 text-muted-foreground hover:text-destructive"
-                            >
-                                <LogOut className="h-5 w-5" />
-                            </Button>
-                        </div>
+                            <LogOut className="h-4 w-4 ml-auto text-muted-foreground group-hover/logout:text-destructive transition-colors group-data-[collapsible=icon]:hidden" />
+                        </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>

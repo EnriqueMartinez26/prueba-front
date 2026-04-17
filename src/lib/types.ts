@@ -48,6 +48,14 @@ export interface ProductInput {
 
 // ─── ENTIDAD USUARIO & SESIÓN ───
 
+export type UserRole = 'buyer' | 'seller' | 'admin';
+
+export interface SellerProfile {
+  storeName: string;
+  storeDescription?: string | null;
+  isApproved: boolean;
+}
+
 /**
  * RN - Identidad: Perfil del usuario autenticado.
  */
@@ -55,12 +63,14 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role: 'user' | 'admin';
+  role: UserRole;
   avatar?: string | null;
   phone?: string | null;
   address?: string | null;
   isVerified?: boolean;
   createdAt?: string;
+  sellerProfile?: SellerProfile | null; // Datos de 3ra Forma Normal
+  isApproved?: boolean; // Para moderación administrativa
 };
 
 // ─── DOMINIO TRANSACCIONAL (CART & ORDERS) ───
