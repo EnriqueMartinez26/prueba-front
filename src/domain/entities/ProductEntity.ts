@@ -71,7 +71,14 @@ export class ProductEntity implements IProductComponent {
   }
 
   isAvailable(): boolean {
+    if (this._data.status) {
+      return this._data.status === 'ACTIVE';
+    }
     return (this._data.stock ?? 0) > 0 && (this._data.active !== false);
+  }
+
+  getStatus(): string {
+    return this._data.status ?? (this.isAvailable() ? 'ACTIVE' : 'DRAFT');
   }
 
   /** Retorna URL de imagen con fallback garantizado. */
