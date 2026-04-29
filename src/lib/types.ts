@@ -19,7 +19,6 @@ export interface ReferenceEntity {
 
 export type Platform = ReferenceEntity;
 export type Genre = ReferenceEntity;
-export type Category = ReferenceEntity;
 
 // ─── ENTIDAD PRODUCTO (GAMES) ───
 
@@ -46,100 +45,13 @@ export interface ProductInput {
   discountEndDate?: string | null;
 }
 
-// ─── ENTIDAD USUARIO & SESIÓN ───
+// ─── ENTIDAD USUARIO & SESIÓN (Delegado a Dominio) ───
 
-export type UserRole = 'buyer' | 'seller' | 'admin';
+export type { User, UserRole, SellerProfile } from '@/domain/entities/UserEntity';
 
-export interface SellerProfile {
-  storeName: string;
-  storeDescription?: string | null;
-  isApproved: boolean;
-}
+// ─── DOMINIO TRANSACCIONAL (Delegado a Dominio) ───
 
-/**
- * RN - Identidad: Perfil del usuario autenticado.
- */
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  avatar?: string | null;
-  phone?: string | null;
-  address?: string | null;
-  isVerified?: boolean;
-  createdAt?: string;
-  sellerProfile?: SellerProfile | null; // Datos de 3ra Forma Normal
-  isApproved?: boolean; // Para moderación administrativa
-};
-
-// ─── DOMINIO TRANSACCIONAL (CART & ORDERS) ───
-
-export type CartItem = {
-  id: string;
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  stock: number;
-  image?: string;
-  platformName?: string;
-  platform?: { name: string };
-};
-
-export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-
-/**
- * RN - Trazabilidad: Estructura del resumen de compra.
- */
-export interface Order {
-  id: string;
-  userId: string;
-  user?: User;
-  items: CartItem[];
-  orderItems?: CartItem[];
-  total: number;
-  totalPrice?: number;
-  status: OrderStatus;
-  orderStatus?: string;
-  isPaid?: boolean;
-  digitalKeys?: { productoId: string; clave: string }[];
-  createdAt: string;
-  shippingAddress: {
-    street: string;
-    city: string;
-    zip: string;
-    country: string;
-  };
-  paymentMethod: string;
-  paymentLink?: string;
-}
-
-// ─── DOMINIO DE FEEDBACK (REVIEWS) ───
-
-/**
- * RN - Feedback: Contrato de reseñas de comunidad.
- */
-export interface Review {
-  id: string;
-  user: { id: string; name: string; avatar?: string | null };
-  productId: string;
-  rating: number;
-  title: string;
-  text: string;
-  verified: boolean;
-  helpfulCount: number;
-  createdAt: string;
-}
-
-/**
- * Métricas agregadas de feedback para análisis administrativo.
- */
-export interface ReviewStats {
-  averageRating: number;
-  totalReviews: number;
-  distribution: Record<number, number>;
-}
+export type { Order, OrderStatus, CartItem } from '@/domain/entities/OrderEntity';
 
 // ─── RESPUESTAS DE API ───
 
