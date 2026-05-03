@@ -85,7 +85,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild className="hover:bg-white/5 hover:text-white transition-colors cursor-pointer">
                             <Link href="/admin">
-                                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-black font-black shadow-lg shadow-primary/20">
+                                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-white font-bold shadow-lg shadow-primary/20">
                                     <Package className="size-5" />
                                 </div>
                                 <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">

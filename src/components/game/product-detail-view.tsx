@@ -68,7 +68,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                 />
 
                 <div className="mb-10">
-                    <h1 className="text-5xl md:text-7xl font-headline font-semibold mb-4 tracking-tighter text-white drop-shadow-2xl">
+                    <h1 className="text-5xl md:text-7xl font-headline font-bold mb-4 tracking-tighter text-white/70 drop-shadow-2xl">
                         {game.name}
                     </h1>
                     <div className="flex items-center gap-4">
@@ -116,10 +116,10 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                         {game.requirements && (
                             <Card className="bg-card/30 backdrop-blur-xl border-white/5 overflow-hidden">
                                 <CardHeader className="bg-muted/20 border-b border-white/5">
-                                    <CardTitle className="text-lg font-headline font-semibold flex items-center gap-3 text-white">
-                                        <Monitor className="h-5 w-5 text-primary" />
-                                        Requisitos del Sistema
-                                    </CardTitle>
+                                        <CardTitle className="text-lg font-headline font-bold flex items-center gap-3 text-white/60">
+                                            <Monitor className="h-5 w-5 text-primary" />
+                                            Requisitos del Sistema
+                                        </CardTitle>
                                 </CardHeader>
                                 <CardContent className="pt-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
@@ -165,7 +165,7 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
                                                  </Badge>
                                              </div>
                                          )}
-                                        <div className="text-5xl font-black text-white tracking-tighter drop-shadow-md">
+                                        <div className="text-5xl font-bold text-white/60 tracking-tighter drop-shadow-md">
                                             {formatCurrency(finalPriceVal)}
                                         </div>
                                     </div>
@@ -245,7 +245,7 @@ function SpecItem({ label, value, highlight }: { label: string, value?: string, 
     if (!value) return null;
     return (
         <div className="flex flex-col gap-1 pb-2 md:pb-0">
-            <span className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground/60">{label}</span>
+            <span className="text-[9px] font-bold uppercase tracking-widest text-white/60">{label}</span>
             <span className={cn("text-xs font-semibold leading-tight", highlight ? "text-primary uppercase" : "text-white")}>{value}</span>
         </div>
     );

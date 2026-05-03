@@ -44,11 +44,11 @@ export default function CartPage() {
             <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
             <ShoppingBag className="h-12 w-12 text-primary relative z-10" />
         </div>
-        <h2 className="text-3xl font-headline font-bold text-white mb-2 italic">
-          Inicia Sesión
+        <h2 className="text-3xl font-headline text-white font-bold mb-2 italic">
+          Iniciá Sesión
         </h2>
-        <p className="text-muted-foreground text-sm uppercase tracking-widest font-semibold opacity-60 mb-8 max-w-sm mx-auto">
-          Debes estar identificado para gestionar tu carrito y finalizar compras.
+        <p className="text-muted-foreground text-sm uppercase tracking-widest font-bold opacity-60 mb-8 max-w-sm mx-auto">
+          Tenés que estar identificado para gestionar tu carrito y finalizar compras.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild>
@@ -70,7 +70,7 @@ export default function CartPage() {
     <div className="container mx-auto max-w-screen-xl px-4 py-20 animate-in fade-in duration-1000">
       <div className="flex items-center justify-between mb-12 border-b border-white/5 pb-8 sticky top-[4.5rem] z-30 bg-background/80 backdrop-blur-xl pt-4 -mt-4">
           <div>
-            <h1 className="text-5xl font-semibold font-headline text-white tracking-tighter italic uppercase drop-shadow-md">Tu Carrito</h1>
+            <h1 className="text-5xl font-bold font-headline text-white/60 tracking-tighter italic uppercase drop-shadow-md">Tu Carrito</h1>
           </div>
       </div>
 
@@ -80,7 +80,7 @@ export default function CartPage() {
           <ShoppingBag className="mx-auto h-20 w-20 text-muted-foreground opacity-10 mb-6" />
           <h2 className="font-headline text-3xl font-bold text-white">Carrito Vacío</h2>
           <p className="mt-4 text-muted-foreground max-w-sm mx-auto text-sm">
-            Aún no has agregado productos a tu carrito. Explora nuestro catálogo para encontrar tus juegos favoritos.
+            Todavía no agregaste productos a tu carrito. Explorá nuestro catálogo para encontrar tus juegos favoritos.
           </p>
           <Button asChild variant="outline" className="mt-10 px-10">
             <Link href="/productos">Ir al Catálogo</Link>
@@ -164,19 +164,19 @@ export default function CartPage() {
                 <div className="space-y-4">
                     <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-muted-foreground">
                         <span>Ítems ({cartCount})</span>
-                        <span className="text-white text-sm">{formatCurrency(cartTotal)}</span>
+                        <span className="text-white/60 text-sm font-bold">{formatCurrency(cartTotal)}</span>
                     </div>
                 </div>
                 
                 <Separator className="bg-primary/20" />
                 
                 <div className="flex justify-between items-end">
-                    <span className="text-xs font-black uppercase tracking-widest text-muted-foreground">TOTAL</span>
-                    <span className="text-4xl font-medium text-white tracking-tighter tabular-nums">{formatCurrency(cartTotal)}</span>
+                    <span className="text-xs font-bold uppercase tracking-widest text-white/60">TOTAL</span>
+                    <span className="text-4xl font-bold text-white/60 tracking-tighter tabular-nums">{formatCurrency(cartTotal)}</span>
                 </div>
               </CardContent>
               <CardFooter className="px-10 pb-10">
-                <Button className="w-full" size="lg" asChild>
+                <Button className="w-full font-bold uppercase tracking-widest text-[10px]" size="lg" asChild>
                   <Link href="/checkout">
                     Continuar al Pago <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

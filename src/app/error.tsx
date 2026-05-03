@@ -41,8 +41,8 @@ export default function Error({
                 <div className="relative bg-card/40 backdrop-blur-2xl border border-destructive/20 p-12 rounded-[3.5rem] shadow-3xl">
                     <ShieldAlert className="h-20 w-20 text-destructive relative z-10 mx-auto animate-pulse" />
                     <div className="mt-8 space-y-2">
-                        <h2 className="text-3xl font-black text-white tracking-tighter italic">Anomalía del Sistema</h2>
-                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-destructive/80">Excepción en Ciclo de Renderizado</p>
+                        <h2 className="text-3xl font-bold text-white/60 tracking-tighter italic">Anomalía del Sistema</h2>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-destructive/60">Excepción en Ciclo de Renderizado</p>
                     </div>
                 </div>
             </div>
@@ -77,7 +77,7 @@ export default function Error({
 
             {/* Footer de Capa de Error */}
             <div className="fixed bottom-10 opacity-20 select-none">
-                <span className="text-[9px] font-black uppercase tracking-[0.6em] text-white">Critical Error Boundary Protocol v3.0</span>
+                <span className="text-[9px] font-bold uppercase tracking-[0.6em] text-white/20">Critical Error Boundary Protocol v3.0</span>
             </div>
         </div>
     );

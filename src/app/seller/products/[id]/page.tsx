@@ -158,7 +158,7 @@ export default function SellerEditProductPage({ params }: { params: Promise<{ id
                     </FormItem>
                   )} />
 
-                  <Button type="submit" className="w-full h-16 bg-primary text-black font-black text-lg tracking-widest rounded-[2rem] shadow-xl hover:-translate-y-1 transition-all" disabled={vm.isSubmitting || vm.isUploading}>
+                  <Button type="submit" className="w-full h-16 bg-primary text-white font-bold text-lg tracking-widest rounded-[2rem] shadow-xl hover:-translate-y-1 transition-all" disabled={vm.isSubmitting || vm.isUploading}>
                     {vm.isSubmitting ? <Loader2 className="h-6 w-6 animate-spin" /> : <><Save className="mr-3 h-6 w-6" /> GUARDAR CAMBIOS</>}
                   </Button>
                 </form>

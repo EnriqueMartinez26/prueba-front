@@ -38,8 +38,8 @@
     --card-foreground: 240 5% 95%;
     --popover: 274 25% 10%;
     --popover-foreground: 240 5% 95%;
-    --primary: 285 100% 70%;
-    --primary-foreground: 285 100% 10%;
+    --primary: 285 70% 65%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 275 20% 20%;
     --secondary-foreground: 240 5% 98%;
     --muted: 275 20% 20%;

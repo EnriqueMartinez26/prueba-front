@@ -32,7 +32,7 @@ export default function ComparisonPage() {
                 </div>
                 <h1 className="text-4xl font-headline font-bold mb-4 text-white tracking-tight">Comparar juegos</h1>
                 <p className="text-muted-foreground mb-8 text-sm uppercase tracking-widest font-black opacity-60">Todavia no agregaste juegos para comparar.</p>
-                <Button asChild className="h-12 px-8 rounded-full font-black uppercase tracking-widest text-[10px] bg-primary text-black hover:bg-primary/90 shadow-xl transition-all">
+                <Button asChild className="h-12 px-8 rounded-full font-bold uppercase tracking-widest text-[10px] bg-primary text-white hover:bg-primary/90 shadow-xl transition-all">
                     <Link href="/productos">Volver al catalogo</Link>
                 </Button>
             </div>

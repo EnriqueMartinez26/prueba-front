@@ -121,7 +121,7 @@ export function GameCard({ game }: GameCardProps) {
               * RN - Localización Monetaria: El ViewModel garantiza el formato ARS (Pesos Argentinos)
               * operando bajo los estándares transaccionales del TFI.
               */}
-            <span className="text-2xl font-bold text-white tracking-tighter">{vm.toDisplayPrice()}</span>
+            <span className="text-2xl font-bold text-white/60 tracking-tighter">{vm.toDisplayPrice()}</span>
             
             {vm.isOnSale() && (
               <span className="text-xs text-muted-foreground line-through decoration-red-500 opacity-50 font-medium">

@@ -34,12 +34,7 @@ export default function WishlistPage() {
             </h1>
 
         </div>
-        {wishlist.length > 0 && (
-            <div className="flex items-center gap-2 bg-primary/10 border border-primary/20 px-4 py-2 rounded-full">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
-              <span className="text-[10px] font-black text-primary uppercase tracking-widest">Lista sincronizada</span>
-            </div>
-        )}
+
       </div>
       
       {/* RN - Gestión de Resultados: Matriz de Activos Deseados */}

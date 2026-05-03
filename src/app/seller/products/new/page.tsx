@@ -234,7 +234,7 @@ export default function SellerNewProductPage() {
                     </FormItem>
                   )} />
 
-                  <Button type="submit" className="w-full h-16 bg-primary text-black font-black text-lg tracking-widest rounded-[2rem] shadow-xl hover:shadow-[0_15px_40px_rgba(214,88,250,0.4)] hover:-translate-y-1 transition-all" disabled={vm.isSubmitting || vm.isUploading}>
+                  <Button type="submit" className="w-full h-16 bg-primary text-white font-bold text-lg tracking-widest rounded-[2rem] shadow-xl hover:shadow-[0_15px_40px_rgba(214,88,250,0.4)] hover:-translate-y-1 transition-all" disabled={vm.isSubmitting || vm.isUploading}>
                     {vm.isSubmitting ? <Loader2 className="h-6 w-6 animate-spin" /> : <><PlusCircle className="mr-3 h-6 w-6" /> CREAR PUBLICACIÓN</>}
                   </Button>
                 </form>

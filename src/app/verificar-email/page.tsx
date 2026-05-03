@@ -85,7 +85,7 @@ function VerifyEmailContent() {
                                 <h3 className="text-2xl font-bold font-headline text-white">¡Identidad Validada!</h3>
                                 <p className="text-sm text-muted-foreground">Sus credenciales han sido normalizadas. La cuenta ahora posee privilegios de acceso completos.</p>
                             </div>
-                            <Button asChild className="w-full h-14 bg-primary text-black hover:bg-primary/90 font-black uppercase text-[10px] tracking-widest rounded-xl shadow-xl transition-all mt-4">
+                            <Button asChild className="w-full h-14 bg-primary text-white font-bold uppercase text-[10px] tracking-widest rounded-xl shadow-xl transition-all mt-4">
                                 <Link href="/login">Acceder al Sistema <ArrowRight className="ml-2 h-4 w-4" /></Link>
                             </Button>
                         </div>

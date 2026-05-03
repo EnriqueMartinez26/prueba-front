@@ -223,7 +223,7 @@ function IconWithBadge({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.5, opacity: 0 }}
             transition={{ type: "spring", stiffness: 500, damping: 15 }}
-            className="absolute -top-3 -right-3 h-6 w-6 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white text-[10px] font-bold flex items-center justify-center shadow-lg ring-2 ring-background z-10"
+            className="absolute -top-4 -right-4 h-5 w-5 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white text-[9px] font-bold flex items-center justify-center shadow-lg ring-1 ring-background z-10"
           >
             {badge > 9 ? "9+" : badge}
           </motion.span>

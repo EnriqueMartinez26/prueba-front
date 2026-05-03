@@ -104,7 +104,7 @@ function SuccessContent() {
               Mis Pedidos
             </Link>
           </Button>
-          <Button asChild size="lg" className="h-14 bg-primary text-black hover:bg-primary/90 font-black uppercase text-[10px] tracking-widest transition-all rounded-xl shadow-xl shadow-primary/20">
+          <Button asChild size="lg" className="h-14 bg-primary text-white font-bold uppercase text-[10px] tracking-widest transition-all rounded-xl shadow-xl shadow-primary/20">
             <Link href="/productos">
               <ShoppingBag className="mr-2 h-4 w-4" />
               Nueva Compra

@@ -69,7 +69,7 @@ export default function AccountPage() {
     return (
       <div className="container mx-auto px-4 py-32 text-center flex flex-col items-center justify-center gap-4">
         <Loader2 className="h-12 w-12 animate-spin text-primary opacity-20" />
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground">
+        <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">
           Cargando tu cuenta...
         </p>
       </div>
@@ -207,7 +207,7 @@ export default function AccountPage() {
 
         <div className="text-center md:text-left space-y-4 relative z-10 flex-1">
           <div className="space-y-1">
-            <h1 className="text-5xl font-black font-headline text-transparent bg-clip-text bg-gradient-to-r from-white via-primary/90 to-white tracking-tighter italic leading-tight">
+            <h1 className="text-5xl font-bold font-headline text-transparent bg-clip-text bg-gradient-to-r from-white via-primary/90 to-white tracking-tighter italic leading-tight">
               {vm.user.name}
             </h1>
             <p className="text-muted-foreground flex items-center gap-2 justify-center md:justify-start font-medium opacity-60 text-lg">
@@ -284,19 +284,19 @@ export default function AccountPage() {
           
           <TabsTrigger
             value="orders"
-            className="relative flex-1 h-full rounded-[1.2rem] font-black uppercase tracking-[0.15em] text-[11px] text-white/40 border border-transparent hover:bg-white/5 hover:border-white/10 hover:text-white data-[state=active]:text-black data-[state=active]:bg-primary data-[state=active]:border-primary data-[state=active]:shadow-[0_0_30px_rgba(214,88,250,0.3)] transition-all duration-500 z-10"
+            className="relative flex-1 h-full rounded-[1.2rem] font-bold uppercase tracking-[0.15em] text-[11px] text-white/40 border border-transparent hover:bg-white/5 hover:border-white/10 hover:text-white data-[state=active]:text-white data-[state=active]:bg-primary data-[state=active]:border-primary data-[state=active]:shadow-[0_0_30px_rgba(214,88,250,0.3)] transition-all duration-500 z-10"
           >
             <Package className="h-4 w-4 mr-2" /> Mis Órdenes
           </TabsTrigger>
           <TabsTrigger
             value="seller"
-            className="relative flex-1 h-full rounded-[1.2rem] font-black uppercase tracking-[0.15em] text-[11px] text-white/40 border border-transparent hover:bg-white/5 hover:border-white/10 hover:text-white data-[state=active]:text-black data-[state=active]:bg-primary data-[state=active]:border-primary data-[state=active]:shadow-[0_0_30px_rgba(214,88,250,0.3)] transition-all duration-500 z-10"
+            className="relative flex-1 h-full rounded-[1.2rem] font-bold uppercase tracking-[0.15em] text-[11px] text-white/40 border border-transparent hover:bg-white/5 hover:border-white/10 hover:text-white data-[state=active]:text-white data-[state=active]:bg-primary data-[state=active]:border-primary data-[state=active]:shadow-[0_0_30px_rgba(214,88,250,0.3)] transition-all duration-500 z-10"
           >
             <Store className="h-4 w-4 mr-2" /> Mis Ventas
           </TabsTrigger>
           <TabsTrigger
             value="settings"
-            className="relative flex-1 h-full rounded-[1.2rem] font-black uppercase tracking-[0.15em] text-[11px] text-white/40 border border-transparent hover:bg-white/5 hover:border-white/10 hover:text-white data-[state=active]:text-black data-[state=active]:bg-primary data-[state=active]:border-primary data-[state=active]:shadow-[0_0_30px_rgba(214,88,250,0.3)] transition-all duration-500 z-10"
+            className="relative flex-1 h-full rounded-[1.2rem] font-bold uppercase tracking-[0.15em] text-[11px] text-white/40 border border-transparent hover:bg-white/5 hover:border-white/10 hover:text-white data-[state=active]:text-white data-[state=active]:bg-primary data-[state=active]:border-primary data-[state=active]:shadow-[0_0_30px_rgba(214,88,250,0.3)] transition-all duration-500 z-10"
           >
             <Settings className="h-4 w-4 mr-2" /> Configuración
           </TabsTrigger>
@@ -333,6 +333,7 @@ export default function AccountPage() {
                     </div>
                     <Button
                       asChild
+                      className="font-bold uppercase tracking-widest text-[10px] text-white"
                     >
                       <Link href="/productos">Explorar el Catálogo</Link>
                     </Button>
@@ -610,7 +611,7 @@ export default function AccountPage() {
         <TabsContent value="settings" className="space-y-12">
           {/* Avatar y Datos Personales */}
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <Card className="border-none bg-gradient-to-br from-white/[0.08] to-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] overflow-hidden group/card shadow-xl ring-1 ring-white/10 hover:ring-primary/20 hover:shadow-[0_10px_40px_rgba(214,88,250,0.1)] transition-all">
+            <Card className="flex flex-col border-none bg-gradient-to-br from-white/[0.08] to-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] overflow-hidden group/card shadow-xl ring-1 ring-white/10 hover:ring-primary/20 hover:shadow-[0_10px_40px_rgba(214,88,250,0.1)] transition-all">
               <CardHeader className="p-10 pb-6 border-b border-white/5">
                 <CardTitle className="flex items-center gap-4 text-2xl font-black text-white italic">
                   <Camera className="h-6 w-6 text-primary" /> Tu Avatar
@@ -619,13 +620,13 @@ export default function AccountPage() {
                   Cambiá cómo te ven en la comunidad
                 </CardDescription>
               </CardHeader>
-              <CardContent className="px-10 pb-10">
-                <div className="flex flex-col items-center gap-8">
+              <CardContent className="px-10 pb-10 flex-1 flex flex-col justify-center">
+                <div className="flex flex-col items-center gap-10">
                   <Avatar className="h-32 w-32 border-4 border-white/10 shadow-2xl">
                     {vm.user.avatar ? (
                       <AvatarImage src={vm.user.avatar} className="object-cover" />
                     ) : null}
-                    <AvatarFallback className="bg-primary/5 text-primary text-3xl font-black">
+                    <AvatarFallback className="bg-primary/5 text-primary/70 text-3xl font-bold">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
@@ -821,13 +822,6 @@ export default function AccountPage() {
               </div>
             </CardContent>
           </Card>
-
-          {/* Footer */}
-          <div className="text-center opacity-20 select-none pb-12">
-            <span className="text-[9px] font-black uppercase tracking-[0.6em] text-white">
-              4Fun Store • Mi Cuenta v2.4
-            </span>
-          </div>
         </TabsContent>
       </Tabs>
     </div>

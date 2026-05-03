@@ -79,12 +79,12 @@ function KpiCard({
                         </div>
                     )}
                 </div>
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-muted-foreground mb-1.5">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/60 mb-1.5">
                     {title}
                 </p>
                 <p className={cn(
-                    "text-4xl lg:text-5xl font-black tracking-tighter leading-none",
-                    alert && "text-destructive"
+                    "text-4xl lg:text-5xl font-bold tracking-tighter leading-none opacity-90",
+                    alert && "text-destructive opacity-100"
                 )}>
                     {value}
                 </p>
@@ -135,7 +135,7 @@ export default function SellerDashboardPage() {
                         <div className="p-3 rounded-2xl bg-primary/15 ring-1 ring-primary/20">
                             <Store className="h-7 w-7 text-primary" />
                         </div>
-                        <h1 className="text-4xl font-headline font-black tracking-tight italic">
+                        <h1 className="text-4xl font-headline font-bold tracking-tight italic opacity-60">
                             Centro de Ventas
                         </h1>
                     </div>
@@ -235,7 +235,7 @@ export default function SellerDashboardPage() {
                     <CardHeader className="px-8 pt-8 pb-4 border-b border-white/5">
                         <div className="flex items-start justify-between">
                             <div>
-                                <CardTitle className="text-2xl font-headline font-black italic flex items-center gap-3">
+                                <CardTitle className="text-2xl font-headline font-bold italic flex items-center gap-3 opacity-60">
                                     <BarChart3 className="h-6 w-6 text-primary" />
                                     Ventas · Últimos 30 días
                                 </CardTitle>
@@ -311,7 +311,7 @@ export default function SellerDashboardPage() {
             {/* RANKING PERSONAL */}
             <Card className="w-full border-0 ring-1 ring-white/5 bg-card/60 backdrop-blur-xl shadow-lg overflow-hidden">
                 <CardHeader className="px-8 pt-8 pb-4 border-b border-white/5">
-                    <CardTitle className="text-2xl font-headline font-black italic flex items-center gap-3">
+                    <CardTitle className="text-2xl font-headline font-bold italic flex items-center gap-3 opacity-60">
                         <Zap className="h-6 w-6 text-primary" />
                         Tus Best-Sellers
                     </CardTitle>
