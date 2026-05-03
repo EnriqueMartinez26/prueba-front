@@ -144,11 +144,19 @@ export function ProductReviews({ productId, productName }: ProductReviewsProps) 
    */
   const handleSubmit = async () => {
     if (!formRating) {
-      toast({ title: "Falta Calificación", variant: "destructive" });
+      toast({ 
+        title: "¿Cómo calificarías este juego?", 
+        description: "Por favor, selecciona una estrella para contarnos tu experiencia.",
+        variant: "destructive" 
+      });
       return;
     }
     if (formText.length < 10) {
-      toast({ title: "Reseña Insuficiente", description: "Mínimo 10 caracteres para asegurar feedback de calidad.", variant: "destructive" });
+      toast({ 
+        title: "Contanos un poco más", 
+        description: "Las mejores reseñas tienen al menos 10 caracteres. ¡Tu opinión ayuda a otros jugadores!", 
+        variant: "destructive" 
+      });
       return;
     }
 
@@ -167,8 +175,12 @@ export function ProductReviews({ productId, productName }: ProductReviewsProps) 
       setPage(1);
       await Promise.all([fetchReviews(), fetchStats()]);
     } catch (err: any) {
-      const message = err instanceof ApiError ? err.message : "Error crítico al publicar";
-      toast({ title: message, variant: "destructive" });
+      const message = err instanceof ApiError ? err.message : "No pudimos publicar tu opinión en este momento.";
+      toast({ 
+        title: "¡Ups! Algo salió mal", 
+        description: message + " Por favor, inténtalo de nuevo en unos instantes.",
+        variant: "destructive" 
+      });
     } finally {
       setSubmitting(false);
     }

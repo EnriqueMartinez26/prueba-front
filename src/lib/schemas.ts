@@ -64,6 +64,7 @@ export const adminProductBaseSchema = z.object({
   specPreset: z.string().optional(),
   imageId: z.string().optional(),
   trailerUrl: z.string().optional(),
+  active: z.boolean().default(false),
 });
 
 // ─── DOMINIO: SEGURIDAD Y AUTH ───

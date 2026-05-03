@@ -21,6 +21,14 @@ import { adminProductBaseSchema, type AdminProductBaseValues } from "@/lib/schem
 import { DEVELOPERS } from "@/lib/constants";
 import type { Platform, Genre } from "@/lib/types";
 
+// Extensión del esquema para lógica comercial de ofertas
+const productCreationSchema = adminProductBaseSchema.extend({
+  isDiscounted: z.boolean().default(false),
+  discountPercentage: z.coerce.number().min(0).max(100).optional(),
+});
+
+export type ProductCreationValues = z.infer<typeof productCreationSchema>;
+
 export function useSellerProductCreationViewModel() {
   const router = useRouter();
   const { toast } = useToast();
@@ -33,8 +41,8 @@ export function useSellerProductCreationViewModel() {
   const [keysText, setKeysText] = useState("");
 
   // -- INICIALIZACIÓN DEL FORMULARIO --
-  const form = useForm<AdminProductBaseValues>({
-    resolver: zodResolver(adminProductBaseSchema),
+  const form = useForm<ProductCreationValues>({
+    resolver: zodResolver(productCreationSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -47,6 +55,9 @@ export function useSellerProductCreationViewModel() {
       specPreset: "Mid",
       imageId: "",
       trailerUrl: "",
+      active: false,
+      isDiscounted: false,
+      discountPercentage: 0,
     },
   });
 
@@ -100,7 +111,7 @@ export function useSellerProductCreationViewModel() {
    * RN - Persistencia: Orquesta la creación del producto.
    * Maneja el estado de submit y la redirección post-éxito.
    */
-  const onSubmit = async (data: AdminProductBaseValues) => {
+  const onSubmit = async (data: ProductCreationValues) => {
     try {
       const keys = keysText.split("\n").map(k => k.trim()).filter(k => k !== "");
       
@@ -108,10 +119,13 @@ export function useSellerProductCreationViewModel() {
         throw new Error("Debes agregar al menos una Clave Digital para publicar el producto.");
       }
 
+      const payload = { ...data };
+      if (!data.isDiscounted) payload.discountPercentage = 0;
+
       // 1. Crear el producto base
       // RN: Ya usamos imageId consistentemente con el backend
       const response = await ProductApiService.create({ 
-        ...data, 
+        ...payload, 
         stock: keys.length,
         developer: data.developer || '' 
       });

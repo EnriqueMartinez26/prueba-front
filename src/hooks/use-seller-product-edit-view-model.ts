@@ -55,6 +55,7 @@ export function useSellerProductEditViewModel(productId: string) {
       imageId: "",
       isDiscounted: false,
       discountPercentage: 0,
+      active: false,
     },
   });
 
@@ -100,6 +101,7 @@ export function useSellerProductEditViewModel(productId: string) {
             trailerUrl: rawProduct.trailerUrl || "",
             isDiscounted: (rawProduct.discountPercentage ?? 0) > 0,
             discountPercentage: rawProduct.discountPercentage || 0,
+            active: rawProduct.status === 'ACTIVE'
           });
         }
       } catch (error) {

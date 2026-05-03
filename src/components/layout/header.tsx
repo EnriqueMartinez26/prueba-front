@@ -12,6 +12,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Heart, Search, ShoppingCart, User, LogOut, Settings, Store, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -214,11 +215,20 @@ function IconWithBadge({
   const content = (
     <div className="relative group">
       <Icon className="h-8 w-8 transition-all duration-300 group-hover:scale-110 group-hover:text-primary" />
-      {badge && typeof badge === "number" && badge > 0 && (
-        <span className="absolute -top-3 -right-3 h-6 w-6 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white text-[10px] font-bold flex items-center justify-center shadow-lg ring-2 ring-background animate-pulse">
-          {badge > 9 ? "9+" : badge}
-        </span>
-      )}
+      <AnimatePresence mode="popLayout">
+        {badge && typeof badge === "number" && badge > 0 && (
+          <motion.span
+            key={badge}
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 15 }}
+            className="absolute -top-3 -right-3 h-6 w-6 rounded-full bg-gradient-to-br from-primary to-primary/80 text-white text-[10px] font-bold flex items-center justify-center shadow-lg ring-2 ring-background z-10"
+          >
+            {badge > 9 ? "9+" : badge}
+          </motion.span>
+        )}
+      </AnimatePresence>
     </div>
   );
 
@@ -331,6 +341,7 @@ export function Header() {
                 icon={Heart}
                 href={vm.wishlist.href}
                 label="Favoritos"
+                badge={vm.wishlist.showBadge ? vm.wishlist.count : undefined}
               />
             )}
 

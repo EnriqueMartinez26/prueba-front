@@ -73,12 +73,28 @@ export class HttpTransport {
   public static async uploadImage(file: File): Promise<string> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'ml_default');
     
-    const res = await fetch('https://api.cloudinary.com/v1_1/demo/image/upload', {
+    // RN - Infraestructura: Recuperamos configuración de Cloudinary desde variables de entorno.
+    // El error 400 suele ocurrir si el Cloud Name o el Upload Preset son incorrectos.
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'demo';
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'ml_default';
+
+    formData.append('upload_preset', uploadPreset);
+    
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
       method: 'POST',
       body: formData
     });
+    
+    if (!res.ok) {
+      const errorData = await res.json();
+      const detailedMessage = errorData.error?.message || 'Bad Request';
+      throw new ApiError(
+        `[Cloudinary Error] ${detailedMessage} (Cloud: ${cloudName}, Preset: ${uploadPreset}). Asegúrate de que el preset sea "Unsigned".`, 
+        res.status
+      );
+    }
+
     const data = await res.json();
     return data.secure_url;
   }

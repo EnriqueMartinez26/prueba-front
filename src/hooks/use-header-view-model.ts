@@ -1,4 +1,5 @@
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { useAuth } from "@/hooks/use-auth";
 
 /**
@@ -14,6 +15,7 @@ import { useAuth } from "@/hooks/use-auth";
  */
 export function useHeaderViewModel() {
   const { cartCount } = useCart();
+  const { wishlist } = useWishlist();
   const { userEntity, user, logout } = useAuth();
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -74,6 +76,8 @@ export function useHeaderViewModel() {
     wishlist: {
       href: "/wishlist",
       show: isLoggedIn,
+      count: wishlist.length,
+      showBadge: isLoggedIn && wishlist.length > 0,
     },
 
     // PERFIL / DROPDOWN

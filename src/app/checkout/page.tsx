@@ -47,6 +47,7 @@ export default function CheckoutPage() {
     handleChange,
     nextStep,
     prevStep,
+    isFormValid,
     handleSubmit
   } = useCheckoutViewModel();
 
@@ -154,7 +155,7 @@ export default function CheckoutPage() {
                     <p className="text-[10px] font-bold text-muted-foreground flex items-center gap-2">
                         <ShieldCheck className="h-3 w-3 text-primary" /> Datos protegidos vía SSL
                     </p>
-                    <Button type="submit" form="shipping-form" className="px-8">
+                    <Button type="submit" form="shipping-form" className="px-8" disabled={!isFormValid}>
                         Seleccionar Método <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </CardFooter>

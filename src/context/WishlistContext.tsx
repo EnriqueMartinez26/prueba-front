@@ -81,6 +81,13 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     // RN - Optimización UX: Cambio visual instantáneo antes de la confirmación API.
     setWishlist(prev => exists ? prev.filter(p => p.id !== game.id) : [...prev, game]);
 
+    if (!exists) {
+      toast({ 
+        title: "Añadido a favoritos", 
+        description: `Se guardó en tu lista de favoritos` 
+      });
+    }
+
     try {
       await WishlistApiService.toggle(game.id);
     } catch (err) {

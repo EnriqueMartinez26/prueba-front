@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShoppingCart, Heart, Monitor, Gamepad2, Disc, Globe, Layers, Info, Star } from "lucide-react";
 import { ProductReviews } from "@/components/game/product-reviews";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
 // ✅ INYECCIÓN ARQUITECTÓNICA (QA MVC)
 import { useProductDetailViewModel } from "@/hooks/use-product-detail-view-model";
@@ -59,11 +60,12 @@ export function ProductDetailView({ game }: ProductDetailViewProps) {
             <main className="container mx-auto px-4 pt-10 max-w-7xl animate-in fade-in slide-in-from-bottom-4 duration-700">
                 
                 {/* Navegación (Breadcrumbs) */}
-                <nav className="mb-8 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/60">
-                    <Link href="/productos" className="hover:text-primary transition-colors">Productos</Link>
-                    <span className="opacity-30">/</span>
-                    <span className="text-primary/80 truncate max-w-[240px] md:max-w-[420px]">{breadcrumbLabel}</span>
-                </nav>
+                <Breadcrumbs 
+                    items={[
+                        { label: "Productos", href: "/productos" },
+                        { label: breadcrumbLabel }
+                    ]} 
+                />
 
                 <div className="mb-10">
                     <h1 className="text-5xl md:text-7xl font-headline font-semibold mb-4 tracking-tighter text-white drop-shadow-2xl">

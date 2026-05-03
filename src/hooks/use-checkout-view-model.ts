@@ -29,8 +29,12 @@ export function useCheckoutViewModel() {
   const nextStep = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (currentStep === 1) {
-      if (!formData.street || !formData.city || !formData.zipCode || !formData.state || !formData.country) {
-        toast({ variant: "destructive", title: "Datos Incompletos", description: "Todos los campos de logística son obligatorios para el despacho." });
+      if (!isFormValid) {
+        toast({ 
+          variant: "destructive", 
+          title: "¿A dónde enviamos tu pedido?", 
+          description: "Por favor, completa todos los campos de dirección para que podamos entregarte tus juegos." 
+        });
         return;
       }
     }
@@ -43,13 +47,21 @@ export function useCheckoutViewModel() {
 
   const handleSubmit = async () => {
     if (!user) {
-      toast({ variant: "destructive", title: "Fallo de Sesión", description: "Es imperativo iniciar sesión para vincular el instrumento." });
+      toast({ 
+        variant: "destructive", 
+        title: "Necesitamos saber quién eres", 
+        description: "Por favor, inicia sesión para que podamos vincular esta compra a tu cuenta." 
+      });
       router.push("/login");
       return;
     }
 
     if (cart.length === 0) {
-      toast({ variant: "destructive", title: "Operación Vacía", description: "No es factible originar un checkout sin inventario." });
+      toast({ 
+        variant: "destructive", 
+        title: "Tu carrito está vacío", 
+        description: "Agrega algunos juegos antes de intentar finalizar la compra." 
+      });
       router.push("/productos");
       return;
     }
@@ -88,7 +100,7 @@ export function useCheckoutViewModel() {
         });
         if (resolvedOrderId) query.set("order_id", String(resolvedOrderId));
 
-        toast({ title: "Orden Sincronizada", description: "Estableciendo conexión encriptada con la pasarela..." });
+        toast({ title: "¡Orden Creada!", description: "Estamos conectando con Mercado Pago para procesar tu pago de forma segura..." });
         router.push(`/checkout/success?${query.toString()}`);
       } else {
         throw new Error("El motor no consolidó la liquidación externa.");
@@ -97,13 +109,21 @@ export function useCheckoutViewModel() {
       console.error("[useCheckoutViewModel] Excepción de Liquidación:", error);
       toast({
         variant: "destructive",
-        title: "Liquidación Interrumpida",
-        description: error.response?.data?.message || error.message || "Fallo en la comunicación con el motor de pagos / Sin Stock."
+        title: "No pudimos procesar el pago",
+        description: error.response?.data?.message || error.message || "Hubo un problema al conectar con la pasarela de pagos. Por favor, verifica tu conexión o el stock de los productos."
       });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const isFormValid = Boolean(
+    formData.street && 
+    formData.city && 
+    formData.state && 
+    formData.zipCode && 
+    formData.country
+  );
 
   return {
     cart,
@@ -112,6 +132,7 @@ export function useCheckoutViewModel() {
     isSubmitting,
     currentStep,
     formData,
+    isFormValid,
     setFormData,
     handleChange,
     nextStep,

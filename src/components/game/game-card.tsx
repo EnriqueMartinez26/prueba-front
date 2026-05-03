@@ -21,6 +21,9 @@ import { useCart } from "@/context/CartContext";
 import { ProductEntity } from "@/domain/entities/ProductEntity";
 import type { Game } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface GameCardProps {
   game: Game;
@@ -35,8 +38,20 @@ export function GameCard({ game }: GameCardProps) {
   const vm = new ProductEntity(game as any);
   
   const { toggleWishlist, isInWishlist } = useWishlist();
-  const { addToCart } = useCart();
+  const { addToCart, cart } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
   const isFavorite = isInWishlist(vm.getDisplayId());
+
+  // RN - Prevención de Errores: Detectar si el producto ya está en el carrito y alcanzó el stock máximo.
+  const cartItem = cart.find(item => item.productId === vm.getDisplayId());
+  const hasReachedStockLimit = cartItem ? cartItem.quantity >= vm.stock : false;
+  const isAlreadyInCart = !!cartItem;
+
+  const handleAddToCart = async () => {
+    setIsAdding(true);
+    await addToCart(game);
+    setTimeout(() => setIsAdding(false), 2000);
+  };
 
   return (
     <Card className="group relative overflow-hidden bg-card/40 backdrop-blur-md transition-all duration-300 hover:bg-card/60 hover:shadow-xl hover:-translate-y-1 rounded-2xl border border-white/5 hover:border-primary/30 shadow-md flex flex-col h-full">
@@ -61,7 +76,14 @@ export function GameCard({ game }: GameCardProps) {
         )}
         aria-label="Alternar Favorito"
       >
-        <Heart className={cn("h-5 w-5 transition-all", isFavorite ? "fill-current scale-110" : "group-hover:scale-125")} />
+        <motion.div
+          animate={isFavorite ? {
+            scale: [1, 1.2, 1],
+            transition: { duration: 0.4, ease: "easeInOut" }
+          } : {}}
+        >
+          <Heart className={cn("h-5 w-5 transition-all", isFavorite ? "fill-current scale-110" : "group-hover:scale-125")} />
+        </motion.div>
       </button>
 
       <Link href={`/productos/${vm.getDisplayId()}`}>
@@ -112,18 +134,53 @@ export function GameCard({ game }: GameCardProps) {
 
       <CardFooter className="p-5 pt-0">
         <Button
-          onClick={() => addToCart(game)}
-          className="w-full h-11 rounded-lg bg-white/5 text-white hover:bg-primary hover:text-black border border-white/10 hover:border-primary transition-all duration-300 font-bold uppercase text-[9px] tracking-widest shadow-sm hover:shadow-md group/btn disabled:opacity-50 disabled:cursor-not-allowed"
-          disabled={!vm.hasStock()}
-        >
-          {vm.hasStock() ? (
-            <>
-              <ShoppingCart className="h-5 w-5 group-hover/btn:scale-110 group-hover/btn:rotate-6 transition-transform" />
-              <span className="text-xs font-bold">Añadir</span>
-            </>
-          ) : (
-            "Agotado"
+          onClick={handleAddToCart}
+          className={cn(
+            "w-full h-11 rounded-lg transition-all duration-300 font-bold uppercase text-[9px] tracking-widest shadow-sm hover:shadow-md group/btn disabled:opacity-50 disabled:cursor-not-allowed",
+            isAdding 
+              ? "bg-green-500 text-white border-green-500 hover:bg-green-600" 
+              : hasReachedStockLimit
+                ? "bg-white/5 text-white/40 border-white/5 cursor-not-allowed"
+                : "bg-white/5 text-white hover:bg-primary hover:text-black border border-white/10 hover:border-primary"
           )}
+          disabled={!vm.hasStock() || isAdding || hasReachedStockLimit}
+        >
+          <AnimatePresence mode="wait">
+            {isAdding ? (
+              <motion.div
+                key="added"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                <Check className="h-5 w-5" />
+                <span className="text-xs font-bold">¡Añadido!</span>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="add"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                {!vm.hasStock() ? (
+                  "Agotado"
+                ) : hasReachedStockLimit ? (
+                  <>
+                    <Check className="h-5 w-5 text-green-500" />
+                    <span className="text-xs font-bold">En el Carrito</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-5 w-5 group-hover/btn:scale-110 group-hover/btn:rotate-6 transition-transform" />
+                    <span className="text-xs font-bold">Añadir</span>
+                  </>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Button>
       </CardFooter>
     </Card>

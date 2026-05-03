@@ -57,7 +57,7 @@ export default function SellerNewProductPage() {
                   
                   <FormField control={vm.form.control} name="name" render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Nombre del Juego</FormLabel>
+                      <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Nombre del Juego</FormLabel>
                       <FormControl><Input placeholder="Elden Ring" className="h-14 bg-white/5 border-white/10 rounded-2xl font-bold" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -65,7 +65,7 @@ export default function SellerNewProductPage() {
 
                   <FormField control={vm.form.control} name="description" render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Descripción</FormLabel>
+                      <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Descripción</FormLabel>
                       <FormControl><Textarea placeholder="Contale a los compradores de qué trata el juego..." className="min-h-[140px] bg-white/5 border-white/10 rounded-2xl" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -74,14 +74,14 @@ export default function SellerNewProductPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField control={vm.form.control} name="price" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Precio (ARS)</FormLabel>
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Precio (ARS)</FormLabel>
                         <FormControl><Input type="number" step="0.01" className="h-14 bg-white/5 border-white/10 rounded-2xl font-black text-primary" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={vm.form.control} name="stock" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Stock Calculado</FormLabel>
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Stock Calculado</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <Input 
@@ -125,7 +125,7 @@ export default function SellerNewProductPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField control={vm.form.control} name="platformId" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Plataforma</FormLabel>
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Plataforma</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl><SelectTrigger className="h-14 bg-white/5 border-white/10 rounded-2xl">
                             <SelectValue placeholder={vm.isLoadingTaxonomies ? "Cargando..." : "Seleccionar"} />
@@ -139,7 +139,7 @@ export default function SellerNewProductPage() {
                     )} />
                     <FormField control={vm.form.control} name="genreId" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Género</FormLabel>
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Género</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl><SelectTrigger className="h-14 bg-white/5 border-white/10 rounded-2xl">
                             <SelectValue placeholder={vm.isLoadingTaxonomies ? "Cargando..." : "Seleccionar"} />
@@ -155,15 +155,57 @@ export default function SellerNewProductPage() {
 
                   <FormField control={vm.form.control} name="trailerUrl" render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">URL del Trailer (YouTube)</FormLabel>
+                      <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">URL del Trailer (YouTube)</FormLabel>
                       <FormControl><Input placeholder="https://www.youtube.com/watch?v=..." className="h-14 bg-white/5 border-white/10 rounded-2xl" {...field} value={field.value || ""} /></FormControl>
                       <FormMessage />
                     </FormItem>
                   )} />
 
+                  <FormField control={vm.form.control} name="isDiscounted" render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-4 space-y-0 rounded-[2rem] border border-white/5 p-6 bg-white/5">
+                      <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                      <div className="space-y-1">
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest">Activar Oferta Inicial</FormLabel>
+                        <FormDescription className="text-[9px] uppercase font-bold tracking-widest opacity-40">Lanzá el producto con un precio promocional.</FormDescription>
+                      </div>
+                    </FormItem>
+                  )} />
+
+                  {vm.form.watch("isDiscounted" as any) && (
+                    <div className="space-y-6 animate-in slide-in-from-top-4 duration-500">
+                      <FormField control={vm.form.control} name="discountPercentage" render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Porcentaje de Descuento (%)</FormLabel>
+                          <FormControl><Input type="number" min="0" max="100" className="h-14 bg-white/5 border-white/10 rounded-2xl font-black text-green-400" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+
+                      <div className="p-6 rounded-[2rem] bg-green-500/10 border border-green-500/20 flex items-center justify-between">
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-green-500/60">Precio Resultante</p>
+                          <div className="flex items-baseline gap-3">
+                            <span className="text-2xl font-black text-green-400">
+                              ${(Number(vm.form.watch("price") || 0) * (1 - (Number(vm.form.watch("discountPercentage") || 0) / 100))).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                            </span>
+                            <span className="text-sm font-bold line-through opacity-30">
+                              ${Number(vm.form.watch("price") || 0).toLocaleString('es-AR')}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-green-500/60">Ahorro</p>
+                          <p className="text-sm font-black text-green-400">
+                            -${(Number(vm.form.watch("price") || 0) * (Number(vm.form.watch("discountPercentage") || 0) / 100)).toLocaleString('es-AR')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <FormField control={vm.form.control} name="developer" render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Desarrollador</FormLabel>
+                      <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Desarrollador</FormLabel>
                       {vm.isCustomDev ? (
                         <div className="flex gap-2">
                           <FormControl><Input className="h-14 bg-white/5 border-white/10 rounded-2xl" placeholder="Nombre de la empresa" {...field} autoFocus /></FormControl>
@@ -179,6 +221,16 @@ export default function SellerNewProductPage() {
                         </Select>
                       )}
                       <FormMessage />
+                    </FormItem>
+                  )} />
+
+                  <FormField control={vm.form.control} name="active" render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-4 space-y-0 rounded-[2rem] border border-primary/20 p-6 bg-primary/5">
+                      <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-primary data-[state=checked]:text-black" /></FormControl>
+                      <div className="space-y-1">
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest text-primary">Producto Público</FormLabel>
+                        <FormDescription className="text-[9px] uppercase font-bold tracking-widest opacity-60">Si se marca, el producto estará disponible en el catálogo inmediatamente.</FormDescription>
+                      </div>
                     </FormItem>
                   )} />
 

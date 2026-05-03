@@ -49,10 +49,6 @@ export default function SellerEditProductPage({ params }: { params: Promise<{ id
         <Button variant="ghost" asChild className="hover:bg-primary/10 hover:text-primary font-bold text-xs uppercase tracking-widest">
           <Link href="/seller/products"><ArrowLeft className="mr-2 h-4 w-4" /> Cancelar Edición</Link>
         </Button>
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <ShieldCheck className="h-4 w-4 text-primary" />
-          <span className="text-[10px] uppercase font-black tracking-widest">Tu Publicación</span>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -70,7 +66,7 @@ export default function SellerEditProductPage({ params }: { params: Promise<{ id
                   
                   <FormField control={vm.form.control} name="name" render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Nombre del Juego</FormLabel>
+                      <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Nombre del Juego</FormLabel>
                       <FormControl><Input className="h-14 bg-white/5 border-white/10 rounded-2xl font-bold" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -78,7 +74,7 @@ export default function SellerEditProductPage({ params }: { params: Promise<{ id
 
                   <FormField control={vm.form.control} name="description" render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Descripción</FormLabel>
+                      <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Descripción</FormLabel>
                       <FormControl><Textarea className="min-h-[140px] bg-white/5 border-white/10 rounded-2xl" {...field} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -87,14 +83,14 @@ export default function SellerEditProductPage({ params }: { params: Promise<{ id
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField control={vm.form.control} name="price" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Precio (ARS)</FormLabel>
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Precio (ARS)</FormLabel>
                         <FormControl><Input type="number" step="0.01" className="h-14 bg-white/5 border-white/10 rounded-2xl font-black text-primary" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={vm.form.control} name="stock" render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Stock</FormLabel>
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Stock</FormLabel>
                         <FormControl><Input type="number" disabled={vm.form.watch("type" as any) === "Digital"} className="h-14 bg-white/5 border-white/10 rounded-2xl font-black" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
@@ -103,7 +99,7 @@ export default function SellerEditProductPage({ params }: { params: Promise<{ id
 
                   <FormField control={vm.form.control} name="trailerUrl" render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">URL del Trailer (YouTube)</FormLabel>
+                      <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">URL del Trailer (YouTube)</FormLabel>
                       <FormControl><Input placeholder="https://www.youtube.com/watch?v=..." className="h-14 bg-white/5 border-white/10 rounded-2xl" {...field} value={field.value || ""} /></FormControl>
                       <FormMessage />
                     </FormItem>
@@ -120,14 +116,47 @@ export default function SellerEditProductPage({ params }: { params: Promise<{ id
                   )} />
 
                   {vm.form.watch("isDiscounted" as any) && (
-                    <FormField control={vm.form.control} name="discountPercentage" render={({ field }) => (
-                      <FormItem className="space-y-3">
-                        <FormLabel className="text-[10px] font-black uppercase tracking-widest opacity-40">Porcentaje de Descuento (%)</FormLabel>
-                        <FormControl><Input type="number" min="0" max="100" className="h-14 bg-white/5 border-white/10 rounded-2xl font-black text-green-400" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )} />
+                    <div className="space-y-6 animate-in slide-in-from-top-4 duration-500">
+                      <FormField control={vm.form.control} name="discountPercentage" render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel className="text-xs font-bold uppercase tracking-widest opacity-60">Porcentaje de Descuento (%)</FormLabel>
+                          <FormControl><Input type="number" min="0" max="100" className="h-14 bg-white/5 border-white/10 rounded-2xl font-black text-green-400" {...field} /></FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+
+                      {/* RN - Don Norman (Feedback/Feedforward): Visualización del impacto inmediato del cambio */}
+                      <div className="p-6 rounded-[2rem] bg-green-500/10 border border-green-500/20 flex items-center justify-between">
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-green-500/60">Precio Resultante</p>
+                          <div className="flex items-baseline gap-3">
+                            <span className="text-2xl font-black text-green-400">
+                              ${(Number(vm.form.watch("price") || 0) * (1 - (Number(vm.form.watch("discountPercentage") || 0) / 100))).toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                            </span>
+                            <span className="text-sm font-bold line-through opacity-30">
+                              ${Number(vm.form.watch("price") || 0).toLocaleString('es-AR')}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-green-500/60">Ahorro</p>
+                          <p className="text-sm font-black text-green-400">
+                            -${(Number(vm.form.watch("price") || 0) * (Number(vm.form.watch("discountPercentage") || 0) / 100)).toLocaleString('es-AR')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   )}
+
+                  <FormField control={vm.form.control} name="active" render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-4 space-y-0 rounded-[2rem] border border-primary/20 p-6 bg-primary/5">
+                      <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} className="data-[state=checked]:bg-primary data-[state=checked]:text-black" /></FormControl>
+                      <div className="space-y-1">
+                        <FormLabel className="text-xs font-bold uppercase tracking-widest text-primary">Producto Público</FormLabel>
+                        <FormDescription className="text-[9px] uppercase font-bold tracking-widest opacity-60">Si está marcado, el producto será visible para todos los compradores.</FormDescription>
+                      </div>
+                    </FormItem>
+                  )} />
 
                   <Button type="submit" className="w-full h-16 bg-primary text-black font-black text-lg tracking-widest rounded-[2rem] shadow-xl hover:-translate-y-1 transition-all" disabled={vm.isSubmitting || vm.isUploading}>
                     {vm.isSubmitting ? <Loader2 className="h-6 w-6 animate-spin" /> : <><Save className="mr-3 h-6 w-6" /> GUARDAR CAMBIOS</>}

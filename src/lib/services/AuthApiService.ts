@@ -77,14 +77,7 @@ export class AuthApiService {
   }
 
   static async uploadImage(file: File): Promise<string> {
-    this.logger.debug('Subiendo imagen de perfil');
-    const formData = new FormData();
-    formData.append('file', file);
-    const res = await HttpTransport.request('/upload', {
-      method: 'POST',
-      body: formData,
-      headers: {} // Dejar que el navegador ponga el Content-Type para FormData
-    });
-    return res.url;
+    this.logger.debug('Subiendo imagen de perfil (Cloudinary Offloading)');
+    return HttpTransport.uploadImage(file);
   }
 }
